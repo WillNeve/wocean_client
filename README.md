@@ -1,6 +1,5 @@
 # Wocean 🌊📃
-## (Client Side)
-[Server Side Repository](https://github.com/WillNeve/wocean_server)
+[Visit the app here](https://wocean-client.vercel.app/)
 ## What is it?
 Wocean, a play on words for an existing (and beloved) notetaking app that I use daily 😉
 I have developed this project to showcase skills intigrating a headless Node.js server api into a React SPA.
@@ -18,3 +17,5 @@ I have developed this project to showcase skills intigrating a headless Node.js 
 - Node.js (with Express.js)
 - Server Deployment hosted on Heroku
 - Serverless PostgreSQL Database hosted on Vercel - managed with pgAdmin
+## (Client Side)
+[Server Side Repository](https://github.com/WillNeve/wocean_server)
