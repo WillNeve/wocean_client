@@ -1,6 +1,6 @@
 # Wocean 🌊📃
 ## (Client Side)
-[Server Side Repository](https://www.example.com](https://github.com/WillNeve/wocean_server)
+[Server Side Repository](https://github.com/WillNeve/wocean_server)
 ## What is it?
 Wocean, a play on words for a beloved existing notetaking app that I use daily 😉
 I have developed this project to showcase skills intigrating a headless Node.js server api into a React SPA.
