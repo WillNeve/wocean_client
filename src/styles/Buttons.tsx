@@ -1,52 +1,43 @@
+import { forwardRef } from 'react';
 import { staticComponentProps } from '../types/types';
-
-export const ButtonCTA: React.FC<staticComponentProps> = ({ children }) => {
-  return (
-    <a
-      type="button"
-      href='/signup'
-      aria-label="Sign Up Button"
-      className="
-                 bg-indigo-600
-                 w-fit p-4 m-4
-                 hover:bg-indigo-500
-                 rounded-md
-                 border
-                 border-gray-500
-                 font-medium
-                 text-gray-200
-                 cursor-pointer
-                 transition"
-    >
-      {children}
-    </a>
-  );
-};
+import './buttons.css';
 
 interface ButtonFormProps extends staticComponentProps {
   // Add your custom props here
   className?: string,
 }
 
-export const ButtonForm: React.FC<ButtonFormProps> = ({ children, className }) => {
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
+const ButtonFormRender: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonFormProps> = (
+  { children, className},
+  buttonRef
+) => {
   return (
     <button
+      ref={buttonRef}
       type="submit"
       className={`
-                 bg-indigo-600
-                 w-fit p-4 m-4
-                 hover:bg-indigo-500
-                 rounded-md
-                 border
-                 border-gray-500
-                 font-medium
-                 text-gray-200
-                 cursor-pointer
-                 transition
-                 ${className}`}
+        flex
+        items-center
+        gap-x-4
+        bg-indigo-600
+        w-fit p-4 m-4
+        hover:bg-indigo-500
+        rounded-md
+        border
+        border-gray-500
+        font-medium
+        text-gray-200
+        cursor-pointer
+        transition
+        button-loading
+        ${className}`}
     >
-
       {children}
+      <AiOutlineLoading3Quarters />
     </button>
   );
 };
+
+export const ButtonForm = forwardRef<HTMLButtonElement, ButtonFormProps>(ButtonFormRender);

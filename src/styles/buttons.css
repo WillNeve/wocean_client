@@ -1,0 +1,23 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button-loading {
+  svg {
+    display: none;
+    font-size: 1.5rem;
+    animation: 1s linear 0s infinite paused spin
+  }
+  &.loading {
+    svg {
+      display: block;
+      animation-play-state: running;
+    }
+  }
+}

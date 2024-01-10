@@ -26,7 +26,7 @@ const FormGroup: React.FC<FormGroupProps> = ({name, errors}) => {
   );
 }
 
-const SignUp = () => {
+const SignIn = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext)
 
@@ -46,21 +46,21 @@ const SignUp = () => {
     setFieldErrors({ username: username, email: email, password: password })
   }
 
-  const createUser = async (e: FormEvent) => {
+  const authorizeUser = async (e: FormEvent) => {
     e.preventDefault();
 
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       buttonRef.current?.classList.add('loading')
 
-      const resp = await  fetch(`${import.meta.env.VITE_SERVER_URL}/register`, {
+      const resp = await  fetch(`${import.meta.env.VITE_SERVER_URL}/signin`, {
         method: 'POST',
         body: formData
       });
 
       buttonRef.current?.classList.remove('loading')
 
-      if (resp.status === 201) {
+      if (resp.status === 200) { // what is authorized status ?
         const data = await resp.json();
         console.log(data);
         if (setUser) {
@@ -78,16 +78,14 @@ const SignUp = () => {
 
   return (
     <div className="md:min-w-96 mx-auto my-5 p-6 shadow-sm shadow-gray-100/10 w-fit border border-gray-600 rounded-md bg-indigo-900 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-      <h1 className="text-xl font-medium">Create your account</h1>
-      <form action="#" ref={formRef} onSubmit={createUser}>
-        <FormGroup name={'username'} errors={fieldErrors.username}/>
+      <h1 className="text-xl font-medium">Log in to your account</h1>
+      <form action="#" ref={formRef} onSubmit={authorizeUser}>
         <FormGroup name={'email'} errors={fieldErrors.email}/>
         <FormGroup name={'password'} errors={fieldErrors.password}/>
-        <FormGroup name={'password_confirmation'} errors={fieldErrors.password}/>
-        <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Create Account</ButtonForm>
+        <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Log in</ButtonForm>
       </form>
     </div>
   )
 }
 
-export default SignUp;
+export default SignIn;
