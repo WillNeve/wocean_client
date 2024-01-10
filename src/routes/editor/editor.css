@@ -1,0 +1,6 @@
+.commandBox {
+  display: none;
+}
+.commandBox.active {
+  display: flex;
+}

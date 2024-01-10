@@ -8,6 +8,8 @@ import NavBar from './components/NavBar';
 import Root from './routes/root';
 import SignUp from './routes/signup/root'
 import SignIn from './routes/signin/root';
+import Editor from './routes/editor/root';
+// error pages
 import NotFound from './routes/404';
 
 //contexts
@@ -15,7 +17,6 @@ import AuthLayer from './auth';
 
 // styles
 import './index.css';
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/signin',
     element: (<SignIn />)
+  },
+  {
+    path: '/edit/:id',
+    element: (<Editor/>)
   },
   {
     path: '*',
