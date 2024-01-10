@@ -17,4 +17,4 @@ I have developed this project to showcase skills intigrating a headless Node.js 
 ### Back ⚙️:
 - Node.js (with Express.js)
 - Server Deployment hosted on Heroku
-- Serverless PostgreSQL hosted on Vercel
+- Serverless PostgreSQL Database hosted on Vercel - managed with pgAdmin
