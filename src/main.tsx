@@ -1,16 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
 //components
 import NavBar from './components/NavBar';
 
 //routes/pages
-import Root from './routes/root';
-import SignUp from './routes/signup/root'
-import SignIn from './routes/signin/root';
-import Editor from './routes/editor/root';
-// error pages
-import NotFound from './routes/404';
+  // Home / Landing
+  import Home from './routes/root';
+  // user registry/auth
+  import SignUp from './routes/signup/root'
+  import SignIn from './routes/signin/root';
+  //core
+  import Dashboard from './routes/dashboard/root';
+  import Editor from './routes/editor/root';
+  // error pages
+  import NotFound from './routes/404';
 
 //contexts
 import AuthLayer from './auth';
@@ -20,7 +25,7 @@ import './index.css';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (<Root/>)
+    element: (<Home/>)
   },
   {
     path: '/signup',
@@ -33,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: '/edit/:id',
     element: (<Editor/>)
+  },
+  {
+    path: '/dashboard',
+    element: (<Dashboard/>)
   },
   {
     path: '*',

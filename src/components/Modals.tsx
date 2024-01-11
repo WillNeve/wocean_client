@@ -1,26 +1,9 @@
-export const SignUpModal = () => {
+import { staticComponentProps } from '../types/types';
+
+export const ModalFade: React.FC<staticComponentProps> = ({children}) => {
   return (
-    <div className="fixed w-fit text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      <h1 className='font-bold text-5xl mt-5 text-gray-200'>Nocean</h1>
-      <p className='mt-2'>Start taking notes like never before</p>
-      <a
-      type="button"
-      href='/signup'
-      aria-label="Sign Up Button"
-      className="
-                 bg-indigo-600
-                 w-fit p-4 m-4
-                 hover:bg-indigo-500
-                 rounded-md
-                 border
-                 border-gray-500
-                 font-medium
-                 text-gray-200
-                 cursor-pointer
-                 transition"
-    >
-      Create your account
-    </a>
+    <div className="md:min-w-96 mx-auto my-5 p-6 shadow-sm shadow-gray-100/10 w-fit border border-gray-600 rounded-md bg-indigo-900 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      {children}
     </div>
-  );
+  )
 }
