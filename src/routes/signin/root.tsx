@@ -41,7 +41,6 @@ const SignIn = () => {
   };
 
   const appendValidationMessages = (errors: validationErrors) => {
-    console.log(errors);
     const {username, email, password} = errors;
     setFieldErrors({ username: username, email: email, password: password })
   }
@@ -62,7 +61,6 @@ const SignIn = () => {
 
       if (resp.status === 200) { // what is authorized status ?
         const data = await resp.json();
-        console.log(data);
         if (setUser) {
           setUser({id: data.user.id, username: data.user.username, email: data.user.email, token: data.user.token})
         }

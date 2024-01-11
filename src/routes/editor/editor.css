@@ -4,3 +4,12 @@
 .commandBox.active {
   display: flex;
 }
+
+
+.editor {
+}
+
+.editor > div {
+ width: 100%;
+ border: 1px dashed yellow;
+}

@@ -1,23 +1,36 @@
+// react
 import React, { useEffect, useRef, useState, useContext, useCallback} from 'react'
-import {useParams} from "react-router-dom";
-import DOMPurify from 'dompurify';
-import parse from 'html-react-parser';
+import {useNavigate, useParams} from "react-router-dom";
+// libraries
+import debounce from 'lodash/debounce'; // debouce library, to not send stale requests / spam api
 
+// cursor context
+import { CursorContextProvider } from '../../contexts/cursor';
 // user context
 import { UserContext } from '../../auth';
+
 // styling
 import './editor.css';
+//components
+import TextBlock from './components/block';
 
-interface editorProps {
+interface BlockObject {
+  type: string; // You might want to use more specific types based on your use case
+  content: string;
 }
 
-const Editor: React.FC<editorProps> = () => {
+const Editor: React.FC= () => {
+
+  const editor = useRef<HTMLDivElement>(document.createElement('div'));
+  const commandBox = useRef<HTMLUListElement>(document.createElement('ul'));
+  const navigate = useNavigate();
   // page id
   const { id } = useParams();
   const pageId = id;
   // doc section state
   const [title, setTitle] = useState('test');
-  const [content, setContent] = useState<string | null>(null);
+  const [updatedAt, setUpdatedAt] = useState('n/a');
+  const [blocks, setBlocks] = useState<BlockObject[]>([]);
   // user
   const { user } = useContext(UserContext);
   // command
@@ -32,8 +45,19 @@ const Editor: React.FC<editorProps> = () => {
   const [commandActive, setCommandActive] = useState(false);
   const [suggestedCommands, setSuggestedCommands] = useState(commandList);
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
-  const commandBox = useRef<HTMLElement | null>(null);
-  const editor = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(true);
+
+
+  const handleBlockChange = useCallback((newContent: string, index: number) => {
+    const localBlocks = [...blocks];
+    const updatedBlock = {
+        ...blocks[index],
+        content: newContent,
+    };
+    localBlocks[index] = updatedBlock;
+    setBlocks(localBlocks)
+    console.log('blocks have been set');
+  }, [blocks])
 
   const loadPage = useCallback(async (pageId: string) => {
     const resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/note/${pageId}`, {
@@ -46,93 +70,80 @@ const Editor: React.FC<editorProps> = () => {
     const data = await resp.json();
 
     setTitle(data.page.title);
-    const santizedString = DOMPurify.sanitize(data.page.body);
-    setContent(santizedString);
-  }, [user, setContent])
+    const date = new Date(data.page.updated_at);
+    setUpdatedAt(date.toLocaleString('en-GB'))
+    const blocks = await JSON.parse(data.page.body);
+    setBlocks(blocks);
+    setLoading(false);
+  }, [user, setBlocks])
+
+  const savePage = useCallback(async (pageId: string) => {
+    if (!loading) {
+
+      const resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/note/${pageId}`, {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json',
+          'Authorization': 'Bearer ' + user?.token,
+        },
+        body: JSON.stringify({ body: blocks })
+      })
+      const data = await resp.json();
+    }
+  }, [user, blocks, loading])
 
   useEffect(() => {
     if (pageId) {
-      console.log(pageId);
       loadPage(pageId);
-      if (content !== null && editor.current !== null) {
-        editor.current.innerHTML = parse(content).join('');
-      }
     } else {
       // handle error
+      navigate("/404");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const debouncedSavePage = debounce(savePage, 2000);
+
   useEffect(() => {
-    if (commandActive) {
-      // show the command box
-      commandBox.current?.classList.add('active');
-    } else {
-      // hide the command box and empty it
-      console.log('removing suggestions!!!!');
-
-      commandBox.current?.classList.remove('active');
+    if (pageId) {
+      debouncedSavePage(pageId)
     }
-  }, [commandActive])
-
-  const clearCommand = useCallback((node: HTMLElement) => {
-    console.log('Command to remove:', `-/${command}-`);
-
-    node.innerHTML = node.innerHTML.replace(`/${command}`, '');
-    setCommandActive(false);
-    setCommand('');
-  }, [command])
-
-  const handleEditorInput = (e) => {
-    // console.log(e.nativeEvent.key);
-    const input = e.nativeEvent.key;
-    if (commandActive) {
-      console.log('in command mode');
-
-      // we are adding text to command
-      if (input === 'Enter') {
-        // run command
-        e.preventDefault();
-        e.target.focus()
-        console.log('Running command:', command);
-        clearCommand(e.target);
-      } else if (input === 'Delete') {
-        if (command.length > 0) {
-          setCommand(command.slice(1, -1))
-        } else {
-          clearCommand(e.target);
-        }
-      } else {
-        setCommand(command + input);
-      }
-    } else {
-      // we assume we are adding text to content
-      if (input === '/') {
-        console.log('command key');
-        setCommandActive(true);
-      } else {
-        // regular input
-        // make post request to server
-      }
-    }
-  }
+  }, [blocks, pageId, debouncedSavePage])
 
   return (
     <div className='wrapper w-100 max-w-5xl mx-auto'>
-      <div className='w-full'>
-        <h1 className='font-medium text-4xl text-center my-4'>{title}</h1>
-        <p className='text-center'>Last edited: 10:39 24/12/23</p>
+      <div className='meta w-full'>
+        <h1 className='font-medium text-4xl text-center mt-4'>{title}</h1>
+        <p className='text-center font-medium text-gray-600 text-sm'>Updated at: <em className='not-italic font-semibold'>{updatedAt}</em></p>
       </div>
-      <div className="editor outline-none rounded-lg bg-indigo-900 p-4 m-4 font-medium min-h-[500px]" contentEditable={true} onKeyDown={handleEditorInput} ref={editor}>
-      </div>
-      <ul ref={commandBox} className="commandBox w-fit bg-indigo-200 min-w-[300px] rounded-md flex-col overflow-hidden" contentEditable={false}>
-        {/* add options here dpeending on the command being typed out (autocomplete) */}
-        {suggestedCommands.map(({name, descriptor}, index) => (
-          <li className={`p-2 text-gray-900 font-semibold ${index === highlightedSuggestion ? 'bg-indigo-500 text-gray-200' : ''}`}
-              key={index}>
-          {name} - {descriptor}
-          </li>
-        ))}
-      </ul>
+      <CursorContextProvider>
+        <div className="wrapper relative">
+          <div className="editor outline-none rounded-lg bg-indigo-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+            {blocks.map(({ type, content }, index) => (
+              <TextBlock
+                key={index}
+                blockType={type}
+                handleChange={(newContent) => {
+                  handleBlockChange(newContent, index);
+                }}
+              >
+                {content}
+              </TextBlock>
+            ))}
+          </div>
+          <ul ref={commandBox} className="absolute left-[20px] commandBox w-fit bg-indigo-200 min-w-[300px] rounded-md flex-col overflow-hidden">
+            {/* add options here dpeending on the command being typed out (autocomplete) */}
+
+            {suggestedCommands.map(({name, descriptor}, index) => (
+              <li className={`p-2 text-gray-900 font-semibold ${index === highlightedSuggestion ? 'bg-indigo-500 text-gray-200' : ''}`}
+                  key={index}>
+              {name} - {descriptor}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </CursorContextProvider>
     </div>
   )
 }
