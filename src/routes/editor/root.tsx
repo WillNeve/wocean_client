@@ -41,10 +41,10 @@ const Editor: React.FC= () => {
       output: `<h1></h1>`
     }
   ]
-  const [command, setCommand] = useState('');
-  const [commandActive, setCommandActive] = useState(false);
-  const [suggestedCommands, setSuggestedCommands] = useState(commandList);
-  const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
+  // const [command, setCommand] = useState('');
+  // const [commandActive, setCommandActive] = useState(false);
+  const [suggestedCommands] = useState(commandList);
+  const [highlightedSuggestion] = useState(0);
   const [loading, setLoading] = useState(true);
 
 
@@ -90,6 +90,7 @@ const Editor: React.FC= () => {
         body: JSON.stringify({ body: blocks })
       })
       const data = await resp.json();
+      console.log(data); // remove this and append some saved notifcation with minimal attention
     }
   }, [user, blocks, loading])
 
