@@ -6,7 +6,7 @@ interface AuthLayerProps {
   children: React.ReactNode
 }
 
-interface UserType {
+export interface UserType {
   id: number,
   username: string,
   email: string,
@@ -14,32 +14,37 @@ interface UserType {
 }
 
 interface UserContextType {
-  user: null | UserType;
-  setUser: Dispatch<SetStateAction<null | UserType>> | null;
+  user: null | UserType,
+  setUser: Dispatch<SetStateAction<null | UserType>> | null,
+  finishedLoadingUser: boolean
 }
 
-export const UserContext = createContext<UserContextType>({user: null, setUser: null})
+export const UserContext = createContext<UserContextType>({user: null, setUser: null, finishedLoadingUser: false})
 
 const AuthLayer: React.FC<AuthLayerProps> = ({children}) => {
   const [user, setUser] = useState<null | UserType>(null)
+  const [finishedLoadingUser, setFinishedLoadingUser] = useState(false);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setFinishedLoadingUser(true)
   }, []);
 
   useEffect(() => {
-    if (user) {
-      sessionStorage.setItem("user", JSON.stringify(user));
-    } else {
-      sessionStorage.removeItem("user");
+    if (finishedLoadingUser) {
+      if (user) {
+        sessionStorage.setItem("user", JSON.stringify(user));
+      } else {
+        sessionStorage.removeItem("user");
+      }
     }
-  }, [user]);
+  }, [user, finishedLoadingUser]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, finishedLoadingUser }}>
       {children}
     </UserContext.Provider>
   );

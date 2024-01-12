@@ -18,7 +18,7 @@ const NavBar = () =>  {
                   border-gray-500
                   bg-indigo-900 text-gray-200'>
       <div className='flex mx-auto justify-between items-center w-full max-w-screen-xl'>
-        <MdOutlineEventNote className='text-2xl'/>
+        <img src="/waves.png" alt="Wocean logo" className="w-[30px]" />
         <ul className='flex gap-x-4 justify-normal'>
           {user ? (
             <>
@@ -26,7 +26,7 @@ const NavBar = () =>  {
                 <a href="/" className='border text-gray-200 bg-indigo-600 border-gray-600 hover:border-gray-400 cursor-pointer p-1 rounded-md'>New Note</a>
               </li>
               <li>
-                <a href="/" className='border text-gray-200 bg-indigo-700 border-gray-600 hover:border-gray-400 cursor-pointer p-1 rounded-md'>My Notes</a>
+                <a href="/dashboard" className='border text-gray-200 bg-indigo-700 border-gray-600 hover:border-gray-400 cursor-pointer p-1 rounded-md'>My Notes</a>
               </li>
               <li>
                 <a href="/" onClick={handleSignOut} className='border text-gray-200 bg-indigo-700 border-gray-600 hover:border-gray-400 cursor-pointer p-1 rounded-md'>Log Out</a>
