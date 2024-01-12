@@ -51,7 +51,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ children, blockType, handleChange
       return (
         <div>
           <p
-            className='w-100 py-2 px-1  focus:bg-indigo-800 outline-none'
+            className='w-100 py-2 px-1  focus:bg-blue-800 outline-none'
             contentEditable={true}
             onInput={handleInput}
             dangerouslySetInnerHTML={createMarkup()}
@@ -63,7 +63,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ children, blockType, handleChange
         return (
           <div>
             <h1
-            className='w-100 py-2 px-1 focus:bg-indigo-800 text-5xl outline-none'
+            className='w-100 py-2 px-1 focus:bg-blue-800 text-5xl outline-none'
             contentEditable={true}
             onInput={handleInput}
             dangerouslySetInnerHTML={createMarkup()}

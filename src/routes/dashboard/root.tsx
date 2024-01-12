@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../auth';
 import { UserType } from '../../auth'
 
+//components
+import NavBar from '../../components/NavBar/NavBar';
+
 //subcomponents
 import MenuSide from './components/MenuSide';
 
@@ -34,17 +37,20 @@ const Dashboard: React.FC = () => {
 
   if (user) {
     return (
-      <div className='dashboard-wrapper mx-auto p-6 w-100 max-w-screen-xl'>
-        <div className="dashboard-inner min-h-[80vh] flex text-gray-200 p-4 font-medium rounded-lg bg-indigo-900 ">
-          <div className='w-1/4 min-w-[250px] border-r-[1px] border-gray-500'>
-            <h1 className='px-4 text-2xl text-gray-300'>Dashboard</h1>
-            <MenuSide />
-          </div>
-          <div className='w-3/4'>
+      <>
+        <NavBar requestNavigate={navigate}/>
+        <div className='dashboard-wrapper mx-auto p-6 w-100 max-w-screen-xl'>
+          <div className="dashboard-inner min-h-[80vh] flex text-gray-200 p-4 font-medium rounded-lg bg-blue-900 ">
+            <div className='w-1/4 min-w-[250px] border-r-[1px] border-gray-500'>
+              <h1 className='px-4 text-2xl text-gray-300'>Dashboard</h1>
+              <MenuSide />
+            </div>
+            <div className='w-3/4'>
 
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }

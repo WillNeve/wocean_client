@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-//components
-import NavBar from './components/NavBar';
+import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 //routes/pages
   // Home / Landing
@@ -49,11 +46,9 @@ const router = createBrowserRouter([
   }
 ]);
 
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthLayer>
-      <NavBar/>
       <RouterProvider router={router}/>
     </AuthLayer>
   </React.StrictMode>

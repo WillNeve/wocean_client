@@ -1,0 +1,17 @@
+.menu {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  transform: translate(0px, 100%);
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height .1s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu.active {
+  opacity: 1;
+  pointer-events: all;
+  max-height: 600px;
+}

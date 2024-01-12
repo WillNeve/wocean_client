@@ -1,7 +1,8 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // components
-import { FormGroup } from "../../components/Form";
+import { ModalFade } from "../../styles/Modals";
+import { FormGroup } from "../../styles/Form";
 import { ButtonForm } from "../../styles/Buttons";
 //auth
 import { UserContext } from "../../auth";
@@ -76,7 +77,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className="md:min-w-96 mx-auto my-5 p-6 shadow-sm shadow-gray-100/10 w-fit border border-gray-600 rounded-md bg-indigo-900 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <ModalFade>
       <h1 className="text-xl font-medium">Log in to your account</h1>
       <form action="#" ref={formRef} onSubmit={authorizeUser}>
         {errorMessage ?
@@ -86,7 +87,7 @@ const SignIn = () => {
         <FormGroup name={'password'} errors={fieldErrors.password}/>
         <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Log in</ButtonForm>
       </form>
-    </div>
+    </ModalFade>
   )
 }
 

@@ -8,7 +8,7 @@ interface MenuButtonProps {
 
 const MenuButton: React.FC<MenuButtonProps> = ({children}) => {
   return (
-    <button type='button' className=' font-normal hover:bg-indigo-500 hover:text-gray-200 flex gap-x-4 items-center p-2 rounded-md'>{children}</button>
+    <button type='button' className=' font-normal hover:bg-blue-500 hover:text-gray-200 flex gap-x-4 items-center p-2 rounded-md'>{children}</button>
   );
 }
 

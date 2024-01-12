@@ -120,7 +120,7 @@ const Editor: React.FC= () => {
       </div>
       <CursorContextProvider>
         <div className="wrapper relative">
-          <div className="editor outline-none rounded-lg bg-indigo-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+          <div className="editor outline-none rounded-lg bg-blue-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
             {blocks.map(({ type, content }, index) => (
               <TextBlock
                 key={index}
@@ -133,11 +133,11 @@ const Editor: React.FC= () => {
               </TextBlock>
             ))}
           </div>
-          <ul ref={commandBox} className="absolute left-[20px] commandBox w-fit bg-indigo-200 min-w-[300px] rounded-md flex-col overflow-hidden">
+          <ul ref={commandBox} className="absolute left-[20px] commandBox w-fit bg-blue-200 min-w-[300px] rounded-md flex-col overflow-hidden">
             {/* add options here dpeending on the command being typed out (autocomplete) */}
 
             {suggestedCommands.map(({name, descriptor}, index) => (
-              <li className={`p-2 text-gray-900 font-semibold ${index === highlightedSuggestion ? 'bg-indigo-500 text-gray-200' : ''}`}
+              <li className={`p-2 text-gray-900 font-semibold ${index === highlightedSuggestion ? 'bg-blue-500 text-gray-200' : ''}`}
                   key={index}>
               {name} - {descriptor}
               </li>
