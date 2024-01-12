@@ -20,13 +20,12 @@ interface BlockObject {
 }
 
 const Editor: React.FC= () => {
-
   const editor = useRef<HTMLDivElement>(document.createElement('div'));
   const commandBox = useRef<HTMLUListElement>(document.createElement('ul'));
   const navigate = useNavigate();
-  // page id
+  // note id
   const { id } = useParams();
-  const pageId = id;
+  const noteId = id;
   // doc section state
   const [title, setTitle] = useState('test');
   const [updatedAt, setUpdatedAt] = useState('n/a');
@@ -59,8 +58,8 @@ const Editor: React.FC= () => {
     console.log('blocks have been set');
   }, [blocks])
 
-  const loadPage = useCallback(async (pageId: string) => {
-    const resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/note/${pageId}`, {
+  const loadNote = useCallback(async (noteId: string) => {
+    const resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/note/${noteId}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -68,19 +67,21 @@ const Editor: React.FC= () => {
       }
     })
     const data = await resp.json();
+    if (data.note) {
 
-    setTitle(data.page.title);
-    const date = new Date(data.page.updated_at);
-    setUpdatedAt(date.toLocaleString('en-GB'))
-    const blocks = await JSON.parse(data.page.body);
-    setBlocks(blocks);
-    setLoading(false);
+      setTitle(data.note.title);
+      const date = new Date(data.note.updated_at);
+      setUpdatedAt(date.toLocaleString('en-GB'))
+      const blocks = await JSON.parse(data.note.body);
+      setBlocks(blocks);
+      setLoading(false);
+    }
   }, [user, setBlocks])
 
-  const savePage = useCallback(async (pageId: string) => {
+  const saveNote = useCallback(async (noteId: string) => {
     if (!loading) {
 
-      const resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/note/${pageId}`, {
+      const resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/note/${noteId}`, {
         method: 'PATCH',
         headers: {
           'Accept': 'application/json',
@@ -95,8 +96,8 @@ const Editor: React.FC= () => {
   }, [user, blocks, loading])
 
   useEffect(() => {
-    if (pageId) {
-      loadPage(pageId);
+    if (noteId) {
+      loadNote(noteId);
     } else {
       // handle error
       navigate("/404");
@@ -104,13 +105,13 @@ const Editor: React.FC= () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const debouncedSavePage = debounce(savePage, 2000);
+  const debouncedsaveNote = debounce(saveNote, 2000);
 
   useEffect(() => {
-    if (pageId) {
-      debouncedSavePage(pageId)
+    if (noteId) {
+      debouncedsaveNote(noteId)
     }
-  }, [blocks, pageId, debouncedSavePage])
+  }, [blocks, noteId, debouncedsaveNote])
 
   return (
     <div className='wrapper w-100 max-w-5xl mx-auto'>

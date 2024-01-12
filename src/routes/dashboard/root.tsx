@@ -66,7 +66,7 @@ const Dashboard: React.FC = () => {
       <>
         <NavBar requestNavigate={navigate}/>
         <ViewNameContext.Provider value={{viewName: viewName, setViewName}}>
-        <div className='dashboard-wrapper mx-auto p-6 w-100 max-w-screen-xl'>
+        <div className='dashboard-wrapper px-4 mt-5 mx-auto w-100 max-w-screen-xl'>
           <div className="relative dashboard-inner h-[80vh] flex text-gray-300 p-4 font-medium rounded-lg bg-blue-900 ">
             <div className='w-1/4 min-w-[200px] border-r-[1px] border-gray-500'>
               <div className="top mb-4">

@@ -39,7 +39,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
   }
 
   return user ? (
-    <div className='sticky z-20 top-0 left-0 w-full p-2 px-6 md:px-12
+    <div className='sticky z-20 top-0 left-0 w-full px-4 py-2
                     border-b
                   border-gray-500
                   bg-blue-900 text-gray-200'>
@@ -67,7 +67,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
           )}
         </ul>
       </div>
-      <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-screen-xl px-6 h-[40px]">
+      <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-screen-xl px-4 h-[40px]">
         <div className={`${menuOpen ? `${styles.menu} ${styles.active}` : `${styles.menu}`}
                         w-fit min-w-[200px] h-fit flex flex-col items-end p-4 bg-slate-900 text-gray-300 rounded-b-lg border border-gray-500`}
                         >
