@@ -58,8 +58,9 @@ const Notes = () => {
         })
       ])
       if (resp instanceof Response) {
-
+        console.log('Response:', resp);
         const data = await resp.json();
+        console.log('Data:', data);
         console.log('YOUR NOTES ARE:', data.notes);
         setNotes(data.notes)
       }
