@@ -1,9 +1,6 @@
 // react
 import React, { useEffect, useRef, useState, useContext, useCallback} from 'react'
 import { useNavigate, useParams} from "react-router-dom";
-
-// cursor context
-import { CursorContextProvider } from '../../contexts/cursor';
 // user context
 import { UserContext } from '../../auth';
 // styling
@@ -79,7 +76,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
         setLoading(false);
       }, 150);
     }
-  }, [user, newNote, setBlocks, noteId])
+  }, [user, setBlocks, noteId])
 
   const saveNote = useCallback(async () => {
       setSaving(true);
@@ -185,61 +182,59 @@ const Note: React.FC<noteProps> = ({newNote}) => {
   return (
     <>
       <NavBar requestNavigate={navigate}/>
-      <CursorContextProvider>
-        <div className='wrapper w-100 max-w-5xl mx-auto'>
-          <div className='meta w-full'>
-            {loading ? (
-              <LoaderGroup active={loaders} className="w-100 flex flex-col items-center mt-4 gap-y-2">
-                <LoaderRect className='h-10 w-2/5 min-w-[100px] max-w-[160px]'></LoaderRect>
-                <LoaderRect className='h-5 w-1/5 min-w-[80px] max-w-[180px]'></LoaderRect>
-              </LoaderGroup>
-            ) : (
-              <>
-                <Title handleChange={handleTitleChange} content={initialTitle}/>
-                <p className='font-medium text-center text-gray-600 text-sm'>Updated at: <em className='not-italic font-semibold'>{updatedAt}</em></p>
-              </>
-            )}
-          </div>
-          <div className="wrapper relative">
-              <div className="relative editor overflow-hidden flex flex-col outline-none rounded-lg bg-sky-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
-                {blocks.map(({ id, type, content }, index) => (
-                  <NoteBlock
-                    focus={id === focusBlockId ? true : false}
-                    key={index}
-                    newBlock={createNewBlock}
-                    newCommandBlock={createNewCommandBlock}
-                    removeBlock={removeBlock}
-                    block={{id, type, content}}
-                    handleChange={(text) => {handleBlockChange(text, index)}}
-                  />
-                ))}
-                {loading ? (
-                  <LoaderGroup active={loaders} className='w-100 flex flex-col items-start gap-y-3'>
-                    <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                  </LoaderGroup>
-                ) : ''}
-                <div className={`${loading ? 'hidden' : ''}
-                                saving-notif
-                                flex items-center gap-x-1
-                                absolute top-2 right-2 w-fit
-                                px-2 py-1 border border-gray-600 rounded-md bg-gray-200/100
-                                font-normal text-sm text-gray-800 backdrop-blur-sm ${ saving ? '' : 'saved'}`}>
-                  <p className='w-fit'>{ saving ? 'Saving' : 'Saved'}</p>
-                  <div className="icon relative h-5 w-5">
-                    <AiOutlineLoading3Quarters className='circ absolute w-100 h-100'/>
-                    <GiConfirmed className='tick absolute w-100 h-100' />
-                  </div>
+      <div className='wrapper w-100 max-w-5xl mx-auto'>
+        <div className='meta w-full'>
+          {loading ? (
+            <LoaderGroup active={loaders} className="w-100 flex flex-col items-center mt-4 gap-y-2">
+              <LoaderRect className='h-10 w-2/5 min-w-[100px] max-w-[160px]'></LoaderRect>
+              <LoaderRect className='h-5 w-1/5 min-w-[80px] max-w-[180px]'></LoaderRect>
+            </LoaderGroup>
+          ) : (
+            <>
+              <Title handleChange={handleTitleChange} content={initialTitle}/>
+              <p className='font-medium text-center text-gray-600 text-sm'>Updated at: <em className='not-italic font-semibold'>{updatedAt}</em></p>
+            </>
+          )}
+        </div>
+        <div className="wrapper relative">
+            <div className="relative editor overflow-hidden flex flex-col outline-none rounded-lg bg-sky-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+              {blocks.map(({ id, type, content }, index) => (
+                <NoteBlock
+                  focus={id === focusBlockId ? true : false}
+                  key={index}
+                  newBlock={createNewBlock}
+                  newCommandBlock={createNewCommandBlock}
+                  removeBlock={removeBlock}
+                  block={{id, type, content}}
+                  handleChange={(text) => {handleBlockChange(text, index)}}
+                />
+              ))}
+              {loading ? (
+                <LoaderGroup active={loaders} className='w-100 flex flex-col items-start gap-y-3'>
+                  <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
+                  <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+                  <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+                  <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+                  <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+                  <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+                  <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+                </LoaderGroup>
+              ) : ''}
+              <div className={`${loading ? 'hidden' : ''}
+                              saving-notif
+                              flex items-center gap-x-1
+                              absolute top-2 right-2 w-fit
+                              px-2 py-1 border border-gray-600 rounded-md bg-gray-200/100
+                              font-normal text-sm text-gray-800 backdrop-blur-sm ${ saving ? '' : 'saved'}`}>
+                <p className='w-fit'>{ saving ? 'Saving' : 'Saved'}</p>
+                <div className="icon relative h-5 w-5">
+                  <AiOutlineLoading3Quarters className='circ absolute w-100 h-100'/>
+                  <GiConfirmed className='tick absolute w-100 h-100' />
                 </div>
               </div>
             </div>
           </div>
-        </CursorContextProvider>
+        </div>
     </>
   )
 }
