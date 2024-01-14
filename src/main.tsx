@@ -10,7 +10,7 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
   import SignIn from './routes/signin/root';
   //core
   import Dashboard from './routes/dashboard/root';
-  import Editor from './routes/editor/root';
+  import Note from './routes/note/root';
   // error pages
   import NotFound from './routes/404';
 
@@ -33,8 +33,12 @@ const router = createBrowserRouter([
     element: (<SignIn />)
   },
   {
-    path: '/edit/:id',
-    element: (<Editor/>)
+    path: '/notes/new',
+    element: (<Note newNote={true}/>)
+  },
+  {
+    path: '/notes/:note_id',
+    element: (<Note newNote={false}/>)
   },
   {
     path: '/dashboard',

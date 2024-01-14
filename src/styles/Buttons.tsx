@@ -21,9 +21,9 @@ const ButtonFormRender: React.ForwardRefRenderFunction<HTMLButtonElement, Button
         flex
         items-center
         gap-x-4
-        bg-blue-600
+        bg-sky-600
         w-fit p-4 m-4
-        hover:bg-blue-500
+        hover:bg-sky-500
         rounded-md
         border
         border-gray-500

@@ -1,3 +1,4 @@
 export type staticComponentProps = {
-  children: React.ReactNode
+  children?: React.ReactNode,
+  className?: string,
 };
