@@ -28,8 +28,6 @@ const AuthLayer: React.FC<AuthLayerProps> = ({children}) => {
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
-      console.log('STORED USER FROM SESSION,', storedUser);
-
       setUser(JSON.parse(storedUser));
     }
     setFinishedLoadingUser(true)

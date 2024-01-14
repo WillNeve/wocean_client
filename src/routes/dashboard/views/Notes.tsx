@@ -43,7 +43,6 @@ const Notes = () => {
 
   const getNotes = async () => {
     if (user) {
-      console.log('USER obj:', user);
       const resp: Response | string = await Promise.race([
         fetch(`${import.meta.env.VITE_SERVER_URL}/user/${user.id}/notes`, {
           method: 'GET',
@@ -59,10 +58,7 @@ const Notes = () => {
         })
       ])
       if (resp instanceof Response) {
-        console.log('Response:', resp);
         const data = await resp.json();
-        console.log('Data:', data);
-        console.log('YOUR NOTES ARE:', data.notes);
         setNotes(data.notes)
       }
     }
