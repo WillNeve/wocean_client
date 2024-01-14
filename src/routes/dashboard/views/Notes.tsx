@@ -43,6 +43,7 @@ const Notes = () => {
 
   const getNotes = async () => {
     if (user) {
+      console.log('USER obj:', user);
       const resp: Response | string = await Promise.race([
         fetch(`${import.meta.env.VITE_SERVER_URL}/user/${user.id}/notes`, {
           method: 'GET',
