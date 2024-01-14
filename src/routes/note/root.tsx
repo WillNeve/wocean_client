@@ -42,7 +42,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
   const [loaders, setLoaders] = useState<boolean>(true);
 
   const loadNote = useCallback(async (newNote: boolean) => {
-    await new Promise((res) => setTimeout(res, 2000))
+    // await new Promise((res) => setTimeout(res, 2000)) // USED FOR TESTING LOADING ANIMS
     let resp;
     if (newNote) {
       resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/notes/new`, {
