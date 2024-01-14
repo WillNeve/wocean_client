@@ -70,7 +70,7 @@ const Notes = () => {
 
   return (
     <>
-      <h2>Your notes ({notes.length}):</h2>
+      <h2>Your notes ({(notes as Array<note>).length}):</h2>
       <div className={`${styles.customScroll} pr-4 mt-4 w-full h-fit max-h-[75%] overflow-y-scroll
                                               overflow-x-auto
                                               grid gap-4 min-[400px]:grid-cols-2
