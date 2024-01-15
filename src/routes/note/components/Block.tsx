@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import DOMPurify from 'dompurify';
 
 export type noteBlockType = {
   id?: number,
@@ -130,7 +131,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
   }
 
   const createMarkup = (content: string) => {
-    return { __html: content };
+    return { __html: DOMPurify.sanitize(content) };
   };
 
   useEffect(() => {

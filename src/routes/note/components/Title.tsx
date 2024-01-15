@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-
+import DOMPurify from 'dompurify';
+//icons
 import {FiAlertOctagon} from 'react-icons/fi';
 
 
@@ -17,7 +18,7 @@ const Title: React.FC<titleProps> = ({content, handleChange}) => {
   }, [content])
 
   const createMarkup = (content: string) => {
-    return { __html: content };
+    return { __html: DOMPurify.sanitize(content) };
   };
 
   const handleInput = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
