@@ -21,7 +21,6 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [viewName, setViewName] = useState('notes')
   const [activeView, setActiveView] = useState((<></>));
-
   const { user, finishedLoadingUser } = useContext(UserContext);
 
   const setView = useCallback((viewName: string) => {

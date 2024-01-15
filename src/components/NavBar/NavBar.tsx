@@ -9,6 +9,7 @@ import { FiLogOut } from "react-icons/fi";
 
 //styles
 import './navbar.css'
+import { useLocation } from "react-router-dom";
 
 interface NavButtonProps {
   children: ReactNode,
@@ -28,6 +29,7 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
   const { user, setUser } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
@@ -44,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
 
   return (
     <div className='sticky z-20 top-0 left-0 w-full px-4 py-2 pb-3
-                    border-b-[1px] border-b-gray-700
+                    border-b-[1px] border-b-gray-700 bg-slate-900
                    text-gray-200'>
       <div className='flex mx-auto justify-between items-center w-full px-4 max-w-5xl'>
         <a href='/' className="masked text-2xl font-bold flex items-center gap-x-2">
@@ -64,9 +66,16 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
             </button>
             </>
           ) : (
-            <li>
-              <NavButtonCTA route="/signin">Log In</NavButtonCTA>
-            </li>
+            (location.pathname === '/signin' ? (
+              <li>
+                <NavButtonCTA route="/signup">Create your account</NavButtonCTA>
+              </li>
+            ) : (
+              <li>
+                <NavButtonCTA route="/signin">Log In</NavButtonCTA>
+              </li>
+            ))
+
           )}
         </ul>
       </div>

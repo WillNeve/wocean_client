@@ -51,7 +51,7 @@ const SignUp = () => {
         new Promise<string>((resolve) => {
           setTimeout(() => {
             resolve('Server is unresponsive');
-          }, 5000);
+          }, 10000);
         })
       ])
 

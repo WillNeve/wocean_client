@@ -33,8 +33,9 @@ const Note: React.FC<noteProps> = ({newNote}) => {
   const [initialTitle, setInitialTitle] = useState('');
   const [updatedAt, setUpdatedAt] = useState('n/a');
   const [blocks, setBlocks] = useState<noteBlockType[]>([]);
-  const [focusBlockId, setFocusBlockID] = useState(0);
+  const [focusBlockIndex, setFocusBlockIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [nextId, setNextId] = useState<number>(0);
   // const [contentHidden, setContentHidden] = useState<boolean>(true)
   //save optimisation
   const [typing, setTyping] = useState(0);
@@ -69,14 +70,17 @@ const Note: React.FC<noteProps> = ({newNote}) => {
       const date = new Date(data.note.updated_at);
       setUpdatedAt(date.toLocaleString('en-GB'))
       const blocks = await JSON.parse(data.note.body);
-      blocks.forEach((block: noteBlockType) => block.id = parseInt((block.id as unknown as string)))
+      for (let i = 0; i < blocks.length; i++) {
+        blocks[i].id = i;
+      }
+      setNextId(blocks.length)
       setBlocks(blocks);
       setLoaders(false)
       setTimeout(() => {
         setLoading(false);
       }, 150);
     }
-  }, [user, setBlocks, noteId])
+  }, [user, setBlocks, setNextId, noteId])
 
   const saveNote = useCallback(async () => {
       setSaving(true);
@@ -89,10 +93,10 @@ const Note: React.FC<noteProps> = ({newNote}) => {
         },
         body: JSON.stringify({ title: title, body: blocks })
       })
-      const data = await resp.json();
       setTimeout(() => {
-        console.log(data); // save confirmation for now
-        setSaving(false);
+        if (resp.status === 200) {
+          setSaving(false);
+        }
       }, 1000);
   }, [title, blocks, user, noteId])
 
@@ -120,7 +124,6 @@ const Note: React.FC<noteProps> = ({newNote}) => {
     setTyping((prevTyping) => prevTyping - 1);
   };
 
-
   const handleBlockChange = useCallback((newContent: string, index: number) => {
     const localBlocks = [...blocks];
     const updatedBlock = {
@@ -134,6 +137,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
 
   const handleTitleChange = useCallback((newTitle: string) => {
     setTitle(newTitle);
+    setFocusBlockIndex(-1);
     startTyping();
   }, [startTyping])
 
@@ -151,32 +155,51 @@ const Note: React.FC<noteProps> = ({newNote}) => {
     }
   }, [newNote, navigate, user, loadNote, loading, noteId, finishedLoadingUser])
 
-  const createNewBlock = (sourceId: number) => {
-    const newBlockId = sourceId + 1;
-    const localBlocks = [...blocks];
-    localBlocks.forEach((block) => {
-      if (block.id >= newBlockId) {
-        block.id += 1;
-      }
-    })
-    setBlocks([...localBlocks, { id: newBlockId, type: 'p', content: '' }]);
-    setFocusBlockID(newBlockId);
-  }
-
-  const removeBlock = (id: number) => {
-    if (blocks.length === 1) {
-      return;
+  const handleFocusShift = (newOrder: number) => {
+    if (newOrder < 0) {
+      setFocusBlockIndex(0)
+    } else if (newOrder > blocks.length - 1) {
+      setFocusBlockIndex(blocks.length - 1)
+    } else {
+      setFocusBlockIndex(newOrder)
     }
-    const localBlocks = blocks.filter((block) => block.id !== id );
-    setBlocks(localBlocks);
-    setFocusBlockID(id - 1);
   }
 
-  const createNewCommandBlock = (id: number, block: noteBlockType) => {
-    let localBlocks = blocks.filter((block) => block.id !== id );
-    localBlocks = [...localBlocks, {...block, id: id}];
+  const createNewBlock = (sourceIndex: number) => {
+    const newBlock = {id: nextId, type: 'p', content: ''};
+    setNextId(nextId + 1);
+    const localBlocks = [
+        ...blocks.slice(0, sourceIndex + 1),
+        newBlock,
+        ...blocks.slice(sourceIndex + 1)
+    ];
     setBlocks(localBlocks);
-    setFocusBlockID(id);
+    setFocusBlockIndex(sourceIndex + 1);
+  }
+
+  const removeBlock = (sourceIndex: number) => {
+    const localBlocks = blocks.filter((_: noteBlockType, i: number) => i !== sourceIndex);
+    setFocusBlockIndex(sourceIndex - 1);
+    if (localBlocks.length === 0)  {
+      const newBlock = {id: nextId, type: 'p', content: ''};
+      setNextId(nextId + 1);
+      localBlocks.push(newBlock)
+    }
+    setBlocks(localBlocks);
+    setFocusBlockIndex(sourceIndex > 0 ? sourceIndex - 1 : sourceIndex);
+  }
+
+  const createNewCommandBlock = (sourceIndex: number, block: noteBlockType) => {
+    const newBlock = block;
+    newBlock.id = nextId;
+    setNextId(nextId + 1);
+    const localBlocks = [
+        ...blocks.slice(0, sourceIndex),
+        newBlock,
+        ...blocks.slice(sourceIndex + 1)
+    ];
+    setBlocks(localBlocks);
+    setFocusBlockIndex(sourceIndex);
   }
 
   return (
@@ -197,20 +220,22 @@ const Note: React.FC<noteProps> = ({newNote}) => {
           )}
         </div>
         <div className="wrapper relative">
-            <div className="relative editor overflow-hidden flex flex-col outline-none rounded-lg bg-sky-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+            <div className="relative editor w-100 overflow-hidden flex flex-col outline-none rounded-lg bg-sky-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
               {blocks.map(({ id, type, content }, index) => (
                 <NoteBlock
-                  focus={id === focusBlockId ? true : false}
-                  key={index}
+                  key={id}
+                  index={index}
+                  block={{type, content}}
+                  focus={index === focusBlockIndex ? true : false}
                   newBlock={createNewBlock}
                   newCommandBlock={createNewCommandBlock}
                   removeBlock={removeBlock}
-                  block={{id, type, content}}
+                  requestFocusShift={handleFocusShift}
                   handleChange={(text) => {handleBlockChange(text, index)}}
                 />
               ))}
               {loading ? (
-                <LoaderGroup active={loaders} className='w-100 flex flex-col items-start gap-y-3'>
+                <LoaderGroup active={loaders} className='absolute w-full flex flex-col items-start gap-y-3'>
                   <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
                   <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
                   <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>

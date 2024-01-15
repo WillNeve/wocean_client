@@ -4,6 +4,7 @@ import { UserContext } from '../../../auth';
 import styles from '../dashboard.module.css'
 //icons
 import { HiOutlinePlus } from "react-icons/hi";
+import { LoaderGroup, LoaderRect } from '../../../styles/Utility';
 
 
 type note = {
@@ -39,6 +40,7 @@ const NewNoteTile = () => {
 
 const Notes = () => {
   const [notes, setNotes] = useState([])
+  const [loaded, setLoaded] = useState<boolean>(false)
   const { user } = useContext(UserContext);
 
   const getNotes = async () => {
@@ -58,6 +60,9 @@ const Notes = () => {
         })
       ])
       if (resp instanceof Response) {
+        if (resp.status === 200) {
+          setLoaded(true);
+        }
         const data = await resp.json();
         setNotes(data.notes)
       }
@@ -70,17 +75,50 @@ const Notes = () => {
 
   return (
     <>
-      <h2>Your notes ({notes.length}):</h2>
+
+      <h2>{loaded ? (<>Your notes ({notes.length})</>) : (<>Loading...</>)}</h2>
       <div className={`${styles.customScroll} pr-4 mt-4 w-full h-fit max-h-[75%] overflow-y-scroll
                                               overflow-x-auto
                                               grid gap-4 min-[400px]:grid-cols-2
                                               sm:grid-cols-3 md:grid-cols-4
                                               min-[900px]:grid-cols-5 lg:grid-cols-6 grid-rows-auto
                                               `}>
-        <NewNoteTile/>
-        {notes.map((note, index) => (
-          <NoteTile key={index} note={note}/>
-        ))}
+        {loaded ? (
+          <>
+            <NewNoteTile/>
+            {notes.map((note, index) => (
+              <NoteTile key={index} note={note}/>
+            ))}
+          </>
+        ):
+        (
+          <>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+            <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+              <LoaderRect className='w-full h-full'/>
+            </LoaderGroup>
+          </>
+        )}
       </div>
     </>
   );

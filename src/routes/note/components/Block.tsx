@@ -1,17 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 export type noteBlockType = {
-  id: number,
+  id?: number,
   type: string,
   content: string
 }
 
 interface NoteBlockProps {
+  index: number,
   block: noteBlockType
   handleChange: (content: string) => void,
-  newBlock: (id: number) => void,
-  newCommandBlock: (id: number, block: noteBlockType) => void,
-  removeBlock: (id: number) => void,
+  newBlock: (sourceIndex: number) => void,
+  requestFocusShift: (index: number) => void,
+  newCommandBlock: (sourceIndex: number, block: noteBlockType) => void,
+  removeBlock: (index: number) => void,
   focus: boolean
 }
 
@@ -21,37 +23,39 @@ type command = {
   block: noteBlockType
 }
 
-const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, newCommandBlock, removeBlock, focus}) => {
+const commands: command[] = [
+  {
+    name: 'Heading 1',
+    match: /^He?a?d?i?n?g?\s?1?$/i,
+    block: { type: 'h1', content: '' },
+  },
+  {
+    name: 'Heading 2',
+    match: /^He?a?d?i?n?g?\s?2?$/i,
+    block: { type: 'h2', content: '' },
+  },
+  {
+    name: 'Paragraph',
+    match: /^Pa?r?a?g?r?a?p?h?$/i,
+    block: { type: 'p', content: '' },
+  },
+  {
+    name: 'Bold',
+    match: /^Bo?l?d?$/i,
+    block: { type: 'strong', content: '' },
+  },
+  {
+    name: 'Italic',
+    match: /^It?a?l?i?c?$/i,
+    block: { type: 'em', content: '' },
+  },
+]
+
+const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlock, newCommandBlock, removeBlock, focus, requestFocusShift}) => {
   const [content] = useState<string>(block.content)
+  const [empty, setEmpty] = useState<boolean>(content.length === 0);
   const blockRef = useRef<HTMLDivElement>(null);
 
-  const commands: command[] = [
-    {
-      name: 'Heading 1',
-      match: /^He?a?d?i?n?g?\s?1?$/i,
-      block: { id: 0, type: 'h1', content: '' },
-    },
-    {
-      name: 'Heading 2',
-      match: /^He?a?d?i?n?g?\s?2?$/i,
-      block: { id: 0, type: 'h2', content: '' },
-    },
-    {
-      name: 'Paragraph',
-      match: /^Pa?r?a?g?r?a?p?h?$/i,
-      block: { id: 0, type: 'p', content: '' },
-    },
-    {
-      name: 'Bold',
-      match: /^Bo?l?d?$/i,
-      block: { id: 0, type: 'strong', content: '' },
-    },
-    {
-      name: 'Italic',
-      match: /^It?a?l?i?c?$/i,
-      block: { id: 0, type: 'em', content: '' },
-    },
-  ];
 
   const [commandsActive, setCommandsActive] = useState(false);
   const [suggestedCommands, setSuggestedCommands] = useState(commands);
@@ -69,9 +73,10 @@ const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, ne
       setSuggestedCommands(suggestions);
 
     }
-  }, [writtenCommand])
+  }, [writtenCommand, commandsActive])
 
   const handleInput = (e: React.KeyboardEvent<HTMLElement>) => {
+    // console.log(e.key);
     const text = (e.target as HTMLInputElement).innerText;
     if (commandsActive) {
       if (e.key === 'Tab') {
@@ -84,30 +89,38 @@ const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, ne
       }
     } else {
       if (e.key === 'Enter') {
-        newBlock(block.id);
+        newBlock(index);
         e.preventDefault();
         return;
       } else if (text.length === 0 && e.key === '/') {
         setCommandsActive(true)
       } else if (text.length === 0 && e.key === 'Backspace') {
-        removeBlock(block.id);
+        removeBlock(index);
         return;
-      }
-      if (/^(\w|\s|Backspace)$/.test(e.key)) {
+      } else if (/^(\w|\s|Backspace)$/.test(e.key)) {
         handleChange(text);
       }
+
+    }
+    if (e.key === 'ArrowUp') {
+      requestFocusShift(index - 1)
+    } else if (e.key === 'ArrowDown') {
+      requestFocusShift(index + 1)
     }
   };
 
   const handleCommands = (e: React.KeyboardEvent<HTMLElement>) => {
     const text = (e.target as HTMLInputElement).innerText;
+    setEmpty(text.length === 0);
     if (commandsActive) {
       if (e.key === 'Backspace' && text.length < 1) {
         setCommandsActive(false);
         setHighlightedSuggestion(0);
       } else if (e.key === 'Enter') {
-        const commandBlock = commands[highlightedSuggestion].block;
-        newCommandBlock(block.id, commandBlock)
+        const commandBlock = suggestedCommands[highlightedSuggestion].block;
+        newCommandBlock(index, commandBlock)
+        setCommandsActive(false);
+      } else if (e.key === ' ') {
         setCommandsActive(false);
       } else if (e.key !== 'Tab') {
         setHighlightedSuggestion(0);
@@ -116,9 +129,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, ne
     }
   }
 
-
-
-  const createMarkup = () => {
+  const createMarkup = (content: string) => {
     return { __html: content };
   };
 
@@ -130,55 +141,77 @@ const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, ne
         blockRef.current.blur();
       }
     }
-  }, [focus])
+  }, [focus, block])
 
   const formBlock = (block: noteBlockType) => {
     switch (block.type) {
       case 'p':
         return (
+          <div className='w-full'>
+            <p className={`${empty && focus ? '' : 'hidden'} absolute pointer-events-none w-full py-1 px-1 focus:bg-gray-800/20 outline-none opacity-20`}>
+              Start typing or press '/' for commands
+            </p>
             <p
-              className={`w-100 ${focus ? '' : ''} py-1 px-1 focus:bg-gray-800/20 outline-none`}
+              className={`w-full py-1 px-1 focus:bg-gray-800/20 outline-none`}
               contentEditable={true}
               ref={blockRef}
+              onClick={() => {requestFocusShift(index)}}
               onKeyDown={handleInput}
               onKeyUp={handleCommands}
-              dangerouslySetInnerHTML={createMarkup()}
+              dangerouslySetInnerHTML={createMarkup(content)}
             />
+          </div>
         );
         break;
       case 'h1':
           return (
               <h1
-              className={`w-100 py-2 px-1 focus:bg-gray-800/20 text-5xl outline-none`}
+              className={`w-full py-2 px-1 focus:bg-gray-800/20 text-5xl outline-none`}
               contentEditable={true}
               ref={blockRef}
+              onClick={() => {requestFocusShift(index)}}
               onKeyDown={handleInput}
               onKeyUp={handleCommands}
-              dangerouslySetInnerHTML={createMarkup()}
+              dangerouslySetInnerHTML={createMarkup(content)}
               />
           )
         break;
       case 'h2':
         return (
-            <h1
-            className={`w-100 py-2 px-1 focus:bg-gray-800/20 text-5xl outline-none`}
+            <h2
+            className={`w-full py-1 px-1 focus:bg-gray-800/20 text-3xl outline-none`}
             contentEditable={true}
             ref={blockRef}
+            onClick={() => {requestFocusShift(index)}}
             onKeyDown={handleInput}
             onKeyUp={handleCommands}
-            dangerouslySetInnerHTML={createMarkup()}
+            dangerouslySetInnerHTML={createMarkup(content)}
             />
         )
         break;
-      case 'h3':
+      case 'em':
         return (
-            <h1
-            className={`w-100 py-2 px-1 focus:bg-gray-800/20 text-5xl outline-none`}
+            <em
+            className={`block w-full py-1 px-1 focus:bg-gray-800/20 outline-none`}
             contentEditable={true}
             ref={blockRef}
+            onClick={() => {requestFocusShift(index)}}
             onKeyDown={handleInput}
             onKeyUp={handleCommands}
-            dangerouslySetInnerHTML={createMarkup()}
+            dangerouslySetInnerHTML={createMarkup(content)}
+            />
+        )
+        break;
+      case 'strong':
+        return (
+            <strong
+            className={`block w-full py-1 px-1 focus:bg-gray-800/20 outline-none`}
+            contentEditable={true}
+            ref={blockRef}
+            onClick={() => {requestFocusShift(index)}}
+            onKeyDown={handleInput}
+            onKeyUp={handleCommands}
+            dangerouslySetInnerHTML={createMarkup(content)}
             />
         )
         break;
@@ -188,7 +221,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, ne
   }
 
   return (
-    <div className={`w-100`} style={{order: block.id}}>
+    <div className={`w-full`} style={{order: index}}>
       {formBlock(block)}
       <div className={`${commandsActive ? 'flex flex-col' : 'hidden'}
                       commandBox bg-gray-400 text-gray-800 font-medium text-xl
@@ -196,13 +229,18 @@ const NoteBlock: React.FC<NoteBlockProps> = ({ block, handleChange, newBlock, ne
                       border border-gray-600 rounded-b-lg
                       `}>
         <ul>
-          {suggestedCommands.map((command, index) => (
-            <li key={index}
-            className={`${suggestedCommands[highlightedSuggestion]?.name === command.name ? 'font-bold bg-sky-500' : ''}
-                        p-1 text-sm `}>
-              {command.name}
-            </li>
-          ))}
+          {suggestedCommands.length > 0 ? (
+            suggestedCommands.map((command, index) => (
+              <li key={index}
+              className={`${index === highlightedSuggestion ? 'font-bold bg-sky-500' : ''}
+                          p-1 text-sm `}>
+                {command.name}
+              </li>
+            ))
+          ) : (
+            <p className={`${index === highlightedSuggestion ? 'font-bold bg-sky-500' : ''}
+            p-1 text-sm `}>No commands found</p>
+          )}
         </ul>
       </div>
     </div>

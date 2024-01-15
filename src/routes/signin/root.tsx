@@ -49,7 +49,7 @@ const SignIn = () => {
         new Promise<string>((resolve) => {
           setTimeout(() => {
             resolve('Server is unresponsive');
-          }, 5000);
+          }, 10000);
         })
       ])
 
@@ -79,7 +79,7 @@ const SignIn = () => {
 
   return (
     <>
-      <NavBar/>
+      <NavBar requestNavigate={navigate}/>
       <ModalFade>
         <h1 className="text-xl font-medium">Log in to your account</h1>
         <form action="#" ref={formRef} onSubmit={authorizeUser}>
