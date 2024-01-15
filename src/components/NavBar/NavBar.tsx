@@ -28,7 +28,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
   const { user, setUser } = useContext(UserContext);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const location = useLocation();
 
   const handleMenuToggle = () => {

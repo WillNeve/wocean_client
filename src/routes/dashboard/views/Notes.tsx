@@ -19,9 +19,11 @@ interface noteTileProps {
 
 const NoteTile: React.FC<noteTileProps> = ({note}) => {
   return (
-    <a href={`/notes/${note.id}`} className='w-full h-auto flex items-center justify-center aspect-square rounded-md
+    <a href={`/notes/${note.id}`}
+       className='w-full h-auto flex items-center justify-center aspect-square rounded-md
                   bg-slate-900 border border-gray-500
-                     hover:border-2 hover:border-sky-500 cursor-pointer'>
+                     hover:border-2 hover:border-sky-500 cursor-pointer'
+       draggable={'true'}>
       <h3 className='text-center'>{note.title}</h3>
     </a>
   );
@@ -29,7 +31,8 @@ const NoteTile: React.FC<noteTileProps> = ({note}) => {
 
 const NewNoteTile = () => {
   return (
-    <a href={`/notes/new`} className='w-full h-auto flex items-center justify-center aspect-square rounded-md
+    <a href={`/notes/new`}
+       className='w-full h-auto flex items-center justify-center aspect-square rounded-md
                     bg-slate-900/50 border border-gray-500
                       hover:border-2 hover:border-sky-500 cursor-pointer'>
       <HiOutlinePlus className='text-2xl'/>

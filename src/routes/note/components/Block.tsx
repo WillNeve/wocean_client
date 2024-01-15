@@ -2,20 +2,20 @@ import React, { useEffect, useState, useRef } from 'react';
 import DOMPurify from 'dompurify';
 
 export type noteBlockType = {
-  id?: number,
+  id?: number, // auto assigned in editor thus not set when passing in a command block from here
   type: string,
   content: string
 }
 
 interface NoteBlockProps {
   index: number,
-  block: noteBlockType
+  block: noteBlockType,
   handleChange: (content: string) => void,
   newBlock: (sourceIndex: number) => void,
   requestFocusShift: (index: number) => void,
   newCommandBlock: (sourceIndex: number, block: noteBlockType) => void,
   removeBlock: (index: number) => void,
-  focus: boolean
+  focused: boolean
 }
 
 type command = {
@@ -52,7 +52,7 @@ const commands: command[] = [
   },
 ]
 
-const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlock, newCommandBlock, removeBlock, focus, requestFocusShift}) => {
+const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlock, newCommandBlock, removeBlock, focused, requestFocusShift}) => {
   const [content] = useState<string>(block.content)
   const [empty, setEmpty] = useState<boolean>(content.length === 0);
   const blockRef = useRef<HTMLDivElement>(null);
@@ -77,11 +77,26 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
   }, [writtenCommand, commandsActive])
 
   const handleInput = (e: React.KeyboardEvent<HTMLElement>) => {
+    // Keydown event, any preventative pre text change actions go here
     // console.log(e.key);
     const text = (e.target as HTMLInputElement).innerText;
     if (commandsActive) {
       if (e.key === 'Tab') {
         e.preventDefault();
+        if (highlightedSuggestion === suggestedCommands.length - 1) {
+          setHighlightedSuggestion(0);
+        } else {
+          setHighlightedSuggestion(highlightedSuggestion + 1);
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+      } else if (e.key === 'ArrowUp') {
+        if (highlightedSuggestion === 0) {
+          setHighlightedSuggestion(suggestedCommands.length - 1);
+        } else {
+          setHighlightedSuggestion(highlightedSuggestion - 1);
+        }
+      } else if (e.key === 'ArrowDown') {
         if (highlightedSuggestion === suggestedCommands.length - 1) {
           setHighlightedSuggestion(0);
         } else {
@@ -98,19 +113,16 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       } else if (text.length === 0 && e.key === 'Backspace') {
         removeBlock(index);
         return;
-      } else if (/^(\w|\s|Backspace)$/.test(e.key)) {
-        handleChange(text);
+      } else if (e.key === 'ArrowUp') {
+        requestFocusShift(index - 1)
+      } else if (e.key === 'ArrowDown') {
+        requestFocusShift(index + 1)
       }
-
-    }
-    if (e.key === 'ArrowUp') {
-      requestFocusShift(index - 1)
-    } else if (e.key === 'ArrowDown') {
-      requestFocusShift(index + 1)
     }
   };
 
   const handleCommands = (e: React.KeyboardEvent<HTMLElement>) => {
+    // keyup event, any post text change actions go here
     const text = (e.target as HTMLInputElement).innerText;
     setEmpty(text.length === 0);
     if (commandsActive) {
@@ -118,14 +130,22 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
         setCommandsActive(false);
         setHighlightedSuggestion(0);
       } else if (e.key === 'Enter') {
-        const commandBlock = suggestedCommands[highlightedSuggestion].block;
-        newCommandBlock(index, commandBlock)
+        const commandBlock = suggestedCommands[highlightedSuggestion]?.block;
+        if (commandBlock) {
+          newCommandBlock(index, commandBlock)
+        }
         setCommandsActive(false);
       } else if (e.key === ' ') {
         setCommandsActive(false);
-      } else if (e.key !== 'Tab') {
+      } else if (/^[a-zA-Z]$/.test(e.key)) {
         setHighlightedSuggestion(0);
         setWrittenCommand(text.substring(1))
+      }
+    } else {
+      if (/^(\w|\s|Backspace)$/.test(e.key)) {
+        // console.clear();
+        // console.log('Saving text:', text);
+        handleChange(text);
       }
     }
   }
@@ -136,20 +156,20 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
 
   useEffect(() => {
     if (blockRef.current) {
-      if (focus) {
+      if (focused) {
         blockRef.current.focus();
       } else {
         blockRef.current.blur();
       }
     }
-  }, [focus, block])
+  }, [focused, block])
 
   const formBlock = (block: noteBlockType) => {
     switch (block.type) {
       case 'p':
         return (
           <div className='w-full'>
-            <p className={`${empty && focus ? '' : 'hidden'} absolute pointer-events-none w-full py-1 px-1 focus:bg-gray-800/20 outline-none opacity-20`}>
+            <p className={`${empty && focused ? '' : 'hidden'} absolute pointer-events-none w-full py-1 px-1 focus:bg-gray-800/20 outline-none opacity-20`}>
               Start typing or press '/' for commands
             </p>
             <p

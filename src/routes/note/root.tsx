@@ -33,7 +33,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
   const [initialTitle, setInitialTitle] = useState('');
   const [updatedAt, setUpdatedAt] = useState('n/a');
   const [blocks, setBlocks] = useState<noteBlockType[]>([]);
-  const [focusBlockIndex, setFocusBlockIndex] = useState(0);
+  const [focusedBlockIndex, setFocusedBlockIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [nextId, setNextId] = useState<number>(0);
   // const [contentHidden, setContentHidden] = useState<boolean>(true)
@@ -137,7 +137,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
 
   const handleTitleChange = useCallback((newTitle: string) => {
     setTitle(newTitle);
-    setFocusBlockIndex(-1);
+    setFocusedBlockIndex(-1);
     startTyping();
   }, [startTyping])
 
@@ -157,11 +157,11 @@ const Note: React.FC<noteProps> = ({newNote}) => {
 
   const handleFocusShift = (newOrder: number) => {
     if (newOrder < 0) {
-      setFocusBlockIndex(0)
+      setFocusedBlockIndex(0)
     } else if (newOrder > blocks.length - 1) {
-      setFocusBlockIndex(blocks.length - 1)
+      setFocusedBlockIndex(blocks.length - 1)
     } else {
-      setFocusBlockIndex(newOrder)
+      setFocusedBlockIndex(newOrder)
     }
   }
 
@@ -174,19 +174,19 @@ const Note: React.FC<noteProps> = ({newNote}) => {
         ...blocks.slice(sourceIndex + 1)
     ];
     setBlocks(localBlocks);
-    setFocusBlockIndex(sourceIndex + 1);
+    setFocusedBlockIndex(sourceIndex + 1);
   }
 
   const removeBlock = (sourceIndex: number) => {
     const localBlocks = blocks.filter((_: noteBlockType, i: number) => i !== sourceIndex);
-    setFocusBlockIndex(sourceIndex - 1);
+    setFocusedBlockIndex(sourceIndex - 1);
     if (localBlocks.length === 0)  {
       const newBlock = {id: nextId, type: 'p', content: ''};
       setNextId(nextId + 1);
       localBlocks.push(newBlock)
     }
     setBlocks(localBlocks);
-    setFocusBlockIndex(sourceIndex > 0 ? sourceIndex - 1 : sourceIndex);
+    setFocusedBlockIndex(sourceIndex > 0 ? sourceIndex - 1 : sourceIndex);
   }
 
   const createNewCommandBlock = (sourceIndex: number, block: noteBlockType) => {
@@ -199,7 +199,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
         ...blocks.slice(sourceIndex + 1)
     ];
     setBlocks(localBlocks);
-    setFocusBlockIndex(sourceIndex);
+    setFocusedBlockIndex(sourceIndex);
   }
 
   return (
@@ -226,7 +226,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
                   key={id}
                   index={index}
                   block={{type, content}}
-                  focus={index === focusBlockIndex ? true : false}
+                  focused={index === focusedBlockIndex ? true : false}
                   newBlock={createNewBlock}
                   newCommandBlock={createNewCommandBlock}
                   removeBlock={removeBlock}
