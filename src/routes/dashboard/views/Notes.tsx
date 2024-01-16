@@ -20,6 +20,10 @@ interface noteTileProps {
   onMouseUp: (e: React.MouseEvent) => void,
 }
 
+interface noteTileStatic {
+  
+}
+
 const NoteTile: React.FC<noteTileProps> = ({note, onMouseDown, onMouseMove, onMouseUp}) => {
   return (
     <a href={`/notes/${note.id}`}
@@ -33,6 +37,10 @@ const NoteTile: React.FC<noteTileProps> = ({note, onMouseDown, onMouseMove, onMo
       <h3 className='text-center'>{note.title}</h3>
     </a>
   );
+}
+
+const NoteTileFake: React.FC<noteTileStatic> = ({note}) => {
+
 }
 
 const NewNoteTile = () => {
@@ -54,7 +62,7 @@ const Notes = () => {
   const [dragTarget, setDragTarget] = useState<number | null>(null);
 
   const handleNotePress = (e: React.MouseEvent, index: number) => {
-    e.stopPropagation();
+    e.preventDefault();
     console.log(`Tile index ${index} pressed`);
     console.clear();
     console.log(e);
@@ -63,14 +71,12 @@ const Notes = () => {
   }
 
   const handleNoteMove = (e: React.MouseEvent, index: number) => {
-    e.stopPropagation();
     if (dragActive) {
       console.log(`Dragged tile index ${index} moving`, index === dragTarget);
     }
   }
 
   const handleNoteRelease = (e: React.MouseEvent, index: number) => {
-    e.stopPropagation();
     e.preventDefault();
     console.log(e, index);
     // ........
