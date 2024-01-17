@@ -220,7 +220,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
           )}
         </div>
         <div className="wrapper relative">
-            <div className="relative editor w-100 overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-wave-100 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+            <div className="relative editor w-100 overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-white p-4 m-4 font-medium min-h-[500px]" ref={editor}>
               {blocks.map(({ id, type, content }, index) => (
                 <NoteBlock
                   key={id}

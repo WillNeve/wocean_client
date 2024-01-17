@@ -81,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
       </div>
       <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-5xl px-4 h-[40px] pointer-events-none">
         <div className={`NavMenu ${menuOpen ? 'active' : ''}
-                        w-fit min-w-[200px] h-fit flex flex-col items-end mr-1 p-4 bg-wave-100 text-gray-600 rounded-b-lg border border-gray-600 border-t-gray-200`}
+                        w-fit min-w-[200px] h-fit flex flex-col items-end mr-1 p-4 bg-white text-gray-600 rounded-b-lg border border-gray-600 border-t-gray-200`}
                         >
           <a href="/dashboard" className={`bg-wave-200 hover:bg-wave-300 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
             <MdOutlineSpaceDashboard className='text-md'/>
