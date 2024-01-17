@@ -34,7 +34,6 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
         onMouseDown={onDragStart}
         onTouchStart={onTouchStart}
         onDragEnd={onDragEnd}
-        onClick={(e) => console.log('clicked tile', e)}
       >
         <h3 className={`${moving ? 'hidden' : '' } text-center`}>{note?.title}</h3>
       </a>

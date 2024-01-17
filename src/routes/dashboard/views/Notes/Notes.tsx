@@ -121,7 +121,6 @@ const Notes = () => {
     // prevent page scrolling on mobile
     document.addEventListener('touchmove', preventPageScroll, { passive: false });
 
-    console.log(e);
     const baseTarget = e.target as HTMLElement;
     const target = baseTarget.nodeName === 'A' ? baseTarget : baseTarget.offsetParent;
     setDragTargetIndex(index);
@@ -144,7 +143,6 @@ const Notes = () => {
       // most likely a click not a drag (very short path)
       const href = noteTileRefs.current[dragTargetIndex].href;
       const url = new URL(href);
-      console.log('redirecting to note page');
       navigate(url.pathname)
 
     }
@@ -161,7 +159,6 @@ const Notes = () => {
     e.preventDefault();
     if (dragActive) {
       setDragCaptures(dragCaptures + 1)
-      console.log('Drag captures:', dragCaptures);
 
       const clientX = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientX : (e as unknown as MouseEvent).clientX;
       const clientY = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientY : (e as unknown as MouseEvent).clientY;
