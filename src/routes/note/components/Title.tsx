@@ -21,43 +21,48 @@ const Title: React.FC<titleProps> = ({content, handleChange}) => {
     return { __html: DOMPurify.sanitize(content) };
   };
 
-  const handleInput = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
-    const text = (e.target as HTMLInputElement).innerText;
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       return;
     }
     if (e.key === 'Backspace') {
-      if (text.length <= 1) {
-        setInvalid(true);
-        handleChange('Title');
+      if (invalid) {
+        e.preventDefault();
       }
-    } else if (!/^[A-Za-z]$/.test(e.key) && text.length === 0) {
-      e.preventDefault();
-    } else {
+    }
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLHeadElement>) => {
+    const text = (e.target as HTMLInputElement).innerText;
+    if (/^[A-Za-z]$/.test(e.key)) {
       setInvalid(false);
       handleChange(text);
+    } else if (!invalid && text.length === 0 && e.key === 'Backspace') {
+      setInvalid(true);
+      handleChange('Title');
     }
   };
 
   return (
     <>
       <div className="relative w-fit h-fit  mt-4  mx-auto">
-      <h1 className={`font-medium text-4xl
+      <h1 className={`text-gray-200 font-medium text-4xl
                       outline-none mx-auto w-fit m-w-5`}
               contentEditable={true}
               dangerouslySetInnerHTML={createMarkup(localContent)}
-              onKeyDown={handleInput}>
+              onKeyDown={handleKeyDown}
+              onKeyUp={handleKeyUp}>
               </h1>
-      <h1 className={`${!invalid ? 'hidden' : ''} text-gray-400/50
+      <h1 className={`${!invalid ? 'hidden' : ''} text-gray-200/50
                       font-medium text-4xl
                       outline-none
                       absolute top-0 left-0 pointer-events-none -translate-x-1/2`}
-              onKeyDown={handleInput}>Title
+              onKeyDown={handleKeyDown}>Title
               </h1>
       </div>
       <div className={`${!invalid ? 'hidden' : ''}
-                      w-fit mx-auto text-red-300 font-medium
+                      w-fit mx-auto text-red-500 font-medium
                       flex items-center gap-x-2`}><FiAlertOctagon className='mb-[1px]'/><p>Title must be provided</p></div>
     </>
   )

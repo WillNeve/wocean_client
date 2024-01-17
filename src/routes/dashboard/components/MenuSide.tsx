@@ -17,8 +17,8 @@ const MenuButton: React.FC<MenuButtonProps> = ({children, onClick, name, viewNam
   return (
     <button type='button'
             onClick={handleClick}
-            className={`font-normal ${name === viewName ? 'bg-sky-500 text-gray-200' : ''}
-                        hover:bg-sky-500 hover:text-gray-200
+            className={`font-normal ${name === viewName ? 'bg-wave-200 font-semibold' : ''}
+            text-gray-600 hover:bg-wave-200 border border-gray-500 hover:font-semibold
                         flex gap-x-4 justify-center min-[700px]:justify-start items-center p-2 rounded-md`}
             >
       {children}
@@ -28,7 +28,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({children, onClick, name, viewNam
 
 const DividerBar = () => {
   return (
-    <div className='h-[1px] mb-2 bg-gray-400'></div>
+    <div className='h-[1px] mb-2 bg-gray-600'></div>
   );
 }
 
@@ -42,7 +42,7 @@ const MenuSide: React.FC = () => {
   }
 
   return (
-    <div className="menu h-100 px-2 min-[700px]:px-4 mt-2 text-gray-400 font-light">
+    <div className="menu h-100 px-2 min-[700px]:px-4 mt-2 text-gray-600 font-light">
       <div className="submenu">
         <h2 className='text-sm text-center min-[700px]:text-start'>Notes</h2>
         <ul className='my-4 flex flex-col gap-y-1'>

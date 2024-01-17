@@ -17,5 +17,5 @@
 }
 
 .masked {
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1.0) 60%, rgba(0,0,0,.5) 100%);
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1.0) 60%, rgba(0,0,0,.6) 100%);
 }

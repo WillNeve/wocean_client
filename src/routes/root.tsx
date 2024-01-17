@@ -4,7 +4,7 @@ import { UserContext } from "../auth";
 
 
 //components
-import { ModalFade } from "../styles/Modals";
+import { ModalClear } from "../styles/Modals";
 import NavBar from "../components/NavBar/NavBar";
 
 function Home() {
@@ -22,51 +22,53 @@ function Home() {
   return (
     <>
       <NavBar requestNavigate={navigate}/>
-      <div className="w-full h-lvh text-left bg-gradient-to-tr from-slate-900 to-slate-800">
-        <ModalFade>
-          <h1 className='font-bold text-5xl mt-5 mb-5 text-gray-200'>Wocean</h1>
-          <p className='mt-2'>Streamline your note-taking</p>
-          <div className="flex flex-col buttons">
-            <a
-              type="button"
-              href='/signup'
-              aria-label="Sign Up Button"
-              className="
-                      bg-sky-600
-                      w-fit p-4 my-4
-                      hover:bg-sky-500
-                      rounded-md
-                      border
-                      border-gray-500
-                      font-medium
-                      text-gray-200
-                      cursor-pointer
-                      transition"
-            >
-              Create your account
-            </a>
-            <div className="flex flex-col">
-              <p>Have an account?</p>
+      <div className="w-full h-lvh text-left bg-gradient-to-b from-wave-600 to-wave-700">
+        <ModalClear>
+          <div className="w-100 py-2 pl-6 bg-gradient-to-r from-wave-700 to-wave-600">
+            <h1 className='font-bold text-5xl mt-5 mb-5 text-white'>🌊 Wocean</h1>
+          </div>
+          <div className="bg-wave-100 p-6">
+            <p className='mt-2'>Streamline your note-taking</p>
+            <div className="flex flex-col buttons">
               <a
                 type="button"
-                href='/signin'
+                href='/signup'
                 aria-label="Sign Up Button"
                 className="
-                        w-fit p-2 py-1 my-2
-                        hover:bg-sky-600
+                        bg-wave-200
+                        w-fit p-4 my-4
+                        hover:bg-wave-300
                         rounded-md
                         border
-                        border-gray-500
+                        border-gray-600
                         font-medium
-                        text-gray-200
                         cursor-pointer
                         transition"
               >
-                Login
+                Create your account
               </a>
+              <div className="flex flex-col">
+                <p>Have an account?</p>
+                <a
+                  type="button"
+                  href='/signin'
+                  aria-label="Sign Up Button"
+                  className="
+                          w-fit p-2 py-1 my-2
+                          hover:bg-wave-200
+                          rounded-md
+                          border
+                          border-gray-500
+                          font-medium
+                          cursor-pointer
+                          transition"
+                >
+                  Login
+                </a>
+              </div>
             </div>
           </div>
-        </ModalFade>
+        </ModalClear>
       </div>
     </>
   );

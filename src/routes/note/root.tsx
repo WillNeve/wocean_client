@@ -215,12 +215,12 @@ const Note: React.FC<noteProps> = ({newNote}) => {
           ) : (
             <>
               <Title handleChange={handleTitleChange} content={initialTitle}/>
-              <p className='font-medium text-center text-gray-600 text-sm'>Updated at: <em className='not-italic font-semibold'>{updatedAt}</em></p>
+              <p className='text-center text-gray-300 text-sm'>Updated at: <em className='not-italic text-gray-200'>{updatedAt}</em></p>
             </>
           )}
         </div>
         <div className="wrapper relative">
-            <div className="relative editor w-100 overflow-hidden flex flex-col outline-none rounded-lg bg-sky-900 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+            <div className="relative editor w-100 overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-wave-100 p-4 m-4 font-medium min-h-[500px]" ref={editor}>
               {blocks.map(({ id, type, content }, index) => (
                 <NoteBlock
                   key={id}
@@ -249,7 +249,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
                               saving-notif
                               flex items-center gap-x-1
                               absolute top-2 right-2 w-fit
-                              px-2 py-1 border border-gray-600 rounded-md bg-gray-200/100
+                              px-2 py-1 border border-gray-600 rounded-md bg-whitebright/100
                               font-normal text-sm text-gray-800 backdrop-blur-sm ${ saving ? '' : 'saved'}`}>
                 <p className='w-fit'>{ saving ? 'Saving' : 'Saved'}</p>
                 <div className="icon relative h-5 w-5">

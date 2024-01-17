@@ -7,8 +7,8 @@
 
 body {
   @apply font-semibold;
-  @apply text-gray-300;
-  @apply bg-slate-900;
+  @apply text-gray-600;
+  @apply bg-wave-700;
   margin: 0;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -24,12 +24,12 @@ code {
 }
 
 .customScroll::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 
 
 .customScroll::-webkit-scrollbar-thumb {
-  @apply bg-gray-300;
+  @apply bg-gray-600;
   border-radius: 6px;
 }

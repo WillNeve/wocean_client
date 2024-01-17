@@ -81,15 +81,17 @@ const SignIn = () => {
     <>
       <NavBar requestNavigate={navigate}/>
       <ModalFade>
-        <h1 className="text-xl font-medium">Log in to your account</h1>
-        <form action="#" ref={formRef} onSubmit={authorizeUser}>
-          {errorMessage ?
-            (<div className="text-red-300 font-medium flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
-            : ''}
-          <FormGroup name={'email'} errors={fieldErrors.email}/>
-          <FormGroup name={'password'} errors={fieldErrors.password}/>
-          <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Log in</ButtonForm>
-        </form>
+        <div className="p-6">
+          <h1 className="text-xl font-medium">Log in to your account</h1>
+          <form action="#" ref={formRef} onSubmit={authorizeUser}>
+            {errorMessage ?
+              (<div className="text-red-300 font-medium flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
+              : ''}
+            <FormGroup name={'email'} errors={fieldErrors.email}/>
+            <FormGroup name={'password'} errors={fieldErrors.password}/>
+            <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Log in</ButtonForm>
+          </form>
+        </div>
       </ModalFade>
     </>
   )

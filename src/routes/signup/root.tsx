@@ -81,17 +81,19 @@ const SignUp = () => {
     <>
       <NavBar requestNavigate={navigate}/>
       <ModalFade>
-        <h1 className="text-xl font-medium">Create your account</h1>
-        <form action="#" ref={formRef} onSubmit={createUser}>
-          {errorMessage ?
-          (<div className="text-red-300 font-medium flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
-          : ''}
-          <FormGroup name={'username'} errors={fieldErrors.username}/>
-          <FormGroup name={'email'} errors={fieldErrors.email}/>
-          <FormGroup name={'password'} errors={fieldErrors.password}/>
-          <FormGroup name={'password_confirmation'} errors={fieldErrors.password}/>
-          <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Create Account</ButtonForm>
-        </form>
+        <div className="p-6">
+          <h1 className="text-xl font-medium">Create your account</h1>
+          <form action="#" ref={formRef} onSubmit={createUser}>
+            {errorMessage ?
+            (<div className="text-red-300 font-medium flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
+            : ''}
+            <FormGroup name={'username'} errors={fieldErrors.username}/>
+            <FormGroup name={'email'} errors={fieldErrors.email}/>
+            <FormGroup name={'password'} errors={fieldErrors.password}/>
+            <FormGroup name={'password_confirmation'} errors={fieldErrors.password}/>
+            <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Create Account</ButtonForm>
+          </form>
+        </div>
       </ModalFade>
     </>
   )

@@ -54,18 +54,18 @@ const Dashboard: React.FC = () => {
         <NavBar requestNavigate={navigate}/>
         <ViewNameContext.Provider value={{viewName: viewName, setViewName}}>
         <div className='dashboard-wrapper px-4 mt-5 mx-auto w-100 max-w-5xl'>
-          <div className="relative dashboard-inner h-[80vh] flex text-gray-300 px-2 py-4 min-[700px]:px-4 font-medium rounded-lg bg-sky-900 ">
-            <div className='min-w-[85px] w-[20%] min-[700px]:w-[30%] border-r-[1px] border-gray-500'>
+          <div className="relative dashboard-inner h-[80vh] flex text-gray-600 px-2 py-4 min-[700px]:px-4 font-medium rounded-lg bg-wave-100 ">
+            <div className='min-w-[85px] w-[20%] min-[700px]:w-[30%] border-r-[1px] border-gray-600'>
               <div className="hidden top mb-4 min-[700px]:block">
-                <h1 className='px-4 text-2xl text-gray-300'>Dashboard</h1>
-                <p className='px-4 font-light text-gray-400'>Welcome, <em className='not-italic'>{user.username}</em></p>
+                <h1 className='px-4 text-2xl text-gray-600'>Dashboard</h1>
+                <p className='px-4 font-light text-gray-700'>Welcome, <em className='not-italic'>{user.username}</em></p>
               </div>
               <MenuSide />
             </div>
-            <div className='w-3/4 px-4 text-gray-400'>
+            <div className='w-3/4 px-4 text-gray-700'>
               <div className="block top mb-4 min-[700px]:hidden">
-                <h1 className='text-xl text-gray-300'>Dashboard - {formattedViewName}</h1>
-                <p className='text-sm font-light text-gray-400'>Welcome, <em className='not-italic'>{user.username}</em></p>
+                <h1 className='text-xl text-gray-600'>Dashboard - {formattedViewName}</h1>
+                <p className='text-sm font-light text-gray-700'>Welcome, <em className='not-italic'>{user.username}</em></p>
               </div>
               {activeView}
             </div>

@@ -21,14 +21,14 @@ const ButtonFormRender: React.ForwardRefRenderFunction<HTMLButtonElement, Button
         flex
         items-center
         gap-x-4
-        bg-sky-600
+        bg-wave-100
         w-fit p-4 m-4
-        hover:bg-sky-500
+        hover:bg-wave-200
         rounded-md
         border
         border-gray-500
         font-medium
-        text-gray-200
+        text-gray-600
         cursor-pointer
         transition
         button-loading
