@@ -134,6 +134,7 @@ const Notes = () => {
 
 
   const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
     if (dragActive) {
       const clientX = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientX : (e as unknown as MouseEvent).clientX;
       const clientY = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientY : (e as unknown as MouseEvent).clientY;
