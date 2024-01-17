@@ -135,16 +135,17 @@ const Notes = () => {
     }
   }
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (e) => {
     // re enable scrolling
+    console.log(e);
+
     document.removeEventListener('touchmove', preventPageScroll);
 
-    if (dragCaptures < 5) {
+    if (dragCaptures < 5 && dragActive) {
       // most likely a click not a drag (very short path)
       const href = noteTileRefs.current[dragTargetIndex].href;
       const url = new URL(href);
       navigate(url.pathname)
-
     }
     setDragActive(false);
     setDragTargetIndex(0);
@@ -154,9 +155,6 @@ const Notes = () => {
 
 
   const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
-
-
-    e.preventDefault();
     if (dragActive) {
       setDragCaptures(dragCaptures + 1)
 
@@ -253,7 +251,8 @@ const Notes = () => {
            onMouseMove={handleDragMove}
            onTouchMove={handleDragMove}
            onMouseUp={handleDragEnd}
-           onTouchEnd={handleDragEnd}>
+           onTouchEnd={handleDragEnd}
+          >
         {loaded ? (
           <>
             <NewNoteTile/>
