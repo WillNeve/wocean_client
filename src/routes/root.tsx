@@ -22,7 +22,7 @@ function Home() {
   return (
     <>
       <NavBar requestNavigate={navigate}/>
-      <div className="w-full h-lvh text-left bg-gradient-to-b from-wave-600 to-wave-700">
+      <div className="w-full h-lvh text-left">
         <ModalClear>
           <div className="w-100 py-2 pl-6 bg-gradient-to-r from-wave-700 to-wave-600">
             <h1 className='font-bold text-5xl mt-5 mb-5 text-white'>🌊 Wocean</h1>

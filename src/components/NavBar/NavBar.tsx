@@ -46,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
 
   return (
     <div className='sticky z-20 top-0 left-0 w-full px-4 py-2
-                    border-b-[1px] border-b-whiteDark bg-wave-700
+                   
                    text-whitebright'>
       <div className='flex mx-auto justify-between items-center w-full px-4 max-w-5xl'>
         <a href='/' className="masked text-2xl font-bold flex items-center gap-x-2">

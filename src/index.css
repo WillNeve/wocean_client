@@ -6,9 +6,12 @@
 @import 'tailwindcss/utilities';
 
 body {
+  min-height: 100vh;
   @apply font-semibold;
-  @apply text-gray-600;
-  @apply bg-wave-700;
+  @apply bg-gradient-to-b;
+  @apply from-wave-900;
+  @apply to-wave-700;
+  /* @apply bg-wave-700; */
   margin: 0;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
