@@ -110,7 +110,6 @@ const Notes = () => {
   };
 
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
-
     console.clear();
     console.log(e);
     const baseTarget = e.target as HTMLElement;
@@ -227,7 +226,9 @@ const Notes = () => {
                                               min-[900px]:grid-cols-5 lg:grid-cols-6 grid-rows-auto
                                               `}
            onMouseMove={handleDragMove}
-           onTouchMove={handleDragMove}>
+           onTouchMove={handleDragMove}
+           onMouseUp={handleDragEnd}
+           onTouchEnd={handleDragEnd}>
         {loaded ? (
           <>
             <NewNoteTile/>
