@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 //context
 import { UserContext } from '../../../../auth';
 //types
@@ -9,6 +10,8 @@ import { NoteTile, NewNoteTile, NoteTileClone } from './components/Tile';
 import { LoaderGroup, LoaderRect } from '../../../../styles/Utility';
 
 const Notes = () => {
+  const navigate = useNavigate();
+
   const [notes, setNotes] = useState<note[]>([])
   const [loaded, setLoaded] = useState<boolean>(false)
   const { user } = useContext(UserContext);
@@ -71,7 +74,7 @@ const Notes = () => {
 
   useEffect(() => {
     getNotes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const saveNewTileOrder = useCallback(() => {
@@ -79,12 +82,13 @@ const Notes = () => {
       notes[i].order = i;
     }
     saveNotes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes])
 
   // -------- drag and drop
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [dragTargetIndex, setDragTargetIndex] = useState<number>(0);
+  const [dragCaptures, setDragCaptures] = useState<number>(0);
 
   const noteTileRefs = useRef<Array<HTMLAnchorElement>>([]);
 
@@ -109,8 +113,14 @@ const Notes = () => {
     setNotes(newNotes);
   };
 
+  const preventPageScroll = (e: MouseEvent | TouchEvent) => {
+    e.preventDefault();
+  }
+
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
-    console.clear();
+    // prevent page scrolling on mobile
+    document.addEventListener('touchmove', preventPageScroll, { passive: false });
+
     console.log(e);
     const baseTarget = e.target as HTMLElement;
     const target = baseTarget.nodeName === 'A' ? baseTarget : baseTarget.offsetParent;
@@ -127,15 +137,32 @@ const Notes = () => {
   }
 
   const handleDragEnd = () => {
+    // re enable scrolling
+    document.removeEventListener('touchmove', preventPageScroll);
+
+    if (dragCaptures < 5) {
+      // most likely a click not a drag (very short path)
+      const href = noteTileRefs.current[dragTargetIndex].href;
+      const url = new URL(href);
+      console.log('redirecting to note page');
+      navigate(url.pathname)
+
+    }
     setDragActive(false);
     setDragTargetIndex(0);
     saveNewTileOrder();
+    setDragCaptures(0);
   }
 
 
   const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+
+
     e.preventDefault();
     if (dragActive) {
+      setDragCaptures(dragCaptures + 1)
+      console.log('Drag captures:', dragCaptures);
+
       const clientX = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientX : (e as unknown as MouseEvent).clientX;
       const clientY = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientY : (e as unknown as MouseEvent).clientY;
       if (dragCloneRef.current) {

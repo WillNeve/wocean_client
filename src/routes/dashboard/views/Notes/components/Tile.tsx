@@ -28,12 +28,13 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
         href={`/notes/${note.id}`}
         ref={ref}
         data-index={index}
-        className={`${moving ? `bg-sky-500/20 border-gray-200` : `bg-slate-900 border-gray-500`} relative flex  w-full h-auto aspect-square items-center justify-center rounded-md
+        className={`${moving ? `bg-sky-500/20 border-gray-200 cursor-grabbing` : `bg-slate-900 border-gray-500 cursor-pointer`} relative flex  w-full h-auto aspect-square items-center justify-center rounded-md
                       border border-gray-500
-                     hover:border-2 hover:border-sky-500 cursor-grab`}
+                     hover:border-2 hover:border-sky-500`}
         onMouseDown={onDragStart}
         onTouchStart={onTouchStart}
         onDragEnd={onDragEnd}
+        onClick={(e) => console.log('clicked tile', e)}
       >
         <h3 className={`${moving ? 'hidden' : '' } text-center`}>{note?.title}</h3>
       </a>
