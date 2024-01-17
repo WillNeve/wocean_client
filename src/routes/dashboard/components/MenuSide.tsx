@@ -17,8 +17,8 @@ const MenuButton: React.FC<MenuButtonProps> = ({children, onClick, name, viewNam
   return (
     <button type='button'
             onClick={handleClick}
-            className={`font-normal ${name === viewName ? 'bg-wave-200 font-semibold' : ''}
-            text-gray-600 hover:bg-wave-200 border border-gray-500 hover:font-semibold
+            className={`font-normal ${name === viewName ? 'bg-wave-300 font-semibold' : ''}
+            text-gray-600 hover:bg-wave-300 border border-gray-500 hover:font-semibold
                         flex gap-x-4 justify-center min-[700px]:justify-start items-center p-2 rounded-md`}
             >
       {children}

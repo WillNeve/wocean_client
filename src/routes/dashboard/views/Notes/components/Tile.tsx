@@ -28,7 +28,7 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
         href={`/notes/${note.id}`}
         ref={ref}
         data-index={index}
-        className={`${moving ? `bg-wave-600/20 border-none cursor-grabbing` : `bg-wave-500 border-gray-600 cursor-pointer`} relative flex  w-full h-auto aspect-square items-center justify-center rounded-md
+        className={`${moving ? `bg-wave-600/20 border-none cursor-grabbing` : `bg-wave-100 border-gray-600 cursor-pointer`} relative flex  w-full h-auto aspect-square items-center justify-center rounded-md
                       border border-gray-500
                     hover:border-2 hover:border-amber-500`}
         onMouseDown={onDragStart}
@@ -49,7 +49,7 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
       <div
         ref={ref}
         className={`${active ? '' : 'hidden'} flex fixed top-50 left-50 -translate-x-1/2 -translate-y-1/2
-                    items-center justify-center rounded-md bg-wave-500 cursor-grabbing
+                    items-center justify-center rounded-md bg-wave-100 cursor-grabbing
                     border-2 border-amber-500`}
         onMouseUp={onMouseUp}
         onTouchEnd={onTouchEnd}>
@@ -63,8 +63,8 @@ export const NewNoteTile = () => {
   return (
     <a href={`/notes/new`}
        className='w-full h-auto flex items-center justify-center aspect-square rounded-md
-                    bg-wave-200 border border-gray-500
-                      hover:border-2 hover:border-wave-500 cursor-pointer'>
+                    bg-wave-300 border border-gray-500
+                      hover:border-2 hover:border-wave-100 cursor-pointer'>
       <HiOutlinePlus className='text-2xl'/>
     </a>
   );
