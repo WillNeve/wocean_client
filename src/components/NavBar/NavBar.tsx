@@ -61,7 +61,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
               <button type='button'
               aria-label='NavMobileMenu Button'
               onClick={handleMenuToggle}
-              className='p-2 hover:bg-wave-200 rounded-md'>
+              className='p-2 hover:bg-wave-200 hover:text-gray-600 rounded-md'>
               <RiMenu3Line className='cursor-pointer text-xl'/>
             </button>
             </>

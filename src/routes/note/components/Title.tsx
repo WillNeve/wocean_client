@@ -35,12 +35,12 @@ const Title: React.FC<titleProps> = ({content, handleChange}) => {
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLHeadElement>) => {
     const text = (e.target as HTMLInputElement).innerText;
-    if (/^[A-Za-z]$/.test(e.key)) {
-      setInvalid(false);
-      handleChange(text);
-    } else if (!invalid && text.length === 0 && e.key === 'Backspace') {
+    if (!invalid && text.length === 0 && e.key === 'Backspace') {
       setInvalid(true);
       handleChange('Title');
+    } else if (/^[A-Za-z]$/.test(e.key) || (text.length > 0 && e.key === 'Backspace')) {
+      setInvalid(false);
+      handleChange(text);
     }
   };
 
