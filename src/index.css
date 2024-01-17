@@ -22,3 +22,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.customScroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+
+
+.customScroll::-webkit-scrollbar-thumb {
+  @apply bg-gray-300;
+  border-radius: 6px;
+}

@@ -44,7 +44,7 @@ const MenuSide: React.FC = () => {
   return (
     <div className="menu h-100 px-2 min-[700px]:px-4 mt-2 text-gray-400 font-light">
       <div className="submenu">
-        <h2 className='text-sm'>Notes</h2>
+        <h2 className='text-sm text-center min-[700px]:text-start'>Notes</h2>
         <ul className='my-4 flex flex-col gap-y-1'>
           <MenuButton onClick={handleViewChange} name={'notes'} viewName={viewName}>
             <GoFileDirectory className='text-lg'/><p className='hidden min-[700px]:block'>All</p>
@@ -53,7 +53,7 @@ const MenuSide: React.FC = () => {
       </div>
       <DividerBar />
       <div className="submenu">
-        <h2 className='text-sm'>Tools</h2>
+        <h2 className='text-sm text-center min-[700px]:text-start'>Tools</h2>
         <ul className='my-4 flex flex-col gap-y-1'>
           <MenuButton onClick={handleViewChange} name={'overview'} viewName={viewName}>
             <GoGraph className='text-lg'/><p className='hidden min-[700px]:block'>Overview</p>
@@ -62,7 +62,7 @@ const MenuSide: React.FC = () => {
       </div>
       <DividerBar />
       <div className="submenu">
-        <h2 className='text-sm'>Settings</h2>
+        <h2 className='text-sm text-center min-[700px]:text-start'>Settings</h2>
         <ul className='my-4 flex flex-col gap-y-1'>
           <MenuButton onClick={handleViewChange} name={'account'} viewName={viewName}>
             <GoGear className='text-lg'/><p className='hidden min-[700px]:block'>Account</p>

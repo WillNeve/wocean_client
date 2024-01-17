@@ -6,7 +6,7 @@ import NavBar from '../../components/NavBar/NavBar';
 //subcomponents
 import MenuSide from './components/MenuSide';
 //views
-import Notes from './views/Notes';
+import Notes from './views/Notes/Notes';
 import Overview from './views/Overview';
 import Account from './views/Account';
 
