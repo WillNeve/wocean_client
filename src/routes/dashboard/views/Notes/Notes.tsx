@@ -135,10 +135,8 @@ const Notes = () => {
     }
   }
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = () => {
     // re enable scrolling
-    console.log(e);
-
     document.removeEventListener('touchmove', preventPageScroll);
 
     if (dragCaptures < 5 && dragActive) {
