@@ -35,9 +35,9 @@ function Home() {
                 href='/signup'
                 aria-label="Sign Up Button"
                 className="
-                        bg-wave-300
+                        bg-waveLight-600
                         w-fit p-4 my-4
-                        hover:bg-wave-300
+                        hover:bg-waveLight-600
                         rounded-md
                         border
                         border-gray-600
@@ -55,7 +55,7 @@ function Home() {
                   aria-label="Sign Up Button"
                   className="
                           w-fit p-2 py-1 my-2
-                          hover:bg-wave-300
+                          hover:bg-waveLight-600
                           rounded-md
                           border
                           border-gray-500

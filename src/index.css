@@ -9,8 +9,8 @@ body {
   min-height: 100vh;
   @apply font-semibold;
   @apply bg-gradient-to-b;
-  @apply from-wave-900;
-  @apply to-wave-700;
+  @apply from-wave-800;
+  @apply to-wave-600;
   /* @apply bg-wave-700; */
   margin: 0;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

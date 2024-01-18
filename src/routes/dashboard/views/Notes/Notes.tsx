@@ -7,6 +7,11 @@ import { note } from '../../../../types/types';
 //components
 import { NoteTile, NewNoteTile, NoteTileClone } from './components/Tile';
 //icons
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdDriveFileMoveRtl } from "react-icons/md";
+
+
+//styles
 import { LoaderGroup, LoaderRect } from '../../../../styles/Utility';
 
 const Notes = () => {
@@ -122,7 +127,7 @@ const Notes = () => {
     document.addEventListener('touchmove', preventPageScroll, { passive: false });
 
     const baseTarget = e.target as HTMLElement;
-    const target = baseTarget.nodeName === 'A' ? baseTarget : baseTarget.offsetParent;
+    const target = baseTarget.nodeName === 'A' ? baseTarget : baseTarget.closest('a');
     setDragTargetIndex(index);
     setDragActive(true);
     if (dragCloneRef.current) {
@@ -238,9 +243,21 @@ const Notes = () => {
   }
 
   return (
-    <>
-      <h2>{loaded ? (<>Your notes ({notes.length})</>) : (<>Loading...</>)}</h2>
-      <div className={`customScroll pr-4 mt-4 w-full h-fit max-h-[75%] overflow-y-scroll
+    <div className='pr-4 '>
+      <div className="top flex items-center justify-between w-full">
+        <h2>{loaded ? (<>Your notes ({notes.length})</>) : (<>Loading...</>)}</h2>
+        <ul className='flex gap-x-2 bg-gray-100 w-fit px-2 py-1 rounded-md border border-gray-600'>
+          <button type='button'
+                  className='p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-gray-200'>
+            <MdDriveFileMoveRtl/>
+          </button>
+          <button type='button'
+                  className='p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-red-200'>
+            <RiDeleteBin6Line/>
+          </button>
+        </ul>
+      </div>
+      <div className={`customScroll mt-4 w-full h-fit max-h-[75%] overflow-y-scroll
                                               overflow-x-auto
                                               grid gap-4 min-[400px]:grid-cols-2
                                               sm:grid-cols-3 md:grid-cols-4
@@ -303,7 +320,7 @@ const Notes = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

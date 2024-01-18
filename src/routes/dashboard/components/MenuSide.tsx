@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext } from 'react'
 import { GoGraph, GoGear, GoFileDirectory } from "react-icons/go";
 import { ViewNameContext } from '../root';
+import { UserContext } from '../../../auth';
 
 
 interface MenuButtonProps {
@@ -10,6 +11,7 @@ interface MenuButtonProps {
   name: string
 }
 
+
 const MenuButton: React.FC<MenuButtonProps> = ({children, onClick, name, viewName}) => {
   const handleClick = () => {
     onClick(name)
@@ -17,8 +19,8 @@ const MenuButton: React.FC<MenuButtonProps> = ({children, onClick, name, viewNam
   return (
     <button type='button'
             onClick={handleClick}
-            className={`font-normal ${name === viewName ? 'bg-wave-300 font-semibold' : ''}
-            text-gray-600 hover:bg-wave-300 border border-gray-500 hover:font-semibold
+            className={`font-normal ${name === viewName ? 'bg-waveLight-500 font-normal' : ''}
+            text-gray-600 hover:bg-waveLight-500 border border-gray-500 hover:font-normal
                         flex gap-x-4 justify-center min-[700px]:justify-start items-center p-2 rounded-md`}
             >
       {children}
@@ -32,7 +34,8 @@ const DividerBar = () => {
   );
 }
 
-const MenuSide: React.FC = () => {
+
+const ViewList = () => {
   const {viewName, setViewName} = useContext(ViewNameContext)
 
   const handleViewChange = (viewName: string) => {
@@ -40,9 +43,8 @@ const MenuSide: React.FC = () => {
       setViewName(viewName);
     }
   }
-
   return (
-    <div className="menu h-100 px-2 min-[700px]:px-4 mt-2 text-gray-600 font-light">
+    <div className="menu h-100 text-gray-600 font-light">
       <div className="submenu">
         <h2 className='text-sm text-center min-[700px]:text-start'>Notes</h2>
         <ul className='my-4 flex flex-col gap-y-1'>
@@ -70,7 +72,25 @@ const MenuSide: React.FC = () => {
         </ul>
       </div>
     </div>
-  )
+  );
+}
+
+
+
+const MenuSide: React.FC = () => {
+  const { user } = useContext(UserContext);
+
+  if (user) {
+    return (
+      <div className='min-w-[85px] w-[20%] min-[700px]:w-[30%] border-r-[1px] bg-gray-100 px-4 py-1 border-gray-600'>
+        <div className="hidden top mb-4 min-[700px]:block">
+          <h1 className='text-2xl text-gray-700'>Dashboard</h1>
+          <p className='font-light text-gray-700'>Welcome, <em className='not-italic'>{user.username}</em></p>
+        </div>
+        <ViewList />
+      </div>
+    )
+  }
 }
 
 export default MenuSide;
