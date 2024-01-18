@@ -168,7 +168,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
     switch (block.type) {
       case 'p':
         return (
-          <div className='w-full'>
+          <div className='w-full relative'>
             <p className={`${empty && focused ? '' : 'hidden'} absolute pointer-events-none w-full py-1 px-1 text-gray-500 outline-none`}>
               Start typing or press '/' for commands
             </p>

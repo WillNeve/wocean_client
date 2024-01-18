@@ -220,31 +220,33 @@ const Note: React.FC<noteProps> = ({newNote}) => {
           )}
         </div>
         <div className="wrapper relative">
-            <div className="relative editor w-100 overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-white p-4 m-4 font-medium min-h-[500px]" ref={editor}>
-              {blocks.map(({ id, type, content }, index) => (
-                <NoteBlock
-                  key={id}
-                  index={index}
-                  block={{type, content}}
-                  focused={index === focusedBlockIndex ? true : false}
-                  newBlock={createNewBlock}
-                  newCommandBlock={createNewCommandBlock}
-                  removeBlock={removeBlock}
-                  requestFocusShift={handleFocusShift}
-                  handleChange={(text) => {handleBlockChange(text, index)}}
-                />
-              ))}
-              {loading ? (
-                <LoaderGroup active={loaders} className='absolute w-full flex flex-col items-start gap-y-3'>
-                  <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
-                  <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                  <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                  <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                  <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                  <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                  <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                </LoaderGroup>
-              ) : ''}
+            <div className="relative editor w-100 h-[80lvh] overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-white p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+              <div className="customScroll blocks max-h-[100%] overflow-y-scroll">
+                {blocks.map(({ id, type, content }, index) => (
+                  <NoteBlock
+                    key={id}
+                    index={index}
+                    block={{type, content}}
+                    focused={index === focusedBlockIndex ? true : false}
+                    newBlock={createNewBlock}
+                    newCommandBlock={createNewCommandBlock}
+                    removeBlock={removeBlock}
+                    requestFocusShift={handleFocusShift}
+                    handleChange={(text) => {handleBlockChange(text, index)}}
+                  />
+                ))}
+                {loading ? (
+                  <LoaderGroup active={loaders} className='absolute w-full flex flex-col items-start gap-y-3'>
+                    <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
+                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+                  </LoaderGroup>
+                ) : ''}
+              </div>
               <div className={`${loading ? 'hidden' : ''}
                               saving-notif
                               flex items-center gap-x-1

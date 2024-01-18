@@ -12,5 +12,6 @@ export type note = {
   id: number,
   title?: string,
   body?: string,
-  order: number
+  order: number,
+  folder: boolean,
 }

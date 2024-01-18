@@ -19,8 +19,9 @@ const MenuButton: React.FC<MenuButtonProps> = ({children, onClick, name, viewNam
   return (
     <button type='button'
             onClick={handleClick}
-            className={`font-normal ${name === viewName ? 'bg-waveLight-500 font-normal' : ''}
-            text-gray-600 hover:bg-waveLight-500 border border-gray-500 hover:font-normal
+            className={`font-normal ${name === viewName ? 'bg-gradient-to-r font-normal' : ''}
+            from-waveLight-500 to-waveLight-600
+            text-gray-600 hover:bg-gradient-to-r border border-gray-500 hover:font-normal
                         flex gap-x-4 justify-center min-[700px]:justify-start items-center p-2 rounded-md`}
             >
       {children}
@@ -82,7 +83,7 @@ const MenuSide: React.FC = () => {
 
   if (user) {
     return (
-      <div className='min-w-[85px] w-[20%] min-[700px]:w-[30%] border-r-[1px] bg-gray-100 px-4 py-1 border-gray-600'>
+      <div className='min-w-[85px] w-[20%] min-[700px]:w-[30%] border-r-[1px] bg-gray-100 px-4 py-2 border-gray-600'>
         <div className="hidden top mb-4 min-[700px]:block">
           <h1 className='text-2xl text-gray-700'>Dashboard</h1>
           <p className='font-light text-gray-700'>Welcome, <em className='not-italic'>{user.username}</em></p>

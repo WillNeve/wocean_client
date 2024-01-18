@@ -4,6 +4,7 @@ import { UserContext } from "../../auth";
 //icons
 import { RiMenu3Line } from "react-icons/ri";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { FaRegNoteSticky } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
 
 
@@ -18,7 +19,8 @@ interface NavButtonProps {
 
 const NavButtonCTA: React.FC<NavButtonProps> = ({children, route}) => {
   return (
-    <a href={route} className='border border-gray-200 text-whitebright hover:bg-waveLight-600 hover:text-gray-600 hover:font-medium cursor-pointer px-2 p-1 rounded-md'>{children}</a>
+    <a href={route} className='border border-gray-200 text-whitebright hover:bg-gradient-to-l from-waveLight-500 to-waveLight-600
+                               hover:text-gray-600 hover:font-medium cursor-pointer px-2 p-1 rounded-md'>{children}</a>
   );
 }
 
@@ -60,7 +62,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
               <button type='button'
               aria-label='NavMobileMenu Button'
               onClick={handleMenuToggle}
-              className='p-2 hover:bg-waveLight-500 hover:text-gray-600 rounded-md '>
+              className='p-2 hover:bg-gradient-to-l from-waveLight-500 to-waveLight-600 hover:text-gray-600 rounded-md '>
               <RiMenu3Line className='cursor-pointer text-xl'/>
             </button>
             </>
@@ -80,9 +82,13 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
       </div>
       <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-5xl px-4 h-[40px] pointer-events-none">
         <div className={`NavMenu ${menuOpen ? 'active' : ''}
-                        w-fit min-w-[200px] h-fit flex flex-col items-end mr-1 p-4 bg-white text-gray-600 rounded-b-lg border border-gray-600 border-t-gray-200`}
+                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 bg-white text-gray-600 rounded-lg border border-gray-600 border-t-gray-200`}
                         >
-          <a href="/dashboard" className={`font-normal bg-waveLight-500 hover:bg-waveLight-600 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
+          <a href="/notes" className={`font-normal bg-gradient-to-l from-waveLight-500 to-waveLight-600 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
+            <FaRegNoteSticky className='text-md'/>
+            <p>Notes</p>
+          </a>
+          <a href="/dashboard" className={`font-normal bg-gradient-to-l from-waveLight-500 to-waveLight-600 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
             <MdOutlineSpaceDashboard className='text-md'/>
             <p>Dashboard</p>
           </a>
