@@ -79,7 +79,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
   const handleInput = (e: React.KeyboardEvent<HTMLElement>) => {
     // Keydown event, any preventative pre text change actions go here
     // console.log(e.key);
-    const text = (e.target as HTMLInputElement).innerText;
+    const text = (e.target as HTMLInputElement).innerText.trim();
     if (commandsActive) {
       if (e.key === 'Tab') {
         e.preventDefault();
@@ -111,8 +111,6 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       } else if (text.length === 0 && e.key === '/') {
         setCommandsActive(true)
       } else if (text.length === 0 && (e.key === 'Backspace' || e.code === 'Backspace' || e.keyCode === 8)) {
-        console.log(e);
-
         removeBlock(index);
         e.preventDefault();
         return;
