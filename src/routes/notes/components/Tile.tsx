@@ -181,8 +181,6 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
       if (resp instanceof Response) {
         if (resp.status === 200) {
           const data = await resp.json();
-          console.log(data.note);
-
           insertNewNote(data.note)
           // show a notice to user
         } else {

@@ -6,7 +6,6 @@ import { RiMenu3Line } from "react-icons/ri";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
-import { CiStickyNote } from "react-icons/ci";
 
 
 
