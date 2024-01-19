@@ -358,8 +358,8 @@ const Notes = () => {
   return (
     <>
       <NavBar requestNavigate={navigate}/>
-      <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl'>
-        <div className="dashboard-inner relative h-[80vh] text-gray-600 font-medium rounded-lg overflow-hidden
+      <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl h-[85lvh]'>
+        <div className="dashboard-inner relative h-full text-gray-600 font-medium rounded-lg overflow-hidden
                         bg-gradient-to-b from-wave-800 to-wave-600">
           <div className='gradient-whitespace rounded-lg overflow-hidden shadow-inner h-full
                             border border-gray-600 flex'>

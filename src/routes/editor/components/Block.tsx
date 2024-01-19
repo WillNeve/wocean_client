@@ -110,7 +110,9 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
         return;
       } else if (text.length === 0 && e.key === '/') {
         setCommandsActive(true)
-      } else if (text.length === 0 && e.key === 'Backspace') {
+      } else if (text.length === 0 && (e.key === 'Backspace' || e.code === 'Backspace' || e.keyCode === 8)) {
+        console.log(e);
+
         removeBlock(index);
         e.preventDefault();
         return;

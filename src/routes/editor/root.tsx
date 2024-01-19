@@ -205,7 +205,7 @@ const Editor: React.FC<editorProps> = ({newNote}) => {
   return (
     <>
       <NavBar requestNavigate={navigate}/>
-      <div className='wrapper w-100 max-w-5xl mx-auto'>
+      <div className='wrapper w-100 max-h-[90lvh] max-w-5xl mx-auto'>
         <div className='meta w-full'>
           {loading ? (
             <LoaderGroup active={loaders} className="w-100 flex flex-col items-center mt-4 gap-y-2">
