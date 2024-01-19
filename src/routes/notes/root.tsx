@@ -11,7 +11,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdDriveFileMoveRtl } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
 import { CiFolderOn } from "react-icons/ci";
-
+import { HiOutlineChevronDoubleLeft } from "react-icons/hi2";
+import { FaFolder } from "react-icons/fa";
 
 
 //styles
@@ -23,6 +24,8 @@ const preventPageScroll = (e: MouseEvent | TouchEvent) => {
   e.preventDefault();
 }
 
+type toggle = boolean;
+
 const Notes = () => {
   const navigate = useNavigate();
   const { user, finishedLoadingUser } = useContext(UserContext);
@@ -31,14 +34,17 @@ const Notes = () => {
   const [folderId, setFolderId] = useState<string | null>(null)
 
   const [notes, setNotes] = useState<note[]>([])
-  const [folderSelectionActive, setFolderSelectionActive] = useState<boolean>(false);
-  const [folderStructureChanged, setFolderStructureChanged] = useState<boolean>(false);
-  const [loaded, setLoaded] = useState<boolean>(false)
+  const [folderSelectionActive, setFolderSelectionActive] = useState<toggle>(false);
+  const [folderStructureChanged, setFolderStructureChanged] = useState<toggle>(false);
 
+  const [loaded, setLoaded] = useState<toggle>(false)
   const [checkedTileIds, setCheckedTileIds] = useState<number[]>([])
+  const [sideMenuOpen, setSideMenuOpen] = useState<toggle>(false);
+  const [sideMenuTempOpen, setSideMenuTempOpen] = useState<toggle>(false);
 
   const getNotes = async () => {
     setLoaded(false);
+    // await new Promise(res => setTimeout(res, 20000)); // for loader styling
     if (user) {
       const resp: Response | string = await Promise.race([
         fetch(`${import.meta.env.VITE_SERVER_URL}/user/${user.id}/notes${folderId ? `?folder=${folderId}` : ''}`, {
@@ -353,12 +359,13 @@ const Notes = () => {
     <>
       <NavBar requestNavigate={navigate}/>
       <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl'>
-        <div className="dashboard-inner relative h-[80vh] p-4 text-gray-600 font-medium rounded-lg overflow-hidden bg-white ">
-          <div className="top flex items-start justify-between w-full">
+        <div className="dashboard-inner relative h-[80vh] p-4 text-gray-600 font-medium rounded-lg overflow-hidden
+                        bg-gradient-to-b from-wave-800 to-wave-600">
+          <div className="top flex items-start justify-between w-full text-gray-200">
             {folderTitle ? (
               <button
-                className='flex items-center gap-x-1 p-1 border border-gray-600 text-gray-600 rounded-md
-                           hover:bg-gradient-to-l from-waveLight-500 to-waveLight-600'
+                className='flex items-center gap-x-1 p-1 border border-gray-200 rounded-md
+                           hover:opacity-75'
                 onClick={() => setFolderId(null)}>
                 <IoIosArrowBack/>
                 <p className='pr-1'>Back</p>
@@ -367,22 +374,29 @@ const Notes = () => {
             <h2 className='text-lg'>{loaded ? (
               <>
               {folderTitle ? (
-                <>
-                  {folderTitle} ({notes.length})
-                </>
+                <div className='flex items-center gap-x-1'>
+                <h2 className='not-italic font-bold text-xl
+                                flex items-center gap-x-1'>
+                  <FaFolder className=''/>
+                  <p className='text-transparent bg-gradient-to-r from-gray-200 to-wave-500 bg-clip-text'>{folderTitle}</p>
+                </h2>
+                <em className='not-italic text-sm opacity-75'>({notes.length})</em>
+              </div>
               ) : (
-                <>
-                  <em className='not-italic text-wave-500'>All notes</em> ({notes.length})
-                </>
+                <div className='flex items-center gap-x-1'>
+                  <h2 className='not-italic text-transparent font-bold text-xl
+                                  bg-gradient-to-r from-gray-200 to-wave-500 bg-clip-text'>All notes</h2>
+                  <em className='not-italic text-sm opacity-75'>({notes.length})</em>
+                </div>
               )}
               </>
             )
             : (<>Loading...</>)}</h2>
-            <ul className='relative flex gap-x-2 bg-gray-100 w-fit px-2 py-1 rounded-md border border-gray-600'>
+            <ul className='relative flex gap-x-2 gradient-whitespace text-gray-600 w-fit px-2 py-1 rounded-md border border-gray-600'>
               <button type='button'
                       aria-label='Show add to folder options'
-                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer' : ' cursor-default opacity-30'}
-                                 p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-gray-200`}
+                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200' : ' cursor-default opacity-30'}
+                                 p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
                       onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
                 <MdDriveFileMoveRtl/>
               </button>
@@ -406,21 +420,51 @@ const Notes = () => {
                 </div>
               <button type='button'
                       aria-label='Delete checked notes'
-                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer' : ' cursor-default opacity-30'}
-                      p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-red-200`}
+                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-red-200' : ' cursor-default opacity-30'}
+                      p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
                       onClick={deleteCheckedTiles}>
                 <RiDeleteBin6Line/>
               </button>
             </ul>
           </div>
-          <div className='bg-gray-100 rounded-lg overflow-hidden mt-4 shadow-inner h-[90%]
-                            border border-gray-600'>
-            <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} p-[20px] w-full h-fit max-h-[100%] overflow-y-scroll
+          <div className='gradient-whitespace rounded-lg overflow-hidden mt-4 shadow-inner h-[90%]
+                            border border-gray-600 flex'>
+          <div className="relative sideMenuWrapper gradient-whitespace w-fit h-full border-r  border-gray-600"
+               onMouseOver={() => setSideMenuTempOpen(true)}
+               onMouseLeave={() => setSideMenuTempOpen(false)}>
+            <div className="top flex justify-end items-center">
+              <button type='button'
+                      aria-label='toggle side menu'
+                      onClick={() => setSideMenuOpen(!sideMenuOpen)}
+                      className={`z-10 p-1 rounded-md transition-transform ${sideMenuOpen ? '' : 'rotate-180 text-waveLight-800'}`}>
+                  <HiOutlineChevronDoubleLeft className='text-xl'/>
+              </button>
+            </div>
+            <div className={`flex flex-col gap-y-2 items-center h-full transition-all
+                              ${sideMenuTempOpen || sideMenuOpen ? 'w-[100px] p-2 opacity-1' : 'w-[0px] p-0 pointer-events-none opacity-0'}
+                              overflow-hidden`}>
+                  <NewNoteTile folder={false}
+                              folderId={folderId}
+                              insertNewNote={handleNewNote}/>
+                  <NewNoteTile folder={true}
+                              folderId={folderId}
+                              insertNewNote={handleNewNote}/>
+            </div>
+          </div>
+            <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} pl-8 p-[20px] w-full h-fit max-h-[100%] overflow-y-scroll
                                                     overflow-x-auto
-                                                    grid gap-4 grid-cols-2
+                                                    grid gap-4
+                                                    ${sideMenuTempOpen || sideMenuOpen ? `
+                                                    grid-cols-1
+                                                    min-[400px]:grid-cols-2 sm:grid-cols-3
+                                                    md:grid-cols-4 min-[900px]:grid-cols-5
+                                                    lg:grid-cols-6 xl:grid-cols-7 grid-rows-auto
+                                                    `
+                                                    : `grid-cols-2
                                                     min-[400px]:grid-cols-3 sm:grid-cols-4
                                                     md:grid-cols-5 min-[900px]:grid-cols-6
-                                                    lg:grid-cols-7 xl:grid-cols-8 grid-rows-auto
+                                                    lg:grid-cols-7 xl:grid-cols-8 grid-rows-auto`}
+
                                                     `}
                 onMouseMove={handleDragMove}
                 onTouchMove={handleDragMove}
@@ -429,8 +473,6 @@ const Notes = () => {
                 >
               {loaded ? (
                 <>
-                  <NewNoteTile folderId={folderId}
-                              insertNewNote={handleNewNote}/>
                   {notes.map((note, index) => (
                       <NoteTile
                         ref={(el: HTMLAnchorElement) => {

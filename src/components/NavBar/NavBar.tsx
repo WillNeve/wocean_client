@@ -19,8 +19,7 @@ interface NavButtonProps {
 
 const NavButtonCTA: React.FC<NavButtonProps> = ({children, route}) => {
   return (
-    <a href={route} className='border border-gray-200 text-whitebright hover:bg-gradient-to-l from-waveLight-500 to-waveLight-600
-                               hover:text-gray-600 hover:font-medium cursor-pointer px-2 p-1 rounded-md'>{children}</a>
+    <a href={route} className='border border-gray-200 text-whitebright hover:opacity-75 cursor-pointer px-2 p-1 rounded-md'>{children}</a>
   );
 }
 

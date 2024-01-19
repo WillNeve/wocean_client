@@ -219,7 +219,7 @@ const Editor: React.FC<editorProps> = ({newNote}) => {
             </>
           )}
         </div>
-            <div className="relative editor w-100 h-[80lvh] overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-white p-4 m-4 font-medium min-h-[500px]" ref={editor}>
+            <div className="relative editor w-100 h-[80lvh] overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 gradient-whitespace-bright p-4 m-4 font-medium min-h-[500px]" ref={editor}>
               <div className="masked-list-vert py-[20px] customScroll blocks h-[100%] overflow-y-scroll">
                 {blocks.map(({ id, type, content }, index) => (
                   <NoteBlock
