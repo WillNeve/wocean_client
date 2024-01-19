@@ -43,7 +43,7 @@ const Editor: React.FC<editorProps> = ({newNote}) => {
   const [loaders, setLoaders] = useState<boolean>(true);
 
   const loadNote = useCallback(async (newNote: boolean) => {
-    await new Promise((res) => setTimeout(res, 20000)) // USED FOR TESTING LOADING ANIMS
+    // await new Promise((res) => setTimeout(res, 20000)) // USED FOR TESTING LOADING ANIMS
     let resp;
     if (newNote) {
       resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/notes/new`, {
