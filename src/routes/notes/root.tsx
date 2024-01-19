@@ -359,84 +359,18 @@ const Notes = () => {
     <>
       <NavBar requestNavigate={navigate}/>
       <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl'>
-        <div className="dashboard-inner relative h-[80vh] p-4 text-gray-600 font-medium rounded-lg overflow-hidden
+        <div className="dashboard-inner relative h-[80vh] text-gray-600 font-medium rounded-lg overflow-hidden
                         bg-gradient-to-b from-wave-800 to-wave-600">
-          <div className="top flex items-start justify-between w-full text-gray-200">
-            {folderTitle ? (
-              <button
-                className='flex items-center gap-x-1 p-1 border border-gray-200 rounded-md
-                           hover:opacity-75'
-                onClick={() => setFolderId(null)}>
-                <IoIosArrowBack/>
-                <p className='pr-1'>Back</p>
-              </button>
-            ) : ''}
-            <h2 className='text-lg'>{loaded ? (
-              <>
-              {folderTitle ? (
-                <div className='flex items-center gap-x-1'>
-                <h2 className='not-italic font-bold text-xl
-                                flex items-center gap-x-1'>
-                  <FaFolder className=''/>
-                  <p className='text-transparent bg-gradient-to-r from-gray-200 to-wave-500 bg-clip-text'>{folderTitle}</p>
-                </h2>
-                <em className='not-italic text-sm opacity-75'>({notes.length})</em>
-              </div>
-              ) : (
-                <div className='flex items-center gap-x-1'>
-                  <h2 className='not-italic text-transparent font-bold text-xl
-                                  bg-gradient-to-r from-gray-200 to-wave-500 bg-clip-text'>All notes</h2>
-                  <em className='not-italic text-sm opacity-75'>({notes.length})</em>
-                </div>
-              )}
-              </>
-            )
-            : (<>Loading...</>)}</h2>
-            <ul className='relative flex gap-x-2 gradient-whitespace text-gray-600 w-fit px-2 py-1 rounded-md border border-gray-600'>
-              <button type='button'
-                      aria-label='Show add to folder options'
-                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200' : ' cursor-default opacity-30'}
-                                 p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
-                      onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
-                <MdDriveFileMoveRtl/>
-              </button>
-                <div className={`${folderSelectionActive ? '' : 'hidden'} absolute z-20 w-[200px] p-1 right-0 -bottom-1 translate-y-full
-                                rounded-md bg-gray-100 border border-gray-600
-                                text-sm`}>
-                  <p className='text-center'>Add selected notes to:</p>
-                  <ul>
-                    {notes.filter((note) => note.folder).map((note, index) => (
-                      <button type='button'
-                              key={index}
-                              aria-label={`Add selected notes to '${note.title}' folder`}
-                              className='flex items-center justify-center gap-x-2
-                                         w-full cursor-pointer bg-waveLight-300 hover:bg-gray-300
-                                         border border-gray-600 rounded-sm mt-1'
-                              onClick={() => addNotesToFolder(note.id)}>
-                        <CiFolderOn className='text-xl'/><p className='w-fit'>{note.title}</p>
-                      </button>
-                    ))}
-                  </ul>
-                </div>
-              <button type='button'
-                      aria-label='Delete checked notes'
-                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-red-200' : ' cursor-default opacity-30'}
-                      p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
-                      onClick={deleteCheckedTiles}>
-                <RiDeleteBin6Line/>
-              </button>
-            </ul>
-          </div>
-          <div className='gradient-whitespace rounded-lg overflow-hidden mt-4 shadow-inner h-[90%]
+          <div className='gradient-whitespace rounded-lg overflow-hidden shadow-inner h-full
                             border border-gray-600 flex'>
-          <div className="relative sideMenuWrapper gradient-whitespace w-fit h-full border-r  border-gray-600"
+          <div className="relative sideMenuWrapper py-4 gradient-whitespace w-fit h-full border-r  border-gray-600"
                onMouseOver={() => setSideMenuTempOpen(true)}
                onMouseLeave={() => setSideMenuTempOpen(false)}>
             <div className="top flex justify-end items-center">
               <button type='button'
                       aria-label='toggle side menu'
                       onClick={() => setSideMenuOpen(!sideMenuOpen)}
-                      className={`z-10 p-1 rounded-md transition-transform ${sideMenuOpen ? '' : 'rotate-180 text-waveLight-800'}`}>
+                      className={`border-none outline-none z-10 p-1 rounded-md transition-transform ${sideMenuOpen ? '' : 'rotate-180 text-waveLight-800'}`}>
                   <HiOutlineChevronDoubleLeft className='text-xl'/>
               </button>
             </div>
@@ -451,81 +385,149 @@ const Notes = () => {
                               insertNewNote={handleNewNote}/>
             </div>
           </div>
-            <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} pl-8 p-[20px] w-full h-fit max-h-[100%] overflow-y-scroll
-                                                    overflow-x-auto
-                                                    grid gap-4
-                                                    ${sideMenuTempOpen || sideMenuOpen ? `
-                                                    grid-cols-1
-                                                    min-[400px]:grid-cols-2 sm:grid-cols-3
-                                                    md:grid-cols-4 min-[900px]:grid-cols-5
-                                                    lg:grid-cols-6 xl:grid-cols-7 grid-rows-auto
-                                                    `
-                                                    : `grid-cols-2
-                                                    min-[400px]:grid-cols-3 sm:grid-cols-4
-                                                    md:grid-cols-5 min-[900px]:grid-cols-6
-                                                    lg:grid-cols-7 xl:grid-cols-8 grid-rows-auto`}
+            <div className="fileArea w-full h-full py-4 pr-4">
+              <div className="top px-8 flex items-start justify-between w-full text-gray-600">
+                {folderTitle ? (
+                  <button
+                    className='flex items-center gap-x-1 p-1 border border-gray-600 rounded-md
+                              hover:opacity-75'
+                    onClick={() => setFolderId(null)}>
+                    <IoIosArrowBack/>
+                    <p className='pr-1'>Back</p>
+                  </button>
+                ) : ''}
+                <h2 className='text-lg'>{loaded ? (
+                  <>
+                  {folderTitle ? (
+                    <div className='flex items-center gap-x-1'>
+                    <h2 className='not-italic font-bold text-xl
+                                    flex items-center gap-x-2'>
+                      <FaFolder className='opacity-50'/>
+                      <p className='text-transparent bg-gradient-to-r from-gray-600 to-wave-500 bg-clip-text'>{folderTitle}</p>
+                    </h2>
+                    <em className='not-italic text-sm opacity-75'>({notes.length})</em>
+                  </div>
+                  ) : (
+                    <div className='flex items-center gap-x-1'>
+                      <h2 className='not-italic text-transparent font-bold text-xl
+                                      bg-gradient-to-r from-wave-900 to-wave-600 bg-clip-text'>All notes</h2>
+                      <em className='not-italic text-sm opacity-75'>({notes.length})</em>
+                    </div>
+                  )}
+                  </>
+                )
+                : (<>Loading...</>)}</h2>
+                <ul className='relative flex gap-x-2 gradient-whitespace text-gray-600 w-fit px-2 py-1 rounded-md border border-gray-600'>
+                  <button type='button'
+                          aria-label='Show add to folder options'
+                          className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200' : ' cursor-default opacity-30'}
+                                    p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
+                          onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
+                    <MdDriveFileMoveRtl/>
+                  </button>
+                    <div className={`${folderSelectionActive ? '' : 'hidden'} absolute z-20 w-[200px] p-1 right-0 -bottom-1 translate-y-full
+                                    rounded-md bg-gray-100 border border-gray-600
+                                    text-sm`}>
+                      <p className='text-center'>Add selected notes to:</p>
+                      <ul>
+                        {notes.filter((note) => note.folder).map((note, index) => (
+                          <button type='button'
+                                  key={index}
+                                  aria-label={`Add selected notes to '${note.title}' folder`}
+                                  className='flex items-center justify-center gap-x-2
+                                            w-full cursor-pointer bg-waveLight-300 hover:bg-gray-300
+                                            border border-gray-600 rounded-sm mt-1'
+                                  onClick={() => addNotesToFolder(note.id)}>
+                            <CiFolderOn className='text-xl'/><p className='w-fit'>{note.title}</p>
+                          </button>
+                        ))}
+                      </ul>
+                    </div>
+                  <button type='button'
+                          aria-label='Delete checked notes'
+                          className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-red-200' : ' cursor-default opacity-30'}
+                          p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
+                          onClick={deleteCheckedTiles}>
+                    <RiDeleteBin6Line/>
+                  </button>
+                </ul>
+              </div>
+              <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} px-8 p-[20px] w-full flex-grow max-h-[100%] overflow-y-scroll
+                                                      overflow-x-auto
+                                                      grid gap-4
+                                                      ${sideMenuTempOpen || sideMenuOpen ? `
+                                                      grid-cols-1
+                                                      min-[450px]:grid-cols-2 sm:grid-cols-3
+                                                      md:grid-cols-4 min-[900px]:grid-cols-5
+                                                      lg:grid-cols-6 grid-rows-auto
+                                                      `
+                                                      : `grid-cols-1
+                                                      min-[350px]:grid-cols-2 min-[450px]:grid-cols-3
+                                                      min-[600px]:grid-cols-4 min-[750px]:grid-cols-5
+                                                      min-[900px]:grid-cols-6 grid-rows-auto`}
 
-                                                    `}
-                onMouseMove={handleDragMove}
-                onTouchMove={handleDragMove}
-                onMouseUp={handleDragEnd}
-                onTouchEnd={handleDragEnd}
-                >
-              {loaded ? (
-                <>
-                  {notes.map((note, index) => (
-                      <NoteTile
-                        ref={(el: HTMLAnchorElement) => {
-                          const localNoteTileRefs = noteTileRefs;
-                          localNoteTileRefs[index] = el;
-                          setNoteTileRefs(localNoteTileRefs);}}
-                        moving={index === dragTargetIndex && dragActive}
-                        index={index}
-                        key={note.id}
-                        note={note}
-                        onDragStart={(e: React.MouseEvent) => handleDragStart(e, index)}
-                        onTouchStart={(e: React.TouchEvent) => handleDragStart(e, index)}
-                        onDragEnd={handleDragEnd}
-                        onCheckedChange={(checked: boolean) => {handleTileCheckedChange(checked, note.id)}}
-                        requestFolderId={(id: string) => setFolderId(id)}/>
-                  ))}
-                  {notes.length > 0 ? (
-                    <NoteTileClone ref={dragCloneRef}
-                                      note={notes[dragTargetIndex]}
-                                      active={dragActive}
-                                      onMouseUp={handleDragEnd}
-                                      onTouchEnd={handleDragEnd}/>
-                  ) : ''}
-                </>
-              ):
-              (
-                <>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                    <LoaderRect className='w-full h-full rounded-md'/>
-                  </LoaderGroup>
-                </>
-              )}
+                                                      `}
+                  onMouseMove={handleDragMove}
+                  onTouchMove={handleDragMove}
+                  onMouseUp={handleDragEnd}
+                  onTouchEnd={handleDragEnd}
+                  >
+                {loaded ? (
+                  <>
+                    {notes.map((note, index) => (
+                        <NoteTile
+                          ref={(el: HTMLAnchorElement) => {
+                            const localNoteTileRefs = noteTileRefs;
+                            localNoteTileRefs[index] = el;
+                            setNoteTileRefs(localNoteTileRefs);}}
+                          moving={index === dragTargetIndex && dragActive}
+                          index={index}
+                          key={note.id}
+                          note={note}
+                          onDragStart={(e: React.MouseEvent) => handleDragStart(e, index)}
+                          onTouchStart={(e: React.TouchEvent) => handleDragStart(e, index)}
+                          onDragEnd={handleDragEnd}
+                          onCheckedChange={(checked: boolean) => {handleTileCheckedChange(checked, note.id)}}
+                          requestFolderId={(id: string) => setFolderId(id)}/>
+                    ))}
+                    {notes.length > 0 ? (
+                      <NoteTileClone ref={dragCloneRef}
+                                        note={notes[dragTargetIndex]}
+                                        active={dragActive}
+                                        onMouseUp={handleDragEnd}
+                                        onTouchEnd={handleDragEnd}/>
+                    ) : ''}
+                  </>
+                ):
+                (
+                  <>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

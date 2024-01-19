@@ -112,6 +112,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
         setCommandsActive(true)
       } else if (text.length === 0 && e.key === 'Backspace') {
         removeBlock(index);
+        e.preventDefault();
         return;
       } else if (e.key === 'ArrowUp') {
         requestFocusShift(index - 1)
@@ -120,6 +121,14 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       }
     }
   };
+
+  const sendCommand = () => {
+    const commandBlock = suggestedCommands[highlightedSuggestion]?.block;
+    if (commandBlock) {
+      newCommandBlock(index, commandBlock)
+    }
+    setCommandsActive(false);
+  }
 
   const handleCommands = (e: React.KeyboardEvent<HTMLElement>) => {
     // keyup event, any post text change actions go here
@@ -130,11 +139,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
         setCommandsActive(false);
         setHighlightedSuggestion(0);
       } else if (e.key === 'Enter') {
-        const commandBlock = suggestedCommands[highlightedSuggestion]?.block;
-        if (commandBlock) {
-          newCommandBlock(index, commandBlock)
-        }
-        setCommandsActive(false);
+        sendCommand();
       } else if (e.key === ' ') {
         setCommandsActive(false);
       } else if (/^[a-zA-Z]$/.test(e.key)) {
@@ -158,6 +163,13 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
     if (blockRef.current) {
       if (focused) {
         blockRef.current.focus();
+        const range = document.createRange();
+        const selection = window.getSelection();
+
+        range.selectNodeContents(blockRef.current);
+        range.collapse(false); // Collapse the range to the end
+        selection?.removeAllRanges();
+        selection?.addRange(range);
       } else {
         blockRef.current.blur();
       }
@@ -253,8 +265,10 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
           {suggestedCommands.length > 0 ? (
             suggestedCommands.map((command, index) => (
               <li key={index}
-              className={`${index === highlightedSuggestion ? 'font-bold bg-waveLight-600' : ''}
-                          p-1 text-sm `}>
+                  className={`${index === highlightedSuggestion ? 'font-bold bg-waveLight-600' : ''}
+                          p-1 text-sm cursor-pointer`}
+                  onMouseOver={() => setHighlightedSuggestion(index)}
+                  onClick={sendCommand}>
                 {command.name}
               </li>
             ))

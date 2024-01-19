@@ -31,7 +31,7 @@ const View: React.FC = () => {
 
   if (user) {
     return (
-      <div className='w-3/4 px-4 py-2 text-gray-700'>
+      <div className='w-3/4 px-4 py-2 text-gray-700 gradient-whitespace'>
         <div className="block top mb-4 min-[700px]:hidden">
           <h1 className='text-xl text-gray-600'>Dashboard - {formattedViewName}</h1>
           <p className='text-sm font-light text-gray-700'>Welcome, <em className='not-italic'>{user.username}</em></p>

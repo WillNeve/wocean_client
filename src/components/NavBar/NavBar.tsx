@@ -6,6 +6,8 @@ import { RiMenu3Line } from "react-icons/ri";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
+import { CiStickyNote } from "react-icons/ci";
+
 
 
 //styles
@@ -55,8 +57,10 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
         <ul className='flex gap-x-4 justify-normal items-center'>
           {user ? (
             <>
-              <li className='hidden min-[400px]:block'>
-                <NavButtonCTA route="/notes/new">New Note</NavButtonCTA>
+              <li className="hidden min-[400px]:block">
+                <NavButtonCTA route="/notes/new">
+                  New Note
+                </NavButtonCTA>
               </li>
               <button type='button'
               aria-label='NavMobileMenu Button'
