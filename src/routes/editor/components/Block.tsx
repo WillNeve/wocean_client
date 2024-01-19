@@ -173,7 +173,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
               Start typing or press '/' for commands
             </p>
             <p
-              className={`${empty && focused ? '' : ''} w-full py-1 px-1 focus:bg-waveLight-600/50 outline-none`}
+              className={`${empty && focused ? '' : ''} w-full py-1 px-1 focus:bg-waveLight-500/50 outline-none`}
               contentEditable={true}
               ref={blockRef}
               onClick={() => {requestFocusShift(index)}}
@@ -187,7 +187,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'h1':
           return (
               <h1
-              className={`w-full py-2 px-1 focus:bg-waveLight-600/50 text-5xl outline-none`}
+              className={`w-full py-2 px-1 focus:bg-waveLight-500/50 text-5xl outline-none`}
               contentEditable={true}
               ref={blockRef}
               onClick={() => {requestFocusShift(index)}}
@@ -200,7 +200,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'h2':
         return (
             <h2
-            className={`w-full py-1 px-1 focus:bg-waveLight-600/50 text-3xl outline-none`}
+            className={`w-full py-1 px-1 focus:bg-waveLight-500/50 text-3xl outline-none`}
             contentEditable={true}
             ref={blockRef}
             onClick={() => {requestFocusShift(index)}}
@@ -213,7 +213,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'em':
         return (
             <em
-            className={`block w-full py-1 px-1 focus:bg-waveLight-600/50 outline-none`}
+            className={`block w-full py-1 px-1 focus:bg-waveLight-500/50 outline-none`}
             contentEditable={true}
             ref={blockRef}
             onClick={() => {requestFocusShift(index)}}
@@ -226,7 +226,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'strong':
         return (
             <strong
-            className={`block w-full py-1 px-1 focus:bg-waveLight-600/50 outline-none`}
+            className={`block w-full py-1 px-1 focus:bg-waveLight-500/50 outline-none`}
             contentEditable={true}
             ref={blockRef}
             onClick={() => {requestFocusShift(index)}}

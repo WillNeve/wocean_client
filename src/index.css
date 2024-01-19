@@ -36,3 +36,14 @@ code {
   @apply bg-gray-600;
   border-radius: 6px;
 }
+
+
+.masked-list-vert {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(0, 0, 0, 1.0) 20px,
+    rgba(0,0,0,1) calc(100% - 20px),
+    transparent 100%
+  );
+}

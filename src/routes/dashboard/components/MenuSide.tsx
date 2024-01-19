@@ -50,7 +50,7 @@ const ViewList = () => {
         <h2 className='text-sm text-center min-[700px]:text-start'>Notes</h2>
         <ul className='my-4 flex flex-col gap-y-1'>
           <MenuButton onClick={handleViewChange} name={'notes'} viewName={viewName}>
-            <GoFileDirectory className='text-lg'/><p className='hidden min-[700px]:block'>All</p>
+            <GoFileDirectory className='text-lg'/><p className='hidden min-[700px]:block'>Manage</p>
           </MenuButton>
         </ul>
       </div>

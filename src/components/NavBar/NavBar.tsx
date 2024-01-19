@@ -82,20 +82,20 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
       </div>
       <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-5xl px-4 h-[40px] pointer-events-none">
         <div className={`NavMenu ${menuOpen ? 'active' : ''}
-                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 bg-white text-gray-600 rounded-lg border border-gray-600 border-t-gray-200`}
+                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 bg-white text-gray-600 rounded-lg border border-gray-600`}
                         >
-          <a href="/notes" className={`font-normal bg-gradient-to-l from-waveLight-500 to-waveLight-600 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
+          <a href="/notes" className={`w-full font-normal bg-gradient-to-r from-waveLight-200 to-waveLight-300 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
             <FaRegNoteSticky className='text-md'/>
             <p>Notes</p>
           </a>
-          <a href="/dashboard" className={`font-normal bg-gradient-to-l from-waveLight-500 to-waveLight-600 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
+          <a href="/dashboard" className={`w-full font-normal bg-gradient-to-r from-waveLight-200 to-waveLight-300 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
             <MdOutlineSpaceDashboard className='text-md'/>
             <p>Dashboard</p>
           </a>
           <button type='button'
                   aria-label='Log Out Button'
                   onClick={handleLogOut}
-                  className={`font-normal hover:bg-red-500/50 hover:text-whitebright flex gap-x-4 items-center mt-4 p-1 px-2 rounded-md`}
+                  className={`font-normal hover:bg-red-400/50 border border-gray-600/0 hover:border-gray-600 flex gap-x-4 items-center mt-4 p-1 px-2 rounded-md`}
                   >
             <FiLogOut className='text-sm'/><p>Log Out</p>
           </button>

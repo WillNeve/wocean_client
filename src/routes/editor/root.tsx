@@ -4,7 +4,7 @@ import { useNavigate, useParams} from "react-router-dom";
 // user context
 import { UserContext } from '../../auth';
 // styling
-import './note.css';
+import './editor.css';
 //icons
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { GiConfirmed } from "react-icons/gi";
@@ -15,11 +15,11 @@ import Title from './components/Title';
 import NavBar from '../../components/NavBar/NavBar';
 import { LoaderRect, LoaderGroup } from '../../styles/Utility';
 
-interface noteProps {
+interface editorProps {
   newNote: boolean,
 }
 
-const Note: React.FC<noteProps> = ({newNote}) => {
+const Editor: React.FC<editorProps> = ({newNote}) => {
   const editor = useRef<HTMLDivElement>(document.createElement('div'));
   // user
   const { user, finishedLoadingUser } = useContext(UserContext);
@@ -43,7 +43,7 @@ const Note: React.FC<noteProps> = ({newNote}) => {
   const [loaders, setLoaders] = useState<boolean>(true);
 
   const loadNote = useCallback(async (newNote: boolean) => {
-    // await new Promise((res) => setTimeout(res, 2000)) // USED FOR TESTING LOADING ANIMS
+    await new Promise((res) => setTimeout(res, 20000)) // USED FOR TESTING LOADING ANIMS
     let resp;
     if (newNote) {
       resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/notes/new`, {
@@ -219,9 +219,8 @@ const Note: React.FC<noteProps> = ({newNote}) => {
             </>
           )}
         </div>
-        <div className="wrapper relative">
             <div className="relative editor w-100 h-[80lvh] overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 bg-white p-4 m-4 font-medium min-h-[500px]" ref={editor}>
-              <div className="customScroll blocks max-h-[100%] overflow-y-scroll">
+              <div className="masked-list-vert py-[20px] customScroll blocks h-[100%] overflow-y-scroll">
                 {blocks.map(({ id, type, content }, index) => (
                   <NoteBlock
                     key={id}
@@ -260,10 +259,9 @@ const Note: React.FC<noteProps> = ({newNote}) => {
                 </div>
               </div>
             </div>
-          </div>
         </div>
     </>
   )
 }
 
-export default Note;
+export default Editor;

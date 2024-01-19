@@ -2,7 +2,7 @@ const Notes = () => {
 
   return (
     <div>
-      notes moved
+      Manage notes page
     </div>
   );
 }

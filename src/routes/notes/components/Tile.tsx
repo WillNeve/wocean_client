@@ -50,13 +50,15 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
                       font-normal
                      hover:border-amber-500`}>
           <div className='relative w-full h-full'>
+            <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
+              <p className={`${moving ? 'hidden' : ''} text-center`}>{note.title}</p>
+            </div>
             <div className={`${moving ? 'hidden' :  ''} bg-gradient-to-r from-waveLight-300 to-waveLight-400
                             w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2`}></div>
 
             <div className={`${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20`
                              : `bg-gradient-to-r from-waveLight-300 to-waveLight-400 border`}
                              p-1 pl-2 text-gray-500 border-gray-600 w-[70%] h-[12%] rounded-md rounded-b-none`}>
-              <p className={`${moving ? 'hidden' : ''} relative z-10`}>{note.title}</p>
             </div>
 
             <div className={`${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20`
@@ -83,7 +85,8 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
                       font-normal
                       border border-gray-500
                     hover:border-amber-500`}>
-          <div className={`w-full p-1 ${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20` : `bg-gradient-to-r from-waveLight-500 to-waveLight-600`} py-1 ${checked ? 'opacity-75' : ''}`}>
+          <div className={`flex items-center justify-center font-medium w-full p-1 ${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20`
+                          : `bg-gradient-to-r from-waveLight-500 to-waveLight-600`} py-1 ${checked ? 'opacity-75' : ''}`}>
             <h3 className={`${moving ? 'hidden' : '' }`}>{note?.title}</h3>
           </div>
           <div className={`${moving ? 'hidden' : '' } absolute bottom-1 right-1 flex items-center gap-x-1`}>
@@ -118,13 +121,15 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
           className={`${active ? '' : 'hidden'} flex fixed top-50 left-50 -translate-x-1/2 -translate-y-1/2
                       overflow-hidden
                       font-normal
-                    hover:border-amber-500`}
+                    hover:border-amber-500 opacity-85`}
           onMouseUp={onMouseUp}
           onTouchEnd={onTouchEnd}>
           <div className='relative w-full h-full'>
+            <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
+              <p className="text-center">{note.title}</p>
+            </div>
             <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-gradient-to-r from-waveLight-300 to-waveLight-400"></div>
             <div className="p-1 pl-2 border text-gray-500 border-gray-600 w-[70%] h-[12%] rounded-md rounded-b-none bg-gradient-to-r from-waveLight-300 to-waveLight-400">
-              <p className="relative z-10">{note.title}</p>
             </div>
             <div className="border border-gray-600 w-full h-[88%] rounded-md rounded-tl-none bg-gradient-to-r from-waveLight-300 to-waveLight-400"></div>
           </div>
@@ -135,11 +140,11 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
           className={`${active ? '' : 'hidden'} flex fixed top-50 left-50 -translate-x-1/2 -translate-y-1/2
                       rounded-md bg-gradient-to-r from-waveLight-500 to-waveLight-600 cursor-grabbing
                       font-normal
-                      border-2 border-amber-500`}
+                      border border-amber-500 opacity-85`}
           onMouseUp={onMouseUp}
           onTouchEnd={onTouchEnd}>
-          <div className={`w-full p-1bg-gradient-to-r from-waveLight-500 to-waveLight-600 py-1`}>
-            <h3>{note?.title}</h3>
+          <div className={`p-1 flex items-center justify-center font-medium w-full p-1bg-gradient-to-r from-waveLight-500 to-waveLight-600 py-1`}>
+            <h3 className="text-center">{note?.title}</h3>
           </div>
         </div>
       ))

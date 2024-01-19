@@ -6,26 +6,34 @@ import { UserContext } from '../../auth';
 import { note } from '../../types/types';
 //components
 import { NoteTile, NewNoteTile, NoteTileClone } from './components/Tile';
-// styles
-import './notes.css';
 //icons
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdDriveFileMoveRtl } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
+import { CiFolderOn } from "react-icons/ci";
+
 
 
 //styles
 import { LoaderGroup, LoaderRect } from '../../styles/Utility';
 import NavBar from '../../components/NavBar/NavBar';
 
+
+const preventPageScroll = (e: MouseEvent | TouchEvent) => {
+  e.preventDefault();
+}
+
 const Notes = () => {
   const navigate = useNavigate();
+  const { user, finishedLoadingUser } = useContext(UserContext);
+
   const [folderTitle, setFolderTitle] = useState<string | null>(null);
   const [folderId, setFolderId] = useState<string | null>(null)
 
   const [notes, setNotes] = useState<note[]>([])
+  const [folderSelectionActive, setFolderSelectionActive] = useState<boolean>(false);
+  const [folderStructureChanged, setFolderStructureChanged] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false)
-  const { user, finishedLoadingUser } = useContext(UserContext);
 
   const [checkedTileIds, setCheckedTileIds] = useState<number[]>([])
 
@@ -65,7 +73,7 @@ const Notes = () => {
 
   const saveNotesOrder = async () => {
     if (user) {
-      const noteIdsOrders = notes.map(({ id, order }) => ({ id, order }));
+      const notesMinimal = notes.map(({ id, note_order, folder_id }) => ({ id, note_order, folder_id }));
 
       const resp: Response | string = await Promise.race([
         fetch(`${import.meta.env.VITE_SERVER_URL}/user/${user.id}/notes`, {
@@ -74,7 +82,7 @@ const Notes = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${user.token}`, // Replace "user.token" with the actual token
           },
-          body: JSON.stringify(noteIdsOrders),
+          body: JSON.stringify(notesMinimal),
         }).catch(() => 'Server is unresponsive'),
         new Promise<string>((resolve) => {
           setTimeout(() => {
@@ -124,7 +132,7 @@ const Notes = () => {
 
   const saveNewTileOrder = useCallback(() => {
     for (let i = 0; i < notes.length; i++) {
-      notes[i].order = i;
+      notes[i].note_order = i;
     }
     saveNotesOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,8 +141,6 @@ const Notes = () => {
   // -------- drag and drop
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [dragTargetIndex, setDragTargetIndex] = useState<number>(0);
-  const [dragCaptures, setDragCaptures] = useState<number>(0);
-
   const [noteTileRefs, setNoteTileRefs] = useState<Array<HTMLAnchorElement>>([]);
 
   const dragCloneRef = useRef<HTMLDivElement>(null);
@@ -158,13 +164,9 @@ const Notes = () => {
     setNotes(newNotes);
   };
 
-  const preventPageScroll = (e: MouseEvent | TouchEvent) => {
-    e.preventDefault();
-  }
-
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
     // prevent page scrolling on mobile
-    document.addEventListener('touchmove', preventPageScroll, { passive: false });
+    document.addEventListener('touchmove', preventPageScroll, { passive: false })
 
     const baseTarget = e.target as HTMLElement;
     const target = baseTarget.nodeName === 'A' ? baseTarget : baseTarget.closest('a');
@@ -182,25 +184,17 @@ const Notes = () => {
 
   const handleDragEnd = () => {
     // re enable scrolling
-    document.removeEventListener('touchmove', preventPageScroll);
-
-    if (dragCaptures < 5 && dragActive) {
-      // most likely a click not a drag (very short path)
-      const href = noteTileRefs[dragTargetIndex].href;
-      const url = new URL(href);
-      navigate(url.pathname)
+    if (dragActive) {
+      document.removeEventListener('touchmove', preventPageScroll);
+      setDragActive(false);
+      setDragTargetIndex(0);
+      saveNewTileOrder();
     }
-    setDragActive(false);
-    setDragTargetIndex(0);
-    saveNewTileOrder();
-    setDragCaptures(0);
   }
 
 
   const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (dragActive) {
-      setDragCaptures(dragCaptures + 1)
-
       const clientX = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientX : (e as unknown as MouseEvent).clientX;
       const clientY = (e as unknown as TouchEvent).targetTouches ? (e as unknown as TouchEvent).targetTouches[0].clientY : (e as unknown as MouseEvent).clientY;
       if (dragCloneRef.current) {
@@ -313,6 +307,44 @@ const Notes = () => {
     }
   }
 
+  useEffect(() => {
+    if (folderStructureChanged) {
+      const indices: number[] = [];
+      for (let i = 0; i < checkedTileIds.length; i++) {
+        indices.push(notes.findIndex((note) => note.id === checkedTileIds[i]));
+      }
+      saveNotesOrder();
+      setFolderStructureChanged(true);
+      setNotes(notes.filter((note) => !checkedTileIds.includes(note.id)))
+      setCheckedTileIds([]);
+
+      const newRefs = noteTileRefs.filter((_, index) => !indices.includes(index));
+      setNoteTileRefs(newRefs);
+      setCheckedTileIds([]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [folderStructureChanged])
+
+  const addNotesToFolder = (folderId: number) => {
+    const newNotes = notes.map((note) => {
+      if (checkedTileIds.includes(note.id)) {
+        return {...note, folder_id: folderId}
+      } else {
+        return note;
+      }
+    })
+    setNotes(newNotes);
+    setFolderStructureChanged(true);
+
+    setFolderSelectionActive(false);
+  }
+
+  useEffect(() => {
+    if (checkedTileIds.length === 0) {
+      setFolderSelectionActive(false)
+    }
+  }, [checkedTileIds])
+
   const handleNewNote = (note: note) => {
     setNotes([...notes, note]);
   }
@@ -346,87 +378,113 @@ const Notes = () => {
               </>
             )
             : (<>Loading...</>)}</h2>
-            <ul className='flex gap-x-2 bg-gray-100 w-fit px-2 py-1 rounded-md border border-gray-600'>
+            <ul className='relative flex gap-x-2 bg-gray-100 w-fit px-2 py-1 rounded-md border border-gray-600'>
               <button type='button'
-                      className='p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-gray-200'>
+                      aria-label='Show add to folder options'
+                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer' : ' cursor-default opacity-30'}
+                                 p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-gray-200`}
+                      onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
                 <MdDriveFileMoveRtl/>
               </button>
+                <div className={`${folderSelectionActive ? '' : 'hidden'} absolute z-20 w-[200px] p-1 right-0 -bottom-1 translate-y-full
+                                rounded-md bg-gray-100 border border-gray-600
+                                text-sm`}>
+                  <p className='text-center'>Add selected notes to:</p>
+                  <ul>
+                    {notes.filter((note) => note.folder).map((note, index) => (
+                      <button type='button'
+                              key={index}
+                              aria-label={`Add selected notes to '${note.title}' folder`}
+                              className='flex items-center justify-center gap-x-2
+                                         w-full cursor-pointer bg-waveLight-300 hover:bg-gray-300
+                                         border border-gray-600 rounded-sm mt-1'
+                              onClick={() => addNotesToFolder(note.id)}>
+                        <CiFolderOn className='text-xl'/><p className='w-fit'>{note.title}</p>
+                      </button>
+                    ))}
+                  </ul>
+                </div>
               <button type='button'
-                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer' : ' cursor-default opacity-30'} p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-red-200`}
+                      aria-label='Delete checked notes'
+                      className={`${checkedTileIds.length > 0 ? 'cursor-pointer' : ' cursor-default opacity-30'}
+                      p-1 bg-waveLight-300 border border-gray-600 rounded-sm hover:bg-red-200`}
                       onClick={deleteCheckedTiles}>
                 <RiDeleteBin6Line/>
               </button>
             </ul>
           </div>
-          <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} mt-4 py-[20px] w-full max-h-[90%] overflow-y-scroll
-                                                  overflow-x-auto
-                                                  grid gap-4 grid-cols-2
-                                                  min-[400px]:grid-cols-3 sm:grid-cols-4
-                                                  md:grid-cols-5 min-[900px]:grid-cols-6
-                                                  lg:grid-cols-7 xl:grid-cols-8 grid-rows-auto
-                                                  `}
-              onMouseMove={handleDragMove}
-              onTouchMove={handleDragMove}
-              onMouseUp={handleDragEnd}
-              onTouchEnd={handleDragEnd}
-              >
-            {loaded ? (
-              <>
-                <NewNoteTile folderId={folderId}
-                            insertNewNote={handleNewNote}/>
-                {notes.map((note, index) => (
-                    <NoteTile
-                      ref={(el: HTMLAnchorElement) => {
-                        const localNoteTileRefs = noteTileRefs;
-                        localNoteTileRefs[index] = el;
-                        setNoteTileRefs(localNoteTileRefs);}}
-                      moving={index === dragTargetIndex && dragActive}
-                      index={index}
-                      key={note.id}
-                      note={note}
-                      onDragStart={(e: React.MouseEvent) => handleDragStart(e, index)}
-                      onTouchStart={(e: React.TouchEvent) => handleDragStart(e, index)}
-                      onDragEnd={handleDragEnd}
-                      onCheckedChange={(checked: boolean) => {handleTileCheckedChange(checked, note.id)}}
-                      requestFolderId={(id: string) => setFolderId(id)}/>
-                ))}
-                {notes.length > 0 ? (
-                  <NoteTileClone ref={dragCloneRef}
-                                    note={notes[dragTargetIndex]}
-                                    active={dragActive}
-                                    onMouseUp={handleDragEnd}
-                                    onTouchEnd={handleDragEnd}/>
-                ) : ''}
-              </>
-            ):
-            (
-              <>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-                <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                  <LoaderRect className='w-full h-full rounded-md'/>
-                </LoaderGroup>
-              </>
-            )}
+          <div className='bg-gray-100 rounded-lg overflow-hidden mt-4 shadow-inner h-[90%]
+                            border border-gray-600'>
+            <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} p-[20px] w-full h-fit max-h-[100%] overflow-y-scroll
+                                                    overflow-x-auto
+                                                    grid gap-4 grid-cols-2
+                                                    min-[400px]:grid-cols-3 sm:grid-cols-4
+                                                    md:grid-cols-5 min-[900px]:grid-cols-6
+                                                    lg:grid-cols-7 xl:grid-cols-8 grid-rows-auto
+                                                    `}
+                onMouseMove={handleDragMove}
+                onTouchMove={handleDragMove}
+                onMouseUp={handleDragEnd}
+                onTouchEnd={handleDragEnd}
+                >
+              {loaded ? (
+                <>
+                  <NewNoteTile folderId={folderId}
+                              insertNewNote={handleNewNote}/>
+                  {notes.map((note, index) => (
+                      <NoteTile
+                        ref={(el: HTMLAnchorElement) => {
+                          const localNoteTileRefs = noteTileRefs;
+                          localNoteTileRefs[index] = el;
+                          setNoteTileRefs(localNoteTileRefs);}}
+                        moving={index === dragTargetIndex && dragActive}
+                        index={index}
+                        key={note.id}
+                        note={note}
+                        onDragStart={(e: React.MouseEvent) => handleDragStart(e, index)}
+                        onTouchStart={(e: React.TouchEvent) => handleDragStart(e, index)}
+                        onDragEnd={handleDragEnd}
+                        onCheckedChange={(checked: boolean) => {handleTileCheckedChange(checked, note.id)}}
+                        requestFolderId={(id: string) => setFolderId(id)}/>
+                  ))}
+                  {notes.length > 0 ? (
+                    <NoteTileClone ref={dragCloneRef}
+                                      note={notes[dragTargetIndex]}
+                                      active={dragActive}
+                                      onMouseUp={handleDragEnd}
+                                      onTouchEnd={handleDragEnd}/>
+                  ) : ''}
+                </>
+              ):
+              (
+                <>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                  <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                    <LoaderRect className='w-full h-full rounded-md'/>
+                  </LoaderGroup>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
