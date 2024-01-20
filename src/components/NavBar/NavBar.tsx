@@ -1,4 +1,5 @@
 import { useContext, ReactNode, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { UserContext } from "../../auth";
 
 //icons
@@ -6,12 +7,6 @@ import { RiMenu3Line } from "react-icons/ri";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
-
-
-
-//styles
-import './navbar.css'
-import { useLocation } from "react-router-dom";
 
 interface NavButtonProps {
   children: ReactNode,
@@ -47,7 +42,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
   }
 
   return (
-    <div className='sticky z-20 top-0 left-0 w-full p-4
+    <div className='relative z-20 top-0 left-0 w-full p-4
                    text-whitebright'>
       <div className='flex mx-auto justify-between items-center w-full px-4 max-w-5xl'>
         <a href='/' className="masked text-2xl font-bold flex items-center gap-x-2">

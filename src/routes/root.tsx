@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../auth";
 
@@ -15,9 +15,9 @@ const PromiseStatement = () => {
         </div>
         <div className="relative w-full min-[750px]:w-[30%] min-[750px]:max-w-[250px]
                         flex-grow rounded-lg overflow-hidden
-                        shadow-2xl shadow-waveLight-500/20">
+                        shadow-2xl shadow-waveLight-500/10 border border-gray-600">
           <div className="absolute left-0 top-0 z-20 w-full h-full
-                          bg-gradient-to-br from-waveLight-400/10 to-wave-900/40"></div>
+                          bg-gradient-to-br from-waveLight-400/10 to-wave-900/40 pointer-events-none"></div>
           <img src="https://res.cloudinary.com/dep2nnxvb/image/upload/v1705690232/Screenshot_2024-01-19_184804_rgu6nx.png" alt="image of wocean note editor"
               className="relative w-full h-full"/>
         </div>
@@ -26,39 +26,96 @@ const PromiseStatement = () => {
   );
 }
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
+import { FiGithub, FiInstagram, FiLinkedin } from "react-icons/fi";
+
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 
-const Testimonial = () => {
+type clientInfo = {
+  name: string,
+  position: string,
+  testimony: string,
+  imageUrl: string
+}
+
+const TestimonialsCarousel = () => {
+  const [step, setStep] = useState<number>(0);
+
+  const changeStep = (offset: number) => {
+    const newStep = step + offset;
+    if (newStep < 0) {
+      setStep(clients.length - 1);
+    } else if (newStep > clients.length - 1) {
+      setStep(0);
+    } else {
+      setStep(newStep);
+    }
+  };
+
+  const clients: clientInfo[] = [
+    {
+      name: 'Joseph Grills',
+      position: 'Wocean Powered Writer @writing.io',
+      testimony: 'Wocean has enabled me to store anything from thoughts to minutes with ease. The user experience is something else.',
+      imageUrl: 'https://images.unsplash.com/photo-1522556189639-b150ed9c4330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    },
+    {
+      name: 'Becky Forest',
+      position: 'Product Manager @neptune.dev',
+      testimony: 'The increase productivity after making the switch to wocean\'s systems has been astronomical!',
+      imageUrl: 'https://images.unsplash.com/photo-1554727242-741c14fa561c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    },
+  ];
+
+  return (
+    <div className="users flex justify-end mt-4 w-full min-[750px]:w-[40%] min-[750px]:max-w-[450px] flex-grow">
+      <button type='button'
+              aria-label="previous testimonial"
+              onClick={() => changeStep(-1)}>
+        <HiChevronLeft className="text-4xl text-gray-400"/>
+      </button>
+      <div className="relative flex max-w-[450px] min-[750px]:max-w-[350px] flex-col shadow-2xl shadow-waveLight-500/10 rounded-lg p-4 w-full
+                    overflow-hidden  border border-gray-600">
+        <div className="absolute left-0 top-0 z-20 w-full h-full
+          bg-gradient-to-br from-waveLight-400/10 to-wave-900/10 pointer-events-none"></div>
+        <div className="relative mt-2">
+          <FaQuoteLeft className='absolute text-xl left-0 top-0 text-waveLight-400/20'/>
+          <p className="text-justify">{clients[step].testimony}</p>
+          <FaQuoteRight className='absolute text-xl right-0 bottom-0 text-waveLight-400/20'/>
+        </div>
+        <div className="flex gap-x-2 items-start min-[750px]:items-end mt-2 h-fit">
+          <div className="h-full min-h-[50px] w-auto aspect-square relative">
+            <div className="absolute w-full h-full rounded-tr-[40%] overflow-hidden">
+              <img src={clients[step].imageUrl}
+                  alt="picture of a wocean user (stock image)"
+                  className="w-full h-full object-cover object-top"/>
+            </div>
+          </div>
+          <div className="relative h-fit">
+            <p className="font-normal text-sm">{clients[step].name}</p>
+            <p className="text-gray-200/60 text-xs">{clients[step].position}</p>
+          </div>
+        </div>
+      </div>
+      <button type='button'
+              aria-label="next testimonial"
+              onClick={() => changeStep(1)}>
+        <HiChevronRight className="text-4xl text-gray-400"/>
+      </button>
+    </div>
+  );
+}
+
+
+const Testimonials = () => {
   return (
     <div className="relative flex flex-col min-[600px]:flex-row w-full max-w-4xl mx-auto text-gray-200 mt-[80px]">
       <div className="who w-full justify-between flex flex-col min-[750px]:flex-row max-w-landing gap-4 mx-auto">
-        <div className="w-full flex flex-col items-end min-[750px]:order-2 max-w-[400px]">
+        <div className="w-full min-[750px]:w-[60%] flex flex-col items-end min-[750px]:order-2 max-w-[400px] self-end">
           <h2 className="font-semibold text-gray-200/80"> - Who uses us?</h2>
-          <p className="text-3xl text-right">Join <strong className="relative overflow-visible font-bold">millions<em className="font-thin">*</em></strong> of others who choose wocean to consolidate their thoughts</p>
+          <p className="text-3xl text-right">Join <strong className="relative overflow-visible font-bold">millions<em className="font-thin">*</em></strong> of others who have chosen wocean to them consolidate their thoughts</p>
         </div>
-        <div className="users flex justify-end mt-4 w-full min-[750px]:w-[30%] min-[750px]:max-w-[350px] flex-grow">
-          <div className="relative flex max-w-[450px] min-[750px]:max-w-[350px] flex-col shadow-2xl shadow-waveLight-500/20 rounded-lg p-4 w-full
-                          bg-wave-900 overflow-hidden">
-            <div className="absolute left-0 top-0 z-20 w-full h-full
-              bg-gradient-to-br from-waveLight-400/20 to-wave-900/20"></div>
-            <div className="relative mt-2">
-              <FaQuoteLeft className='absolute text-xl left-0 top-0 text-waveLight-400/20'/>
-              <p className="text-justify">Wocean has enabled me to store anything from thoughts to minutes with ease. The user experience is something else.</p>
-              <FaQuoteRight className='absolute text-xl right-0 bottom-0 text-waveLight-400/20'/>
-            </div>
-            <div className="flex gap-x-2 items-end">
-              <div className="relative w-[40px] h-auto aspect-square rounded-tr-[40%] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="picture of a wocean user (stock image)"
-                    className="w-full h-full object-cover object-top"/>
-              </div>
-              <div className="flex flex-col h-fit">
-                <p className="font-normal text-sm">Joseph Grillz</p>
-                <p className="text-gray-200/60 text-xs">Wocean Powered Writer @Writing.io</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TestimonialsCarousel/>
       </div>
     </div>
   );
@@ -110,13 +167,69 @@ const Hero = () => {
 
 const Footer = () => {
   return (
-    <footer className='p-4 max-w-5xl mx-auto mt-[80px] text-gray-300'>
-      {/* <ul>
-        <li>Footer Link</li>
-        <li>Footer Link</li>
-        <li>Footer Link</li>
-        <li>Footer Link</li>
-      </ul> */}
+    <footer className='p-4 pb-6 w-full border-t border-gray-600 max-w-5xl mx-auto mt-[80px] text-gray-300'>
+      <div className="w-full max-w-landing mx-auto">
+        <div className="lists grid justify-center min-[400px]:grid-cols-2 min-[500px]:grid-cols-3 min-[400px]:justify-start gap-2">
+          <div className="contact">
+            <h3 className="text-1xl masked font-bold flex items-center gap-x-2">
+              <div>🌊</div><div>Wocean</div>
+            </h3>
+            <ul className="text-sm w-fit">
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="https://github.com/willneve/wocean_client/" target="_blank" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1"><FiGithub/><p>GitHub</p></a>
+              </li>
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="https://www.linkedin.com/in/william-neve-66a13819a/" target="_blank" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1"><FiLinkedin/><p>LinkedIn</p></a>
+              </li>
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="#" target="_blank" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1"><FiInstagram/><p>Instagram</p></a>
+              </li>
+            </ul>
+          </div>
+          <div className="support">
+            <h3 className="text-1xl masked font-bold flex items-center gap-x-2">
+              Support
+            </h3>
+            <ul className="text-sm">
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="#" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1">FAQs</a>
+              </li>
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="#" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1">Submit a Ticket</a>
+              </li>
+            </ul>
+          </div>
+          <div className="Guide">
+            <h3 className="text-1xl masked font-bold flex items-center gap-x-2">
+              Guide
+            </h3>
+            <ul className="text-sm">
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="#" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1">Your first note</a>
+              </li>
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="#" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1">File system</a>
+              </li>
+              <li className="block text-gray-300 hover:opacity-85 w-fit h-fit rounded-md">
+                <a href="#" className="w-fit h-fit p-2 pl-0 flex items-center gap-x-1">Going further</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-6 w-fit mx-auto text-center">
+          <p className="text-sm">&copy; Copyright Wocean {new Date().getFullYear()}. All rights reserved.</p>
+          <p className="text-xs text-gray-400">Not actually copyrighted 😅. Produced and maintained by{' '}
+          <div className="inline-block">
+            <a href="https://github.com/willneve/"
+              target="_blank"
+              className="flex w-fit items-center gap-x-1 text-transparent
+                          bg-gradient-to-r from-wave-300 to-wave-100 bg-clip-text">
+              William Neve
+            </a>
+          </div>
+          </p>
+        </div>
+      </div>
     </footer>
   );
 }
@@ -139,7 +252,7 @@ function Home() {
       <div className="content px-6">
         <Hero/>
         <PromiseStatement/>
-        <Testimonial/>
+        <Testimonials/>
         <Footer/>
       </div>
     </>

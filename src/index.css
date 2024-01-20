@@ -34,6 +34,25 @@ body {
   animation-play-state: running;
 }
 
+.NavMenu {
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height .1s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.NavMenu.active {
+  opacity: 1;
+  pointer-events: all;
+  max-height: 600px;
+}
+
+.masked {
+  width: fit-content;
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1.0) 60%, rgba(0,0,0,.6) 100%);
+}
+
 
 @keyframes glow {
   0% {
