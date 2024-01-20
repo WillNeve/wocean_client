@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
 import { staticComponentProps } from '../types/types';
-import './buttons.css';
 
 interface ButtonFormProps extends staticComponentProps {
   // Add your custom props here
@@ -21,12 +20,11 @@ const ButtonFormRender: React.ForwardRefRenderFunction<HTMLButtonElement, Button
         flex
         items-center
         gap-x-4
-        bg-white
         w-fit p-4 m-4
-        hover:bg-waveLight-600
         rounded-md
         border
-        border-gray-500
+        hover:opacity-85
+        border-gray-600
         font-medium
         text-gray-600
         cursor-pointer

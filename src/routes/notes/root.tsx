@@ -452,7 +452,7 @@ const Notes = () => {
                   </button>
                 </ul>
               </div>
-              <div className={`customScroll  ${dragActive ? '' : 'masked-list-vert'} px-8 p-[20px] w-full flex-grow max-h-[100%] overflow-y-scroll
+              <div className={`customScrollBar  ${dragActive ? '' : 'maskedListVert'} px-8 p-[20px] w-full flex-grow max-h-[100%] overflow-y-scroll
                                                       overflow-x-auto
                                                       grid gap-4
                                                       ${sideMenuTempOpen || sideMenuOpen ? `

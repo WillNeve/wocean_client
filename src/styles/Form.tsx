@@ -24,7 +24,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({name, errors}) => {
 
   return (
     <div className="flex flex-col my-2">
-    <label htmlFor={name} className="">{name.charAt(0).toUpperCase() + name.slice(1)}</label>
+    <label htmlFor={name} className="">{name.charAt(0).toUpperCase() + name.replace('_', ' ').slice(1)}</label>
     <input type={/^password/.test(name) ? 'password' : 'text'}
            name={name}
            id={name}
