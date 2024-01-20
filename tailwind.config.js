@@ -7,6 +7,9 @@ export default {
       minWidth: {
         '400px': '400px'
       },
+      maxWidth: {
+        'landing': '745px'
+      },
       colors: {
         'wave-700': '#0C4A6E',
         'whitebright': '#F7F7FF',
