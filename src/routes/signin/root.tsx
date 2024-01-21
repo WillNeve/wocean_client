@@ -85,7 +85,7 @@ const SignIn = () => {
           <h1 className="text-xl font-medium">Log in to your account</h1>
           <form action="#" ref={formRef} onSubmit={authorizeUser}>
             {errorMessage ?
-              (<div className="text-red-300 font-medium flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
+              (<div className="text-red-300 flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
               : ''}
             <FormGroup name={'email'} errors={fieldErrors.email}/>
             <FormGroup name={'password'} errors={fieldErrors.password}/>

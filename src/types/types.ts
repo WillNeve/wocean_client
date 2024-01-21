@@ -4,6 +4,8 @@ export type staticComponentProps = {
 };
 
 
+export type toggle = boolean;
+
 
 
 // Note
