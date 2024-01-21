@@ -52,7 +52,7 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
           <div className={`relative w-full h-full ${moving ? 'bg-gradient-to-r from-gray-500/10 to-gray-300/10' : 'gradient-brighten'} mask-folder`}>
             <p className={`${moving ? 'hidden' : '' } absolute top-1/2 left-0 w-full -translate-y-1/2 text-center`}>{note.title}</p>
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <path d="M 0 90 L 0 10 Q 0 0, 10 0 L 50 0 Q 60 0, 60 10 L 90 10 Q 100 10, 100 20 L 100 90 Q 100 100, 90 100, L 10 100, Q 0 100, 0 90 " fill="none" stroke="#6b7280" stroke-width={moving ? '0' : '1'} />
+              <path d="M 0 90 L 0 10 Q 0 0, 10 0 L 50 0 Q 60 0, 60 10 L 90 10 Q 100 10, 100 20 L 100 90 Q 100 100, 90 100, L 10 100, Q 0 100, 0 90 " fill="none" stroke="#6b7280" strokeWidth={moving ? '0' : '1'} />
             </svg>
           </div>
           <div className={`${moving ? 'hidden' : '' } absolute p-[2px] bottom-0 right-0 flex items-center gap-x-1`}>
@@ -116,7 +116,7 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
             <div className='relative w-full h-full gradient-brighten mask-folder'>
               <p className={`absolute top-1/2 left-0 w-full -translate-y-1/2 text-center`}>{note.title}</p>
               <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 0 90 L 0 10 Q 0 0, 10 0 L 50 0 Q 60 0, 60 10 L 90 10 Q 100 10, 100 20 L 100 90 Q 100 100, 90 100, L 10 100, Q 0 100, 0 90 " fill="none" stroke="#6b7280" stroke-width="1px" />
+                <path d="M 0 90 L 0 10 Q 0 0, 10 0 L 50 0 Q 60 0, 60 10 L 90 10 Q 100 10, 100 20 L 100 90 Q 100 100, 90 100, L 10 100, Q 0 100, 0 90 " fill="none" stroke="#6b7280" strokeWidth="1px" />
               </svg>
 
           </div>
@@ -195,9 +195,9 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
             <HiOutlinePlus className={`${hovered ? 'scale-125' : ''} transition-transform text-2xl text-gray-300/50`}/>
           </div>
           <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-wave-800"></div>
-          <div className="p-1 pl-2 border border-gray-400 w-[70%] h-[12%] rounded-md rounded-b-none bg-wave-800">
+          <div className="p-1 pl-2 border border-gray-500 w-[70%] h-[12%] rounded-md rounded-b-none bg-wave-800">
           </div>
-          <div className="border border-gray-400 w-full h-[88%] rounded-md rounded-tl-none bg-wave-800"></div>
+          <div className="border border-gray-500 w-full h-[88%] rounded-md rounded-tl-none bg-wave-800"></div>
         </div>
       </div>
     );
@@ -206,7 +206,7 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
       <button type='button'
               aria-label="New note button"
               className='w-full h-auto aspect-square flex items-center justify-center rounded-md
-                        bg-wave-800 border border-gray-400 cursor-pointer'
+                        bg-wave-800 border border-gray-500 cursor-pointer'
               onClick={handleClick}
               onMouseOver={() => setHovered(true)}
               onMouseOut={() => setHovered(false)}>

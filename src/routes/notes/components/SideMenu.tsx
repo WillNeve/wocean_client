@@ -1,5 +1,4 @@
-import React, { useState, createContext, ReactElement} from "react";
-import { Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect} from "react";
 // types
 import { note, toggle } from "../../../types/types";
 //components
@@ -9,27 +8,25 @@ import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 
 
 interface sideMenuProps {
-  children: ReactElement,
   handleNewNote: (note: note) => void,
   folderId: string | null,
+  announceOpen: (open: boolean) => void,
 }
 
-interface sideMenuContext {
-  setSideMenuOpen: Dispatch<SetStateAction<boolean>> | null,
-  setSideMenuTempOpen: Dispatch<SetStateAction<boolean>> | null,
-  sideMenuOpen: boolean,
-  sideMenuTempOpen: boolean,
-}
-
-export const SideMenuContext = createContext<sideMenuContext>({ setSideMenuOpen: null, setSideMenuTempOpen: null, sideMenuOpen: true, sideMenuTempOpen: false});
-
-
-const SideMenu: React.FC<sideMenuProps> = ({handleNewNote, folderId, children}) => {
+const SideMenu: React.FC<sideMenuProps> = ({handleNewNote, folderId, announceOpen}) => {
   const [menuOpen, setMenuOpen] = useState<toggle>(true);
   const [menuTempOpen, setMenuTempOpen] = useState<toggle>(false);
 
+  useEffect(() => {
+    if (menuOpen || menuTempOpen) {
+      announceOpen(true);
+    } else {
+      announceOpen(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menuOpen, menuTempOpen])
+
   return (
-    <SideMenuContext.Provider value={{ setSideMenuOpen: setMenuOpen, setSideMenuTempOpen: setMenuTempOpen, sideMenuOpen: true, sideMenuTempOpen: false}}>
       <div className="relative sideMenuWrapper py-4 gradient-brighten w-fit h-full border-r  border-gray-600 pr-2"
             onMouseOver={() => setMenuTempOpen(true)}
             onMouseLeave={() => setMenuTempOpen(false)}>
@@ -52,8 +49,6 @@ const SideMenu: React.FC<sideMenuProps> = ({handleNewNote, folderId, children}) 
                           insertNewNote={handleNewNote}/>
         </div>
       </div>
-      {children}
-    </SideMenuContext.Provider>
   );
 }
 

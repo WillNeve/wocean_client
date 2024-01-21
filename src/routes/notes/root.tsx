@@ -5,17 +5,9 @@ import { UserContext } from '../../auth';
 //types
 import { note } from '../../types/types';
 //components
+import TopMenu from './components/TopMenu';
 import SideMenu from './components/SideMenu';
 import { NoteTile, NoteTileClone } from './components/Tile';
-//icons
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { MdDriveFileMoveRtl } from "react-icons/md";
-import { IoIosArrowBack } from "react-icons/io";
-import { CiFolderOn } from "react-icons/ci";
-import { FaFolder } from "react-icons/fa";
-
-import { SideMenuContext } from './components/SideMenu';
-
 
 //styles
 import { LoaderGroup, LoaderRect } from '../../styles/Utility';
@@ -37,13 +29,10 @@ const Notes = () => {
   const [folderId, setFolderId] = useState<string | null>(null)
 
   const [notes, setNotes] = useState<note[]>([])
-  const [folderSelectionActive, setFolderSelectionActive] = useState<toggle>(false);
   const [folderStructureChanged, setFolderStructureChanged] = useState<toggle>(false);
 
   const [loaded, setLoaded] = useState<toggle>(false)
   const [checkedTileIds, setCheckedTileIds] = useState<number[]>([])
-
-  const {sideMenuOpen, sideMenuTempOpen} = useContext(SideMenuContext);
 
   const getNotes = async () => {
     setLoaded(false);
@@ -344,19 +333,15 @@ const Notes = () => {
     })
     setNotes(newNotes);
     setFolderStructureChanged(true);
-
-    setFolderSelectionActive(false);
   }
 
-  useEffect(() => {
-    if (checkedTileIds.length === 0) {
-      setFolderSelectionActive(false)
-    }
-  }, [checkedTileIds])
+
 
   const handleNewNote = (note: note) => {
     setNotes([...notes, note]);
   }
+
+  const [menuOpen, setMenuOpen] = useState<boolean>(true);
 
   return (
     <>
@@ -365,152 +350,92 @@ const Notes = () => {
         <div className="dashboard-inner relative h-full text-gray-400 font-medium rounded-lg overflow-hidden shadow-2xl shadow-waveLight-500/10">
           <div className='rounded-lg overflow-hidden shadow-inner h-full
                             border border-gray-600 flex gradient-brighten'>
-              <SideMenu folderId={folderId} handleNewNote={handleNewNote}>
-                <div className="fileArea w-full h-full py-4 pr-4">
-                  <div className="top px-8 flex items-start justify-between w-full text-gray-300">
-                    {folderTitle ? (
-                      <button
-                        className='flex items-center gap-x-1 p-1 border border-gray-400 rounded-md
-                                  hover:opacity-75'
-                        onClick={() => setFolderId(null)}>
-                        <IoIosArrowBack/>
-                        <p className='pr-1'>Back</p>
-                      </button>
-                    ) : ''}
-                    <h2 className='text-lg'>{loaded ? (
-                      <>
-                      {folderTitle ? (
-                        <div className='flex items-center gap-x-1'>
-                        <h2 className='not-italic font-bold text-xl
-                                        flex items-center gap-x-2'>
-                          <FaFolder/>
-                          <p className='text-transparent text-gradient-light'>{folderTitle}</p>
-                        </h2>
-                        <em className='not-italic text-sm'>({notes.length})</em>
-                      </div>
-                      ) : (
-                        <div className='flex items-center gap-x-1'>
-                          <h2 className='not-italic text-transparent font-bold text-xl text-gradient-light
-                                          '>All notes</h2>
-                          <em className='not-italic text-sm'>({notes.length})</em>
-                        </div>
-                      )}
-                      </>
-                    )
-                    : (<>Loading...</>)}</h2>
-                    <ul className='relative flex gap-x-2 text-gray-300 w-fit rounded-md'>
-                      <button type='button'
-                              aria-label='Show add to folder options'
-                              className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85' : 'cursor-default opacity-30'}
-                                        p-2 border border-gray-400 rounded-sm hover:bg-gray-200/20`}
-                              onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
-                        <MdDriveFileMoveRtl/>
-                      </button>
-                        <div className={`${folderSelectionActive ? '' : 'hidden'} absolute z-20 w-[200px] p-1 right-0 -bottom-1 translate-y-full
-                                        rounded-md bg-gray-100 border border-gray-400
-                                        text-sm`}>
-                          <p className='text-center'>Add selected notes to:</p>
-                          <ul>
-                            {notes.filter((note) => note.folder).map((note, index) => (
-                              <button type='button'
-                                      key={index}
-                                      aria-label={`Add selected notes to '${note.title}' folder`}
-                                      className='flex items-center justify-center gap-x-2
-                                                w-full cursor-pointer bg-waveLight-300 hover:bg-gray-300
-                                                border border-gray-400 rounded-sm mt-1'
-                                      onClick={() => addNotesToFolder(note.id)}>
-                                <CiFolderOn className='text-xl'/><p className='w-fit'>{note.title}</p>
-                              </button>
-                            ))}
-                          </ul>
-                        </div>
-                      <button type='button'
-                              aria-label='Delete checked notes'
-                              className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85 hover:bg-red-500/50' : 'cursor-default opacity-30'}
-                              p-2 border border-gray-400 rounded-sm`}
-                              onClick={deleteCheckedTiles}>
-                        <RiDeleteBin6Line/>
-                      </button>
-                    </ul>
-                  </div>
-                  <div className={`customScrollBar  ${dragActive ? '' : 'maskedListVert'} px-8 p-[20px] w-full flex-grow max-h-[100%] overflow-y-scroll
-                                                          overflow-x-auto
-                                                          grid gap-4
-                                                          ${sideMenuTempOpen || sideMenuOpen ? `
-                                                          grid-cols-1
-                                                          min-[450px]:grid-cols-2 sm:grid-cols-3
-                                                          md:grid-cols-4 min-[900px]:grid-cols-5
-                                                          lg:grid-cols-6 grid-rows-auto
-                                                          `
-                                                          : `grid-cols-1
-                                                          min-[350px]:grid-cols-2 min-[450px]:grid-cols-3
-                                                          min-[600px]:grid-cols-4 min-[750px]:grid-cols-5
-                                                          min-[900px]:grid-cols-6 grid-rows-auto`}
+            <SideMenu folderId={folderId} handleNewNote={handleNewNote} announceOpen={(open: boolean) => {setMenuOpen(open)}}/>
+            <div className="fileArea w-full h-full py-4 pr-4">
+              <TopMenu loaded={loaded}
+                       addNotesToFolder={addNotesToFolder}
+                       deleteCheckedTiles={deleteCheckedTiles}
+                       notes={notes}
+                       checkedTileIds={checkedTileIds}
+                       folderTitle={folderTitle}
+                       setFolderId={setFolderId} />
+              <div className={`customScrollBar  ${dragActive ? '' : 'maskedListVert'} px-8 p-[20px] w-full flex-grow max-h-[100%] overflow-y-scroll
+                                                      overflow-x-auto
+                                                      grid gap-4
+                                                      ${menuOpen ? `
+                                                      grid-cols-1
+                                                      min-[450px]:grid-cols-2 sm:grid-cols-3
+                                                      md:grid-cols-4 min-[900px]:grid-cols-5
+                                                      lg:grid-cols-6 grid-rows-auto
+                                                      `
+                                                      : `grid-cols-1
+                                                      min-[385px]:grid-cols-2 min-[450px]:grid-cols-3
+                                                      min-[600px]:grid-cols-4 min-[750px]:grid-cols-5
+                                                      min-[900px]:grid-cols-6 grid-rows-auto`}
 
-                                                          `}
-                      onMouseMove={handleDragMove}
-                      onTouchMove={handleDragMove}
-                      onMouseUp={handleDragEnd}
-                      onTouchEnd={handleDragEnd}
-                      >
-                    {loaded ? (
-                      <>
-                        {notes.map((note, index) => (
-                            <NoteTile
-                              ref={(el: HTMLAnchorElement) => {
-                                const localNoteTileRefs = noteTileRefs;
-                                localNoteTileRefs[index] = el;
-                                setNoteTileRefs(localNoteTileRefs);}}
-                              moving={index === dragTargetIndex && dragActive}
-                              index={index}
-                              key={note.id}
-                              note={note}
-                              onDragStart={(e: React.MouseEvent) => handleDragStart(e, index)}
-                              onTouchStart={(e: React.TouchEvent) => handleDragStart(e, index)}
-                              onDragEnd={handleDragEnd}
-                              onCheckedChange={(checked: boolean) => {handleTileCheckedChange(checked, note.id)}}
-                              requestFolderId={(id: string) => setFolderId(id)}/>
-                        ))}
-                        {notes.length > 0 ? (
-                          <NoteTileClone ref={dragCloneRef}
-                                            note={notes[dragTargetIndex]}
-                                            active={dragActive}
-                                            onMouseUp={handleDragEnd}
-                                            onTouchEnd={handleDragEnd}/>
-                        ) : ''}
-                      </>
-                    ):
-                    (
-                      <>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                        <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
-                          <LoaderRect className='w-full h-full rounded-md'/>
-                        </LoaderGroup>
-                      </>
-                    )}
-                  </div>
+                                                      `}
+                  onMouseMove={handleDragMove}
+                  onTouchMove={handleDragMove}
+                  onMouseUp={handleDragEnd}
+                  onTouchEnd={handleDragEnd}
+                  >
+                {loaded ? (
+                  <>
+                    {notes.map((note, index) => (
+                        <NoteTile
+                          ref={(el: HTMLAnchorElement) => {
+                            const localNoteTileRefs = noteTileRefs;
+                            localNoteTileRefs[index] = el;
+                            setNoteTileRefs(localNoteTileRefs);}}
+                          moving={index === dragTargetIndex && dragActive}
+                          index={index}
+                          key={note.id}
+                          note={note}
+                          onDragStart={(e: React.MouseEvent) => handleDragStart(e, index)}
+                          onTouchStart={(e: React.TouchEvent) => handleDragStart(e, index)}
+                          onDragEnd={handleDragEnd}
+                          onCheckedChange={(checked: boolean) => {handleTileCheckedChange(checked, note.id)}}
+                          requestFolderId={(id: string) => setFolderId(id)}/>
+                    ))}
+                    {notes.length > 0 ? (
+                      <NoteTileClone ref={dragCloneRef}
+                                        note={notes[dragTargetIndex]}
+                                        active={dragActive}
+                                        onMouseUp={handleDragEnd}
+                                        onTouchEnd={handleDragEnd}/>
+                    ) : ''}
+                  </>
+                ):
+                (
+                  <>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                    <LoaderGroup active={true} className={`w-full h-auto aspect-square`}>
+                      <LoaderRect className='w-full h-full rounded-md'/>
+                    </LoaderGroup>
+                  </>
+                )}
                 </div>
-              </SideMenu>
+            </div>
           </div>
         </div>
       </div>

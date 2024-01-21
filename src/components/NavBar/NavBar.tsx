@@ -59,7 +59,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
               <button type='button'
               aria-label='NavMobileMenu Button'
               onClick={handleMenuToggle}
-              className='p-2 hover:bg-gradient-to-l from-waveLight-500 to-waveLight-600 hover:text-gray-600 rounded-md '>
+              className='p-2 from-waveLight-500 to-waveLight-600 border border-gray-500/0 hover:border-gray-500 rounded-md '>
               <RiMenu3Line className='cursor-pointer text-xl'/>
             </button>
             </>
@@ -78,14 +78,14 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
         </ul>
       </div>
       <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-5xl px-4 h-[40px] pointer-events-none">
-        <div className={`NavMenu ${menuOpen ? 'active' : ''}
-                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 bg-white text-gray-600 rounded-lg border border-gray-600`}
+        <div className={`NavMenu ${menuOpen ? 'active' : ''} relative z-40
+                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 popup-bg text-gray-200 rounded-lg border border-gray-500`}
                         >
-          <a href="/notes" className={`w-full font-normal bg-gradient-to-r from-waveLight-200 to-waveLight-300 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
+          <a href="/notes" className={`w-full font-light flex items-center gap-x-2 justify-end p-2 border border-gray-500 rounded-md hover:opacity-85`}>
             <FaRegNoteSticky className='text-md'/>
             <p>Notes</p>
           </a>
-          <a href="/dashboard" className={`w-full font-normal bg-gradient-to-r from-waveLight-200 to-waveLight-300 hover:to-waveLight-700 flex gap-x-4 items-center p-2  border border-gray-600 rounded-md`}>
+          <a href="/dashboard" className={`w-full font-light flex items-center gap-x-2 justify-end p-2 border border-gray-500 rounded-md hover:opacity-85`}>
             <MdOutlineSpaceDashboard className='text-md'/>
             <p>Dashboard</p>
           </a>

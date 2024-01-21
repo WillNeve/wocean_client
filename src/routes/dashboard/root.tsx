@@ -34,12 +34,10 @@ const Dashboard: React.FC = () => {
       <>
         <NavBar requestNavigate={navigate}/>
         <ViewNameContext.Provider value={{viewName: viewName, setViewName}}>
-        <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl'>
-          <div className="dashboard-inner relative  h-[80vh] flex text-gray-600 font-medium rounded-lg overflow-hidden bg-white ">
+          <div className="relative mx-auto w-100 max-w-5xl h-[80vh] mt-5 border border-gray-600 flex text-gray-200 rounded-lg shadow-2xl shadow-waveLight-500/10 overflow-hidden">
             <MenuSide/>
             <View/>
           </div>
-        </div>
         </ViewNameContext.Provider>
       </>
     )
