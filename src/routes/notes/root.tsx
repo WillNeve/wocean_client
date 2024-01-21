@@ -39,7 +39,7 @@ const Notes = () => {
 
   const [loaded, setLoaded] = useState<toggle>(false)
   const [checkedTileIds, setCheckedTileIds] = useState<number[]>([])
-  const [sideMenuOpen, setSideMenuOpen] = useState<toggle>(false);
+  const [sideMenuOpen, setSideMenuOpen] = useState<toggle>(true);
   const [sideMenuTempOpen, setSideMenuTempOpen] = useState<toggle>(false);
 
   const getNotes = async () => {
@@ -359,11 +359,10 @@ const Notes = () => {
     <>
       <NavBar requestNavigate={navigate}/>
       <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl h-[85lvh]'>
-        <div className="dashboard-inner relative h-full text-gray-600 font-medium rounded-lg overflow-hidden
-                        bg-gradient-to-b from-wave-800 to-wave-600">
-          <div className='gradient-whitespace rounded-lg overflow-hidden shadow-inner h-full
-                            border border-gray-600 flex'>
-          <div className="relative sideMenuWrapper py-4 gradient-whitespace w-fit h-full border-r  border-gray-600"
+        <div className="dashboard-inner relative h-full text-gray-400 font-medium rounded-lg overflow-hidden">
+          <div className='rounded-lg overflow-hidden shadow-inner h-full
+                            border border-gray-400 flex gradient-brighten'>
+          <div className="relative sideMenuWrapper py-4 gradient-brighten w-fit h-full border-r  border-gray-400"
                onMouseOver={() => setSideMenuTempOpen(true)}
                onMouseLeave={() => setSideMenuTempOpen(false)}>
             <div className="top flex justify-end items-center">
@@ -386,10 +385,10 @@ const Notes = () => {
             </div>
           </div>
             <div className="fileArea w-full h-full py-4 pr-4">
-              <div className="top px-8 flex items-start justify-between w-full text-gray-600">
+              <div className="top px-8 flex items-start justify-between w-full text-gray-300">
                 {folderTitle ? (
                   <button
-                    className='flex items-center gap-x-1 p-1 border border-gray-600 rounded-md
+                    className='flex items-center gap-x-1 p-1 border border-gray-400 rounded-md
                               hover:opacity-75'
                     onClick={() => setFolderId(null)}>
                     <IoIosArrowBack/>
@@ -402,31 +401,31 @@ const Notes = () => {
                     <div className='flex items-center gap-x-1'>
                     <h2 className='not-italic font-bold text-xl
                                     flex items-center gap-x-2'>
-                      <FaFolder className='opacity-50'/>
-                      <p className='text-transparent bg-gradient-to-r from-gray-600 to-wave-500 bg-clip-text'>{folderTitle}</p>
+                      <FaFolder/>
+                      <p className='text-transparent text-gradient-light'>{folderTitle}</p>
                     </h2>
-                    <em className='not-italic text-sm opacity-75'>({notes.length})</em>
+                    <em className='not-italic text-sm'>({notes.length})</em>
                   </div>
                   ) : (
                     <div className='flex items-center gap-x-1'>
-                      <h2 className='not-italic text-transparent font-bold text-xl
-                                      bg-gradient-to-r from-wave-900 to-wave-600 bg-clip-text'>All notes</h2>
-                      <em className='not-italic text-sm opacity-75'>({notes.length})</em>
+                      <h2 className='not-italic text-transparent font-bold text-xl text-gradient-light
+                                      '>All notes</h2>
+                      <em className='not-italic text-sm'>({notes.length})</em>
                     </div>
                   )}
                   </>
                 )
                 : (<>Loading...</>)}</h2>
-                <ul className='relative flex gap-x-2 gradient-whitespace text-gray-600 w-fit px-2 py-1 rounded-md border border-gray-600'>
+                <ul className='relative flex gap-x-2 text-gray-300 w-fit px-2 py-1 rounded-md border border-gray-400'>
                   <button type='button'
                           aria-label='Show add to folder options'
-                          className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200' : ' cursor-default opacity-30'}
-                                    p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
+                          className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85' : 'cursor-default opacity-30'}
+                                    p-1 border border-gray-400 rounded-sm`}
                           onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
                     <MdDriveFileMoveRtl/>
                   </button>
                     <div className={`${folderSelectionActive ? '' : 'hidden'} absolute z-20 w-[200px] p-1 right-0 -bottom-1 translate-y-full
-                                    rounded-md bg-gray-100 border border-gray-600
+                                    rounded-md bg-gray-100 border border-gray-400
                                     text-sm`}>
                       <p className='text-center'>Add selected notes to:</p>
                       <ul>
@@ -436,7 +435,7 @@ const Notes = () => {
                                   aria-label={`Add selected notes to '${note.title}' folder`}
                                   className='flex items-center justify-center gap-x-2
                                             w-full cursor-pointer bg-waveLight-300 hover:bg-gray-300
-                                            border border-gray-600 rounded-sm mt-1'
+                                            border border-gray-400 rounded-sm mt-1'
                                   onClick={() => addNotesToFolder(note.id)}>
                             <CiFolderOn className='text-xl'/><p className='w-fit'>{note.title}</p>
                           </button>
@@ -445,8 +444,8 @@ const Notes = () => {
                     </div>
                   <button type='button'
                           aria-label='Delete checked notes'
-                          className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-red-200' : ' cursor-default opacity-30'}
-                          p-1 bg-waveLight-300 border border-gray-600 rounded-sm`}
+                          className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85 hover:bg-red-200 hover:text-gray-600' : 'cursor-default opacity-30'}
+                          p-1 border border-gray-400 rounded-sm`}
                           onClick={deleteCheckedTiles}>
                     <RiDeleteBin6Line/>
                   </button>

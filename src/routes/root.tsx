@@ -88,13 +88,13 @@ const TestimonialsCarousel = () => {
   return (
     <div className="flex flex-col w-full min-[750px]:w-[30%] flex-grow max-w-[450px] self-end">
       <div className="relative users flex justify-end mt-4 w-full h-full">
-        <div className="relative flex flex-col justify-between shadow-2xl shadow-waveLight-500/10 rounded-lg p-4 w-full  min-h-[175px]
+        <div className="relative flex flex-col justify-between shadow-2xl shadow-waveLight-500/10 rounded-lg p-4 w-full  min-h-[175px] min-[750px]:min-h-[195px]
                       overflow-hidden  border border-gray-600">
 
           <button type='button'
                   aria-label="previous testimonial"
                   className="absolute top-0 left-0 h-full w-[20%] z-30
-                             hover:bg-gray-900/30 text-gray-500/0 hover:text-gray-500 flex items-center justify-center"
+                             hover:bg-gray-900/30 text-gray-500/0 hover:text-gray-500 flex items-center justify-center cursor-pointer"
                   onClick={() => {
                     setStepLocks(stepLocks + 1);
                     changeStep(-1, true);
@@ -127,7 +127,7 @@ const TestimonialsCarousel = () => {
           <button type='button'
                   aria-label="next testimonial"
                   className="absolute top-0 right-0 h-full w-[20%] z-30
-                  hover:bg-gray-900/30 text-gray-500/0 hover:text-gray-500 flex items-center justify-center"
+                  hover:bg-gray-900/30 text-gray-500/0 hover:text-gray-500 flex items-center justify-center cursor-pointer"
                   onClick={() => {
                     setStepLocks(stepLocks + 1);
                     changeStep(1, true);

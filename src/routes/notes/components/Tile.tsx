@@ -50,28 +50,28 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
                       font-normal
                      hover:border-gray-200  ${checked ? 'border-amber-500' : ''}`}>
           <div className='relative w-full h-full'>
-            <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
-              <p className={`${moving ? 'hidden' : ''} text-center`}>{note.title}</p>
-            </div>
-            <div className={`${moving ? 'hidden' :  ''} bg-gradient-to-r from-waveLight-300 to-waveLight-400
-                            w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2`}></div>
+              <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
+                <p className={`${moving ? 'hidden' : ''} text-center`}>{note.title}</p>
+              </div>
+              <div className={`${moving ? 'hidden' :  ''}
+                              w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 gradient-brighten`}></div>
 
-            <div className={`${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20`
-                             : `bg-gradient-to-r from-waveLight-300 to-waveLight-400 border`}
-                             p-1 pl-2 text-gray-500 border-gray-600 w-[70%] h-[12%] rounded-md rounded-b-none`}>
-            </div>
+              <div className={`${moving ? `bg-gradient-to-r from-gray-500/20 to-gray-300/20`
+                              : ` gradient-brighten border border-gray-500 `}
+                              p-1 pl-2 text-gray-500 w-[70%] h-[12%] rounded-md rounded-b-none`}>
+              </div>
 
-            <div className={`${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20`
-                             : `bg-gradient-to-r from-waveLight-300 to-waveLight-400 border`}
-                             border-gray-600 w-full h-[88%] rounded-md rounded-tl-none`}></div>
+              <div className={`${moving ? `bg-gradient-to-r from-gray-500/20 to-gray-300/20`
+                              : `gradient-brighten border border-gray-500`}
+                              border-gray-400 w-full h-[88%] rounded-md rounded-tl-none`}></div>
           </div>
-          <div className={`${moving ? 'hidden' : '' } absolute bottom-1 right-1 flex items-center gap-x-1`}>
+          <div className={`${moving ? 'hidden' : '' } absolute p-[2px] bottom-0 right-0 flex items-center gap-x-1`}>
             <button type='button'
                     aria-label='Drag Button'
-                    className="p-1 bg-waveLight-300 hover:bg-amber-500 rounded-md border border-gray-600 cursor-grab"
+                    className={`${checked ? 'hidden' : '' } p-1 rounded-md hover:opacity-85 cursor-grab`}
                     onMouseDown={(e) =>  {checked ? '' : onDragStart(e)}}
                     onTouchStart={(e) =>  {checked ? '' : onTouchStart(e)}}>
-              <MdDragIndicator className='text-lg'/>
+              <MdDragIndicator className='text-2xl'/>
             </button>
           </div>
         </a>
@@ -83,24 +83,24 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
           className={`${moving ? `border-none cursor-grabbing` : `cursor-pointer`}
                       relative flex  w-full h-auto aspect-square rounded-md overflow-hidden
                       font-normal
-                      border ${checked ? 'border-amber-500' : 'border-gray-500'}`}>
-          <div className={`flex items-center justify-center font-medium w-full p-1 ${moving ? `bg-gradient-to-r from-gray-700/20 to-gray-500/20`
-                          : `bg-gradient-to-r from-waveLight-500 to-waveLight-600`} py-1 ${checked ? 'opacity-75' : ''}`}>
+                      border ${checked ? 'border-gray-300' : 'border-gray-500'}`}>
+          <div className={`flex items-center justify-center font-medium w-full p-1 ${moving ? `bg-gradient-to-r from-gray-500/20 to-gray-300/20`
+                          : `gradient-brighten`} py-1 ${checked ? 'opacity-75' : ''}`}>
             <h3 className={`${moving ? 'hidden' : '' }`}>{note?.title}</h3>
           </div>
-          <div className={`${moving ? 'hidden' : '' } absolute bottom-1 right-1 flex items-center gap-x-1`}>
+          <div className={`${moving ? 'hidden' : '' } absolute bottom-0 p-[4px] right-0 flex items-center w-full justify-between`}>
             <button type='button'
                     aria-label='Check Tile Button'
-                    className={`${checked ? 'bg-amber-500' : 'bg-waveLight-300'} p-1 rounded-md border border-gray-600`}
+                    className={`${checked ? 'bg-gray-300/20' : ''} p-1 rounded-md border border-gray-600`}
                     onClick={handleCheckBoxClick}>
               <FaCheck className={`text-lg scale-75 ${checked ? '' : 'opacity-0'}`}/>
             </button>
             <button type='button'
                     aria-label='Drag Button'
-                    className="p-1 bg-waveLight-300 hover:bg-amber-500 rounded-md border border-gray-600 cursor-grab"
+                    className={`${checked ? 'hidden' : '' } p-1 rounded-md hover:opacity-85 cursor-grab`}
                     onMouseDown={(e) =>  {checked ? '' : onDragStart(e)}}
                     onTouchStart={(e) =>  {checked ? '' : onTouchStart(e)}}>
-              <MdDragIndicator className='text-lg'/>
+              <MdDragIndicator className='text-2xl'/>
             </button>
           </div>
         </a>
@@ -127,19 +127,19 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
             <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
               <p className="text-center">{note.title}</p>
             </div>
-            <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-gradient-to-r from-waveLight-300 to-waveLight-400"></div>
-            <div className="p-1 pl-2 border text-gray-500 border-gray-600 w-[70%] h-[12%] rounded-md rounded-b-none bg-gradient-to-r from-waveLight-300 to-waveLight-400">
+            <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-wave-800"></div>
+            <div className="p-1 pl-2 border text-gray-500 border-gray-400 w-[70%] h-[12%] rounded-md rounded-b-none bg-wave-800">
             </div>
-            <div className="border border-gray-600 w-full h-[88%] rounded-md rounded-tl-none bg-gradient-to-r from-waveLight-300 to-waveLight-400"></div>
+            <div className="border border-gray-400 w-full h-[88%] rounded-md rounded-tl-none bg-wave-800"></div>
           </div>
         </div>
       ) : (
         <div
           ref={ref}
           className={`${active ? '' : 'hidden'} flex fixed top-50 left-50 -translate-x-1/2 -translate-y-1/2
-                      rounded-md bg-gradient-to-r from-waveLight-500 to-waveLight-600 cursor-grabbing
+                      rounded-md bg-wave-800 cursor-grabbing
                       font-normal
-                      border border-amber-500 opacity-85`}
+                      border border-gray-500 opacity-85`}
           onMouseUp={onMouseUp}
           onTouchEnd={onTouchEnd}>
           <div className={`p-1 flex items-center justify-center font-medium w-full p-1bg-gradient-to-r from-waveLight-500 to-waveLight-600 py-1`}>
@@ -204,12 +204,12 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
             onMouseOut={() => setHovered(false)}>
         <div className='relative w-full h-full'>
           <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
-            <HiOutlinePlus className={`${hovered ? 'scale-125' : ''} transition-transform text-2xl text-gray-600/50`}/>
+            <HiOutlinePlus className={`${hovered ? 'scale-125' : ''} transition-transform text-2xl text-gray-300/50`}/>
           </div>
-          <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-gray-300"></div>
-          <div className="p-1 pl-2 border border-gray-600 w-[70%] h-[12%] rounded-md rounded-b-none bg-gray-300">
+          <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-wave-800"></div>
+          <div className="p-1 pl-2 border border-gray-400 w-[70%] h-[12%] rounded-md rounded-b-none bg-wave-800">
           </div>
-          <div className="border border-gray-600 w-full h-[88%] rounded-md rounded-tl-none bg-gray-300"></div>
+          <div className="border border-gray-400 w-full h-[88%] rounded-md rounded-tl-none bg-wave-800"></div>
         </div>
       </div>
     );
@@ -218,11 +218,11 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
       <button type='button'
               aria-label="New note button"
               className='w-full h-auto aspect-square flex items-center justify-center rounded-md
-                        bg-gray-300 border border-gray-500 cursor-pointer'
+                        bg-wave-800 border border-gray-400 cursor-pointer'
               onClick={handleClick}
               onMouseOver={() => setHovered(true)}
               onMouseOut={() => setHovered(false)}>
-        <HiOutlinePlus className={`${hovered ? 'scale-125' : ''} transition-transform text-2xl text-gray-600/50`}/>
+        <HiOutlinePlus className={`${hovered ? 'scale-125' : ''} transition-transform text-2xl text-gray-300/50`}/>
       </button>
     );
   }
