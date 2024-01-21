@@ -46,24 +46,14 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
           ref={ref}
           data-index={index}
           className={`${moving ? `cursor-grabbing` : `cursor-pointer`}
-                      relative flex  w-full h-auto aspect-square rounded-md overflow-hidden
+                      relative flex  w-full h-auto aspect-square rounded-md
                       font-normal
                      hover:border-gray-200  ${checked ? 'border-amber-500' : ''}`}>
-          <div className='relative w-full h-full'>
-              <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
-                <p className={`${moving ? 'hidden' : ''} text-center`}>{note.title}</p>
-              </div>
-              <div className={`${moving ? 'hidden' :  ''}
-                              w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 gradient-brighten`}></div>
-
-              <div className={`${moving ? `bg-gradient-to-r from-gray-500/20 to-gray-300/20`
-                              : ` gradient-brighten border border-gray-500 `}
-                              p-1 pl-2 text-gray-500 w-[70%] h-[12%] rounded-md rounded-b-none`}>
-              </div>
-
-              <div className={`${moving ? `bg-gradient-to-r from-gray-500/20 to-gray-300/20`
-                              : `gradient-brighten border border-gray-500`}
-                              border-gray-400 w-full h-[88%] rounded-md rounded-tl-none`}></div>
+          <div className={`relative w-full h-full ${moving ? 'bg-gradient-to-r from-gray-500/10 to-gray-300/10' : 'gradient-brighten'} mask-folder`}>
+            <p className={`${moving ? 'hidden' : '' } absolute top-1/2 left-0 w-full -translate-y-1/2 text-center`}>{note.title}</p>
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 0 90 L 0 10 Q 0 0, 10 0 L 50 0 Q 60 0, 60 10 L 90 10 Q 100 10, 100 20 L 100 90 Q 100 100, 90 100, L 10 100, Q 0 100, 0 90 " fill="none" stroke="#6b7280" stroke-width={moving ? '0' : '1'} />
+            </svg>
           </div>
           <div className={`${moving ? 'hidden' : '' } absolute p-[2px] bottom-0 right-0 flex items-center gap-x-1`}>
             <button type='button'
@@ -84,7 +74,7 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
                       relative flex  w-full h-auto aspect-square rounded-md overflow-hidden
                       font-normal
                       border ${checked ? 'border-gray-300' : 'border-gray-500'}`}>
-          <div className={`flex items-center justify-center font-medium w-full p-1 ${moving ? `bg-gradient-to-r from-gray-500/20 to-gray-300/20`
+          <div className={`flex items-center justify-center font-medium w-full p-1 ${moving ? `bg-gradient-to-r from-gray-500/10 to-gray-300/10`
                           : `gradient-brighten`} py-1 ${checked ? 'opacity-75' : ''}`}>
             <h3 className={`${moving ? 'hidden' : '' }`}>{note?.title}</h3>
           </div>
@@ -123,21 +113,19 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
                     hover:border-gray-200 opacity-85`}
           onMouseUp={onMouseUp}
           onTouchEnd={onTouchEnd}>
-          <div className='relative w-full h-full'>
-            <div className="absolute z-10 w-full h-full flex items-center justify-center pointer-events-none">
-              <p className="text-center">{note.title}</p>
-            </div>
-            <div className="w-[calc(70%-2px)] ml-[1px] h-[4px] absolute left-0 top-[12%] -translate-y-1/2 bg-wave-800"></div>
-            <div className="p-1 pl-2 border text-gray-500 border-gray-400 w-[70%] h-[12%] rounded-md rounded-b-none bg-wave-800">
-            </div>
-            <div className="border border-gray-400 w-full h-[88%] rounded-md rounded-tl-none bg-wave-800"></div>
+            <div className='relative w-full h-full gradient-brighten mask-folder'>
+              <p className={`absolute top-1/2 left-0 w-full -translate-y-1/2 text-center`}>{note.title}</p>
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 0 90 L 0 10 Q 0 0, 10 0 L 50 0 Q 60 0, 60 10 L 90 10 Q 100 10, 100 20 L 100 90 Q 100 100, 90 100, L 10 100, Q 0 100, 0 90 " fill="none" stroke="#6b7280" stroke-width="1px" />
+              </svg>
+
           </div>
         </div>
       ) : (
         <div
           ref={ref}
           className={`${active ? '' : 'hidden'} flex fixed top-50 left-50 -translate-x-1/2 -translate-y-1/2
-                      rounded-md bg-wave-800 cursor-grabbing
+                      rounded-md gradient-brighten cursor-grabbing
                       font-normal
                       border border-gray-500 opacity-85`}
           onMouseUp={onMouseUp}
