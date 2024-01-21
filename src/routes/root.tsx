@@ -13,7 +13,7 @@ const PromiseStatement = () => {
           <h2 className="font-semibold text-gray-200/80"> - Why use us?</h2>
           <p className="text-3xl">With Wocean editor, we have <strong className="font-bold">revolutionalised</strong> the notetaking process.</p>
         </div>
-        <div className="relative w-full min-[750px]:w-[30%] min-[750px]:max-w-[250px]
+        <div className="relative w-full max-w-[500px] min-[750px]:w-[30%] min-[750px]:max-w-[250px]
                         flex-grow rounded-lg overflow-hidden
                         shadow-2xl shadow-waveLight-500/10 border border-gray-600">
           <div className="absolute left-0 top-0 z-20 w-full h-full
@@ -38,11 +38,30 @@ type clientInfo = {
   imageUrl: string
 }
 
+const clients: clientInfo[] = [
+  {
+    name: 'Joseph Grills',
+    position: 'Wocean Powered Writer @writing.io',
+    testimony: 'Wocean has enabled me to store anything from thoughts to minutes with ease. The user experience is something else.',
+    imageUrl: 'https://images.unsplash.com/photo-1522556189639-b150ed9c4330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    name: 'Becky Forest',
+    position: 'Product Manager @neptune.dev',
+    testimony: 'The increased productivity after making the switch to wocean\'s systems has been astronomical!',
+    imageUrl: 'https://images.unsplash.com/photo-1554727242-741c14fa561c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+];
+
 const TestimonialsCarousel = () => {
   const [step, setStep] = useState<number>(0);
+  const [stepLocks, setStepLocks] = useState<number>(0);
+  const [activeTimeout, setActiveTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const changeStep = (offset: number) => {
-    const newStep = step + offset;
+  const changeStep = (change: number, manual: boolean) => {
+    if (!manual && stepLocks > 0) return;
+
+    const newStep = step + change;
     if (newStep < 0) {
       setStep(clients.length - 1);
     } else if (newStep > clients.length - 1) {
@@ -50,58 +69,83 @@ const TestimonialsCarousel = () => {
     } else {
       setStep(newStep);
     }
-  };
+  }
 
-  const clients: clientInfo[] = [
-    {
-      name: 'Joseph Grills',
-      position: 'Wocean Powered Writer @writing.io',
-      testimony: 'Wocean has enabled me to store anything from thoughts to minutes with ease. The user experience is something else.',
-      imageUrl: 'https://images.unsplash.com/photo-1522556189639-b150ed9c4330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    },
-    {
-      name: 'Becky Forest',
-      position: 'Product Manager @neptune.dev',
-      testimony: 'The increase productivity after making the switch to wocean\'s systems has been astronomical!',
-      imageUrl: 'https://images.unsplash.com/photo-1554727242-741c14fa561c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    },
-  ];
+  useEffect(() => {
+    if (activeTimeout !== null) {
+      clearTimeout(activeTimeout);
+    }
+
+    const newTimeout = setTimeout(() => {
+      changeStep(1, false);
+    }, 5000);
+    setActiveTimeout(newTimeout);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, stepLocks])
+
 
   return (
-    <div className="users flex justify-end mt-4 w-full min-[750px]:w-[40%] min-[750px]:max-w-[450px] flex-grow">
-      <button type='button'
-              aria-label="previous testimonial"
-              onClick={() => changeStep(-1)}>
-        <HiChevronLeft className="text-4xl text-gray-400"/>
-      </button>
-      <div className="relative flex max-w-[450px] min-[750px]:max-w-[350px] flex-col shadow-2xl shadow-waveLight-500/10 rounded-lg p-4 w-full
-                    overflow-hidden  border border-gray-600">
-        <div className="absolute left-0 top-0 z-20 w-full h-full
-          bg-gradient-to-br from-waveLight-400/10 to-wave-900/10 pointer-events-none"></div>
-        <div className="relative mt-2">
-          <FaQuoteLeft className='absolute text-xl left-0 top-0 text-waveLight-400/20'/>
-          <p className="text-justify">{clients[step].testimony}</p>
-          <FaQuoteRight className='absolute text-xl right-0 bottom-0 text-waveLight-400/20'/>
-        </div>
-        <div className="flex gap-x-2 items-start min-[750px]:items-end mt-2 h-fit">
-          <div className="h-full min-h-[50px] w-auto aspect-square relative">
-            <div className="absolute w-full h-full rounded-tr-[40%] overflow-hidden">
-              <img src={clients[step].imageUrl}
-                  alt="picture of a wocean user (stock image)"
-                  className="w-full h-full object-cover object-top"/>
+    <div className="flex flex-col w-full min-[750px]:w-[30%] flex-grow max-w-[450px] self-end">
+      <div className="relative users flex justify-end mt-4 w-full h-full">
+        <div className="relative flex flex-col justify-between shadow-2xl shadow-waveLight-500/10 rounded-lg p-4 w-full  min-h-[175px]
+                      overflow-hidden  border border-gray-600">
+
+          <button type='button'
+                  aria-label="previous testimonial"
+                  className="absolute top-0 left-0 h-full w-[20%] z-30
+                             hover:bg-gray-900/30 text-gray-500/0 hover:text-gray-500 flex items-center justify-center"
+                  onClick={() => {
+                    setStepLocks(stepLocks + 1);
+                    changeStep(-1, true);
+                    setTimeout(() => {
+                      setStepLocks((prevValue) => prevValue - 1);
+                    }, 5000);
+                  }}>
+            <HiChevronLeft className="text-5xl"/>
+          </button>
+          <div className="absolute left-0 top-0 z-20 w-full h-full
+            bg-gradient-to-br from-waveLight-400/10 to-wave-900/10 pointer-events-none"></div>
+          <div className="relative mt-2">
+            <FaQuoteLeft className='absolute text-xl left-0 top-0 text-waveLight-400/20'/>
+            <p className="text-justify">{clients[step].testimony}</p>
+            <FaQuoteRight className='absolute text-xl right-0 bottom-0 text-waveLight-400/20'/>
+          </div>
+          <div className="flex gap-x-2 items-end mt-2 h-fit">
+            <div className="h-full min-h-[50px] w-auto aspect-square relative">
+              <div className="absolute w-full h-full rounded-tr-[40%] overflow-hidden">
+                <img src={clients[step].imageUrl}
+                    alt="picture of a wocean user (stock image)"
+                    className="w-full h-full object-cover object-top"/>
+              </div>
+            </div>
+            <div className="relative h-fit">
+              <p className="font-normal text-sm">{clients[step].name}</p>
+              <p className="text-gray-200/60 text-xs">{clients[step].position}</p>
             </div>
           </div>
-          <div className="relative h-fit">
-            <p className="font-normal text-sm">{clients[step].name}</p>
-            <p className="text-gray-200/60 text-xs">{clients[step].position}</p>
-          </div>
+          <button type='button'
+                  aria-label="next testimonial"
+                  className="absolute top-0 right-0 h-full w-[20%] z-30
+                  hover:bg-gray-900/30 text-gray-500/0 hover:text-gray-500 flex items-center justify-center"
+                  onClick={() => {
+                    setStepLocks(stepLocks + 1);
+                    changeStep(1, true);
+                    setTimeout(() => {
+                      setStepLocks((prevValue) => prevValue - 1);
+                    }, 5000);
+                  }}>
+            <HiChevronRight className="text-5xl"/>
+          </button>
         </div>
       </div>
-      <button type='button'
-              aria-label="next testimonial"
-              onClick={() => changeStep(1)}>
-        <HiChevronRight className="text-4xl text-gray-400"/>
-      </button>
+      <div className="flex self-center items-center gap-x-4 mt-4">
+        {clients.map((_c, index) => {
+          return (
+          <div className={`w-[10px] h-[10px] rounded-full border ${index === step ? 'bg-waveLight-300' : ''}`}></div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -109,14 +153,12 @@ const TestimonialsCarousel = () => {
 
 const Testimonials = () => {
   return (
-    <div className="relative flex flex-col min-[600px]:flex-row w-full max-w-4xl mx-auto text-gray-200 mt-[80px]">
-      <div className="who w-full justify-between flex flex-col min-[750px]:flex-row max-w-landing gap-4 mx-auto">
-        <div className="w-full min-[750px]:w-[60%] flex flex-col items-end min-[750px]:order-2 max-w-[400px] self-end">
-          <h2 className="font-semibold text-gray-200/80"> - Who uses us?</h2>
-          <p className="text-3xl text-right">Join <strong className="relative overflow-visible font-bold">millions<em className="font-thin">*</em></strong> of others who have chosen wocean to them consolidate their thoughts</p>
-        </div>
-        <TestimonialsCarousel/>
+    <div className="relative w-full justify-between items-center flex flex-col min-[750px]:flex-row max-w-landing gap-4 gap-x-8 mx-auto text-gray-200 mt-[80px] ">
+      <div className="w-full min-[750px]:w-[70%] flex flex-col items-end min-[750px]:order-2 max-w-[400px] max-[750px]:self-end">
+        <h2 className="font-semibold text-gray-200/80"> - Who uses us?</h2>
+        <p className="text-3xl text-right">Join <strong className="relative overflow-visible font-bold">millions<em className="font-thin">*</em></strong> of others who have chosen wocean to help them consolidate their thoughts.</p>
       </div>
+      <TestimonialsCarousel/>
     </div>
   );
 }
@@ -169,7 +211,7 @@ const Footer = () => {
   return (
     <footer className='p-4 pb-6 w-full border-t border-gray-600 max-w-5xl mx-auto mt-[80px] text-gray-300'>
       <div className="w-full max-w-landing mx-auto">
-        <div className="lists grid justify-center min-[400px]:grid-cols-2 min-[500px]:grid-cols-3 min-[400px]:justify-start gap-2">
+        <div className="lists flex flex-wrap gap-x-20 gap-y-5 mx-auto w-fit max-w-[100%]">
           <div className="contact">
             <h3 className="text-1xl masked font-bold flex items-center gap-x-2">
               <div>🌊</div><div>Wocean</div>
@@ -215,6 +257,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+
         </div>
         <div className="mt-6 w-fit mx-auto text-center">
           <p className="text-sm">&copy; Copyright Wocean {new Date().getFullYear()}. All rights reserved.</p>
