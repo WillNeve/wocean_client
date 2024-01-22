@@ -42,8 +42,8 @@ const SideMenu: React.FC<sideMenuProps> = ({handleNewNote, folderId, announceOpe
                           ${menuTempOpen || menuOpen ? 'w-[100px] p-2 opacity-1' : 'w-[0px] p-0 pointer-events-none opacity-0'}
                           overflow-hidden`}>
               <NewNoteTile folder={false}
-                          folderId={folderId}
-                          insertNewNote={handleNewNote}/>
+                           folderId={folderId}
+                           insertNewNote={handleNewNote}/>
               <NewNoteTile folder={true}
                           folderId={folderId}
                           insertNewNote={handleNewNote}/>

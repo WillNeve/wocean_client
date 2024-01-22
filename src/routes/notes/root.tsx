@@ -358,7 +358,8 @@ const Notes = () => {
                        notes={notes}
                        checkedTileIds={checkedTileIds}
                        folderTitle={folderTitle}
-                       setFolderId={setFolderId} />
+                       setFolderId={setFolderId}
+                       handleNewNote={handleNewNote} />
               <div className={`customScrollBar  ${dragActive ? '' : 'maskedListVert'} px-8 p-[20px] w-full flex-grow max-h-[100%] overflow-y-scroll
                                                       overflow-x-auto
                                                       grid gap-4
