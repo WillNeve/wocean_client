@@ -7,7 +7,7 @@ import { note } from '../../types/types';
 //components
 import TopMenu from './components/TopMenu';
 import SideMenu from './components/SideMenu';
-import { NoteTile, NoteTileClone } from './components/Tile';
+import { NoteTile, NoteTileClone, NewNoteTile } from './components/Tile';
 
 //styles
 import { LoaderGroup, LoaderRect } from '../../styles/Utility';
@@ -382,6 +382,9 @@ const Notes = () => {
                   >
                 {loaded ? (
                   <>
+                    <NewNoteTile folder={false}
+                                folderId={folderId}
+                                insertNewNote={handleNewNote}/>
                     {notes.map((note, index) => (
                         <NoteTile
                           ref={(el: HTMLAnchorElement) => {

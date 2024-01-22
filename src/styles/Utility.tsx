@@ -4,7 +4,7 @@ import { staticComponentProps } from '../types/types';
 
 export const LoaderRect: React.FC<staticComponentProps>= ({children, className}) => {
   return (
-    <div className={`${className} loader`}><div>{children}</div></div>
+    <div className={`${className} loader overflow-hidden`}><div>{children}</div></div>
   )
 }
 

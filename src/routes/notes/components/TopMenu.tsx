@@ -7,11 +7,11 @@ import { IoIosArrowBack } from "react-icons/io";
 import { CiFolderOn } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa";
 import { VscNewFile } from "react-icons/vsc";
+import { IoMdArrowDropdown } from "react-icons/io";
+
 
 import { UserContext } from '../../../auth';
-
-
-
+import { LoaderGroup, LoaderRect } from '../../../styles/Utility';
 
 interface topMenuProps {
   loaded: boolean,
@@ -72,20 +72,21 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
 
 
   return (
-    <div className="relative text-gray-500 text-sm">
+    <div className="relative text-gray-300 text-sm font-l">
       <div className='flex items-center rounded border border-gray-500'>
         <button type="button"
                 aria-label="create new note"
-                className='p-1 flex items-center gap-x-1 hover:opacity-85'
+                className='p-[6px] flex items-center gap-x-1
+                          hover:bg-gray-300/20'
                 onClick={handleClick}>
-          <p>New</p><VscNewFile className="text-lg"/>
+          <p>New Note</p><VscNewFile className="text-lg"/>
         </button>
         <button type="button"
                 aria-label="toggle file creation menu"
-                className='p-1 border-l border-gray-500
+                className='p-[6px] border-l border-gray-500
                            hover:bg-gray-300/20'
                 onClick={() => {setMenuOpen(!menuOpen)}}>
-          ^
+          <IoMdArrowDropdown className="text-xl"/>
         </button>
       </div>
       <ul className={`${menuOpen ? '' : 'hidden'} flex flex-col gap-y-2
@@ -97,7 +98,7 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
                 className="p-1 rounded-md flex items-center gap-x-1 justify-end
                            border border-gray-500 cursor-pointer hover:opacity-85"
                 onClick={handleClick}>
-          <p>New File</p><VscNewFile className="text-lg"/>
+          <p>New Note</p><VscNewFile className="text-lg"/>
         </button>
         <button type="button"
                 aria-label="create new folder"
@@ -121,7 +122,8 @@ const TopMenu: React.FC<topMenuProps> = ({loaded, folderTitle, setFolderId, note
   }, [checkedTileIds])
 
   return (
-    <div className="top px-8 flex items-start justify-between w-full text-gray-300">
+    (loaded ? (
+      <div className="top px-8 flex items-start justify-between w-full text-gray-300">
       {folderTitle ? (
         <button
           className='flex items-center gap-x-1 p-1 border border-gray-500 rounded-md
@@ -157,8 +159,8 @@ const TopMenu: React.FC<topMenuProps> = ({loaded, folderTitle, setFolderId, note
         <ul className='relative flex gap-x-2 text-gray-300 w-fit rounded-md'>
           <button type='button'
                   aria-label='Show add to folder options'
-                  className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85' : 'cursor-default opacity-30'}
-                            p-2 border border-gray-500 rounded-sm hover:bg-gray-200/20`}
+                  className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200/20' : 'cursor-default opacity-30'}
+                            p-2 border border-gray-500 rounded-sm`}
                   onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
             <MdDriveFileMoveRtl/>
           </button>
@@ -193,6 +195,22 @@ const TopMenu: React.FC<topMenuProps> = ({loaded, folderTitle, setFolderId, note
         </ul>
       </div>
     </div>
+    ) : (
+      <div className="top px-8 flex items-start justify-between w-full text-gray-300 h-[35px]">
+        <LoaderGroup active={true} className='w-[10%] h-full'>
+          <LoaderRect className='w-full h-full rounded-sm'></LoaderRect>
+        </LoaderGroup>
+
+        <LoaderGroup active={true} className='w-[20%] h-full'>
+          <LoaderRect className='w-full h-full rounded-sm'></LoaderRect>
+        </LoaderGroup>
+
+        <LoaderGroup active={true} className='w-[30%] h-full'>
+          <LoaderRect className='w-full h-full rounded-sm'></LoaderRect>
+        </LoaderGroup>
+      </div>
+    ))
+
   )
 }
 

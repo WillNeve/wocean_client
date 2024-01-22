@@ -1,6 +1,6 @@
 import React, { forwardRef, useContext, useState } from "react";
 // types
-import { note } from "../../../types/types";
+import { note, toggle } from "../../../types/types";
 // icons
 import { HiOutlinePlus } from "react-icons/hi";
 import { MdDragIndicator } from "react-icons/md";
@@ -29,7 +29,9 @@ interface noteTileCloneProps {
 
 export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
   ({ note, onDragStart, moving, index, onTouchStart, onCheckedChange, requestFolderId }, ref) => {
-    const [checked, setChecked] = useState<boolean>(false);
+    const [checked, setChecked] = useState<toggle>(false);
+
+    const [hovered, setHovered] = useState<toggle>(false);
 
     const handleCheckBoxClick = (e: React.MouseEvent) => {
       e.preventDefault();
@@ -73,7 +75,9 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
           className={`${moving ? `border-none cursor-grabbing` : `cursor-pointer`}
                       relative flex  w-full h-auto aspect-square rounded-md overflow-hidden
                       font-normal
-                      border ${checked ? 'border-gray-300' : 'border-gray-500'}`}>
+                      border ${checked ? 'border-gray-300' : 'border-gray-500'}`}
+                      onMouseEnter={() => setHovered(true)}
+                      onMouseLeave={() => setHovered(false)}>
           <div className={`flex items-center justify-center font-medium w-full p-1 ${moving ? `bg-gradient-to-r from-gray-500/10 to-gray-300/10`
                           : `gradient-brighten`} py-1 ${checked ? 'opacity-75' : ''}`}>
             <h3 className={`${moving ? 'hidden' : '' }`}>{note?.title}</h3>
@@ -81,7 +85,7 @@ export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
           <div className={`${moving ? 'hidden' : '' } absolute bottom-0 p-[4px] right-0 flex items-center w-full justify-between`}>
             <button type='button'
                     aria-label='Check Tile Button'
-                    className={`${checked ? 'bg-gray-300/20' : ''} p-1 rounded-md border border-gray-600`}
+                    className={`${checked || hovered ? 'opacity-100' : 'opacity-0'} ${checked ? 'bg-gray-300/20' : ''} p-1 rounded-md border border-gray-600`}
                     onClick={handleCheckBoxClick}>
               <FaCheck className={`text-lg scale-75 ${checked ? '' : 'opacity-0'}`}/>
             </button>
@@ -205,12 +209,12 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
     return (
       <button type='button'
               aria-label="New note button"
-              className='w-full h-auto aspect-square flex items-center justify-center rounded-md
-                        bg-wave-800 border border-gray-500 cursor-pointer'
+              className='w-full h-auto aspect-square flex items-center justify-center rounded-md transition-transform
+                        gradient-brighten-cta border border-gray-500 cursor-pointer hover:scale-[1.025] hover:opacity-85'
               onClick={handleClick}
               onMouseOver={() => setHovered(true)}
               onMouseOut={() => setHovered(false)}>
-        <HiOutlinePlus className={`${hovered ? 'scale-125' : ''} transition-transform text-2xl text-gray-300/50`}/>
+        <HiOutlinePlus className={`transition-transform text-4xl text-gray-300/50`}/>
       </button>
     );
   }
