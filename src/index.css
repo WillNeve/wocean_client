@@ -107,6 +107,7 @@ svg {
 }
 
 .popup-bg {
+  @apply bg-wave-900/80;
   @apply gradient-brighten backdrop-blur-md;
 }
 

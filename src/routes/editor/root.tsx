@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState, useContext, useCallback} from 'reac
 import { useNavigate, useParams} from "react-router-dom";
 // user context
 import { UserContext } from '../../auth';
-// styling
-import './editor.css';
 //icons
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { GiConfirmed } from "react-icons/gi";

@@ -92,7 +92,7 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
       <ul className={`${menuOpen ? '' : 'hidden'} flex flex-col gap-y-2
                       absolute right-0 -bottom-1 translate-y-full
                       border border-gray-500 min-w-[200px] p-2
-                      gradient-brighten backdrop-blur-xl rounded-md z-20`}>
+                      popup-bg backdrop-blur-xl rounded-md z-20`}>
         <button type="button"
                 aria-label="create new note"
                 className="p-1 rounded-md flex items-center gap-x-1 justify-end
