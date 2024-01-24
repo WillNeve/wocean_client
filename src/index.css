@@ -123,8 +123,12 @@ svg {
   @apply bg-gradient-to-tl from-gray-100 to-gray-300;
 }
 
-.gradient-whitespace-bright {
+.gradient-whitespace-light {
   @apply bg-gradient-to-tl from-gray-100 to-gray-200;
+}
+
+.gradient-whitespace-dark {
+  @apply bg-gradient-to-tl from-wave-500 to-wave-900;
 }
 
 

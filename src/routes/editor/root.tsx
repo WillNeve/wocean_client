@@ -1,17 +1,19 @@
 // react
 import React, { useEffect, useRef, useState, useContext, useCallback} from 'react'
 import { useNavigate, useParams} from "react-router-dom";
+import Window from '../../components/Window/Window';
 // user context
 import { UserContext } from '../../auth';
 //icons
+import { FaSun, FaMoon } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { GiConfirmed } from "react-icons/gi";
 
 //components
 import NoteBlock, { noteBlockType } from './components/Block';
 import Title from './components/Title';
-import NavBar from '../../components/NavBar/NavBar';
 import { LoaderRect, LoaderGroup } from '../../styles/Utility';
+import { toggle } from '../../types/types';
 
 interface editorProps {
   newNote: boolean,
@@ -19,6 +21,7 @@ interface editorProps {
 
 const Editor: React.FC<editorProps> = ({newNote}) => {
   const editor = useRef<HTMLDivElement>(document.createElement('div'));
+  const [dark, setDark] = useState<toggle>(true);
   // user
   const { user, finishedLoadingUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -201,64 +204,76 @@ const Editor: React.FC<editorProps> = ({newNote}) => {
   }
 
   return (
-    <>
-      <NavBar requestNavigate={navigate}/>
-      <div className='wrapper w-100 max-h-[90lvh] max-w-5xl mx-auto'>
-        <div className='meta w-full'>
-          {loading ? (
-            <LoaderGroup active={loaders} className="w-100 flex flex-col items-center mt-4 gap-y-2">
-              <LoaderRect className='h-10 w-2/5 min-w-[100px] max-w-[160px]'></LoaderRect>
-              <LoaderRect className='h-5 w-1/5 min-w-[80px] max-w-[180px]'></LoaderRect>
-            </LoaderGroup>
+
+    <Window requestNavigate={navigate} flexCol={true}>
+      <button type='button'
+              aria-label='toggle dark mode'
+              onClick={() => setDark(!dark)}
+              className='absolute top-3 right-3 border border-gray-500 p-2
+                         rounded-full hover:bg-gray-400/40'>
+          {dark ? (
+            <FaMoon className='text-xl'/>
           ) : (
-            <>
-              <Title handleChange={handleTitleChange} content={initialTitle}/>
-              <p className='text-center text-gray-300 text-sm'>Updated at: <em className='not-italic text-gray-200'>{updatedAt}</em></p>
-            </>
+            <FaSun className='text-xl'/>
           )}
+      </button>
+      <div className='meta w-full'>
+        {loading ? (
+          <LoaderGroup active={loaders} className="w-100 flex flex-col items-center mt-4 gap-y-2">
+            <LoaderRect className='h-10 w-2/5 min-w-[100px] max-w-[160px]'></LoaderRect>
+            <LoaderRect className='h-5 w-1/5 min-w-[80px] max-w-[180px]'></LoaderRect>
+          </LoaderGroup>
+        ) : (
+          <>
+            <Title handleChange={handleTitleChange} content={initialTitle}/>
+            <p className='text-center text-gray-300 text-sm'>Updated at: <em className='not-italic text-gray-200'>{updatedAt}</em></p>
+          </>
+        )}
+      </div>
+      <div className={`relative font-medium editor m-4 p-4 h-[50%] flex-grow overflow-hidden flex flex-col
+                      outline-none rounded-lg
+                      ${dark ? 'gradient-brighten border border-gray-500 text-gray-200' : 'gradient-whitespace-light text-gray-600'}`} ref={editor}>
+        <div className="maskedListVert py-[20px] customScrollBar blocks h-[100%] overflow-y-scroll">
+          {blocks.map(({ id, type, content }, index) => (
+            <NoteBlock
+              key={id}
+              dark={dark}
+              index={index}
+              block={{type, content}}
+              focused={index === focusedBlockIndex ? true : false}
+              newBlock={createNewBlock}
+              newCommandBlock={createNewCommandBlock}
+              removeBlock={removeBlock}
+              requestFocusShift={handleFocusShift}
+              handleChange={(text) => {handleBlockChange(text, index)}}
+            />
+          ))}
+          {loading ? (
+            <LoaderGroup active={loaders} className='absolute w-full flex flex-col items-start gap-y-3'>
+              <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
+              <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+              <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+              <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+              <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+              <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
+              <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
+            </LoaderGroup>
+          ) : ''}
         </div>
-            <div className="relative editor w-100 h-[80lvh] overflow-hidden flex flex-col outline-none rounded-lg text-gray-600 gradient-whitespace-bright p-4 m-4 font-medium min-h-[500px]" ref={editor}>
-              <div className="maskedListVert py-[20px] customScrollBar blocks h-[100%] overflow-y-scroll">
-                {blocks.map(({ id, type, content }, index) => (
-                  <NoteBlock
-                    key={id}
-                    index={index}
-                    block={{type, content}}
-                    focused={index === focusedBlockIndex ? true : false}
-                    newBlock={createNewBlock}
-                    newCommandBlock={createNewCommandBlock}
-                    removeBlock={removeBlock}
-                    requestFocusShift={handleFocusShift}
-                    handleChange={(text) => {handleBlockChange(text, index)}}
-                  />
-                ))}
-                {loading ? (
-                  <LoaderGroup active={loaders} className='absolute w-full flex flex-col items-start gap-y-3'>
-                    <LoaderRect className='h-14 w-3/5 min-w-[200px] max-w-[350px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[250px] max-w-[450px]'></LoaderRect>
-                    <LoaderRect className='h-10 w-4/5 min-w-[240px] max-w-[450px]'></LoaderRect>
-                  </LoaderGroup>
-                ) : ''}
-              </div>
-              <div className={`${loading ? 'hidden' : ''}
-                              saving-notif
-                              flex items-center gap-x-1
-                              absolute top-2 right-2 w-fit
-                              px-2 py-1 border border-gray-600 rounded-md bg-whitebright/100
-                              font-normal text-sm text-gray-800 backdrop-blur-sm ${ saving ? '' : 'saved'}`}>
-                <p className='w-fit'>{ saving ? 'Saving' : 'Saved'}</p>
-                <div className="icon relative h-5 w-5">
-                  <AiOutlineLoading3Quarters className='circ absolute w-100 h-100'/>
-                  <GiConfirmed className='tick absolute w-100 h-100' />
-                </div>
-              </div>
-            </div>
+        <div className={`${loading ? 'hidden' : ''}
+                        saving-notif
+                        flex items-center gap-x-1
+                        absolute top-2 right-2 w-fit
+                        px-2 py-1 border border-gray-600 rounded-md bg-whitebright/100
+                        font-normal text-sm text-gray-800 backdrop-blur-sm ${ saving ? '' : 'saved'}`}>
+          <p className='w-fit'>{ saving ? 'Saving' : 'Saved'}</p>
+          <div className="icon relative h-5 w-5">
+            <AiOutlineLoading3Quarters className='circ absolute w-100 h-100'/>
+            <GiConfirmed className='tick absolute w-100 h-100' />
+          </div>
         </div>
-    </>
+      </div>
+    </Window>
   )
 }
 

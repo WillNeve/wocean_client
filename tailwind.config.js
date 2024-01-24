@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       minWidth: {
-        '400px': '400px'
+        '400px': '400px',
       },
       maxWidth: {
         'landing': '745px'

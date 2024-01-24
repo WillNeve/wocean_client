@@ -15,7 +15,8 @@ interface NoteBlockProps {
   requestFocusShift: (index: number) => void,
   newCommandBlock: (sourceIndex: number, block: noteBlockType) => void,
   removeBlock: (index: number) => void,
-  focused: boolean
+  focused: boolean,
+  dark: boolean,
 }
 
 type command = {
@@ -52,7 +53,7 @@ const commands: command[] = [
   },
 ]
 
-const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlock, newCommandBlock, removeBlock, focused, requestFocusShift}) => {
+const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlock, newCommandBlock, removeBlock, focused, requestFocusShift, dark}) => {
   const [content] = useState<string>(block.content)
   const [empty, setEmpty] = useState<boolean>(content.length === 0);
   const blockRef = useRef<HTMLDivElement>(null);
@@ -181,11 +182,11 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'p':
         return (
           <div className='w-full relative'>
-            <p className={`${empty && focused ? '' : 'hidden'} absolute pointer-events-none w-full py-1 px-1 text-gray-500 outline-none`}>
+            <p className={`${empty && focused ? '' : 'hidden'} absolute pointer-events-none w-full py-1 px-1 ${dark ? 'text-gray-400' : 'text-gray-500'} outline-none`}>
               Start typing or press '/' for commands
             </p>
             <p
-              className={`${empty && focused ? '' : ''} w-full py-1 px-1 focus:bg-waveLight-500/50 outline-none`}
+              className={`${empty && focused ? '' : ''} w-full py-1 px-1 ${dark ? 'focus:bg-waveLight-500/10' : 'focus:bg-waveLight-500/50'} outline-none`}
               contentEditable={true}
               ref={blockRef}
               onClick={() => {requestFocusShift(index)}}
@@ -199,7 +200,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'h1':
           return (
               <h1
-              className={`w-full py-2 px-1 focus:bg-waveLight-500/50 text-5xl outline-none`}
+              className={`w-full py-2 px-1 ${dark ? 'focus:bg-waveLight-500/10' : 'focus:bg-waveLight-500/50'} text-5xl outline-none`}
               contentEditable={true}
               ref={blockRef}
               onClick={() => {requestFocusShift(index)}}
@@ -212,7 +213,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'h2':
         return (
             <h2
-            className={`w-full py-1 px-1 focus:bg-waveLight-500/50 text-3xl outline-none`}
+            className={`w-full py-1 px-1 ${dark ? 'focus:bg-waveLight-500/10' : 'focus:bg-waveLight-500/50'} text-3xl outline-none`}
             contentEditable={true}
             ref={blockRef}
             onClick={() => {requestFocusShift(index)}}
@@ -225,7 +226,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'em':
         return (
             <em
-            className={`block w-full py-1 px-1 focus:bg-waveLight-500/50 outline-none`}
+            className={`block w-full py-1 px-1 ${dark ? 'focus:bg-waveLight-500/10' : 'focus:bg-waveLight-500/50'} outline-none`}
             contentEditable={true}
             ref={blockRef}
             onClick={() => {requestFocusShift(index)}}
@@ -238,7 +239,7 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
       case 'strong':
         return (
             <strong
-            className={`block w-full py-1 px-1 focus:bg-waveLight-500/50 outline-none`}
+            className={`block w-full py-1 px-1 ${dark ? 'focus:bg-waveLight-500/10' : 'focus:bg-waveLight-500/50'} outline-none`}
             contentEditable={true}
             ref={blockRef}
             onClick={() => {requestFocusShift(index)}}
