@@ -353,6 +353,7 @@ const Notes = () => {
             <SideMenu folderId={folderId} handleNewNote={handleNewNote} announceOpen={(open: boolean) => {setMenuOpen(open)}}/>
             <div className="fileArea w-full h-full py-4 pr-4">
               <TopMenu loaded={loaded}
+                       folderId={folderId}
                        addNotesToFolder={addNotesToFolder}
                        deleteCheckedTiles={deleteCheckedTiles}
                        notes={notes}

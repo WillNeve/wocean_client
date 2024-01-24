@@ -22,12 +22,11 @@ interface topMenuProps {
   addNotesToFolder: (folderId: number) => void,
   deleteCheckedTiles: () => void,
   handleNewNote: (note: note) => void,
+  folderId: string | null,
 }
 
 interface newBarProps {
-  newFolder: () => void,
-  newFile: () => void,
-  folderId: number | null,
+  folderId: string | null,
   folder: boolean,
   handleNewNote: (note: note) => void,
 }
@@ -112,7 +111,7 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
   );
 }
 
-const TopMenu: React.FC<topMenuProps> = ({loaded, folderTitle, setFolderId, notes, checkedTileIds, addNotesToFolder, deleteCheckedTiles, handleNewNote }) => {
+const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFolderId, notes, checkedTileIds, addNotesToFolder, deleteCheckedTiles, handleNewNote }) => {
   const [folderSelectionActive, setFolderSelectionActive] = useState<toggle>(false);
 
   useEffect(() => {
@@ -155,7 +154,7 @@ const TopMenu: React.FC<topMenuProps> = ({loaded, folderTitle, setFolderId, note
       )
       : (<>Loading...</>)}</div>
       <div className="right flex items-center gap-x-4">
-        <NewBar/>
+        <NewBar handleNewNote={handleNewNote} folderId={folderId} folder={folderId === null} />
         <ul className='relative flex gap-x-2 text-gray-300 w-fit rounded-md'>
           <button type='button'
                   aria-label='Show add to folder options'
