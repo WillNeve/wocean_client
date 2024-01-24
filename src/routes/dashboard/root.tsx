@@ -16,7 +16,7 @@ export const ViewNameContext = createContext<ViewNameContextType>({viewName: 'no
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [viewName, setViewName] = useState('notes')
+  const [viewName, setViewName] = useState('overview')
   const { user, finishedLoadingUser } = useContext(UserContext);
 
 
@@ -34,10 +34,12 @@ const Dashboard: React.FC = () => {
       <>
         <NavBar requestNavigate={navigate}/>
         <ViewNameContext.Provider value={{viewName: viewName, setViewName}}>
-          <div className="relative mx-auto w-100 max-w-5xl h-[80vh] mt-5 border border-gray-600 flex text-gray-200 rounded-lg shadow-2xl shadow-waveLight-500/10 overflow-hidden">
+        <div className='dashboard-wrapper mt-5 px-4 mx-auto w-100 max-w-5xl h-[85lvh]'>
+          <div className="dashboard-inner flex border border-gray-600 relative h-full text-gray-400 font-medium rounded-lg overflow-hidden shadow-2xl shadow-waveLight-500/10">
             <MenuSide/>
             <View/>
           </div>
+        </div>
         </ViewNameContext.Provider>
       </>
     )
