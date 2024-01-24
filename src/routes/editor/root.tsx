@@ -205,7 +205,7 @@ const Editor: React.FC<editorProps> = ({newNote}) => {
 
   return (
 
-    <Window requestNavigate={navigate} flexCol={true}>
+    <Window requestNavigate={navigate} flexCol={true} noFrame={true}>
       <button type='button'
               aria-label='toggle dark mode'
               onClick={() => setDark(!dark)}

@@ -5,21 +5,32 @@ interface IWindow {
   children: ReactNode,
   requestNavigate: (path: string) => void,
   flexCol?: boolean,
+  noFrame?: boolean,
 }
 
-const Window: React.FC<IWindow> = ({children, requestNavigate, flexCol}) => {
+const Window: React.FC<IWindow> = ({children, requestNavigate, flexCol, noFrame}) => {
 
   return (
     <div className='flex flex-col h-svh w-svw'>
       <NavBar requestNavigate={requestNavigate}/>
-      <div className='page my-5 px-4 mx-auto w-full max-w-5xl h-[60%] flex-grow'>
-        <div className="dashboard-inner relative h-full text-gray-400 font-medium rounded-lg overflow-hidden shadow-2xl shadow-waveLight-500/10">
-          <div className={`relative flex ${flexCol ? 'flex-col' : 'flex-row'} rounded-lg overflow-hidden shadow-inner h-full
-                            border border-gray-600 gradient-brighten`}>
-            {children}
+      {noFrame ? (
+        <div className='page my-5 mx-auto w-full max-w-5xl h-[60%] flex-grow'>
+          <div className="relative h-full text-gray-400 font-medium">
+            <div className={`relative flex ${flexCol ? 'flex-col' : 'flex-row'} rounded-lg overflow-hidden shadow-inner h-full`}>
+              {children}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className='page my-5 px-4 mx-auto w-full max-w-5xl h-[60%] flex-grow'>
+          <div className="dashboard-inner relative h-full text-gray-400 font-medium rounded-lg overflow-hidden shadow-2xl shadow-waveLight-500/10">
+            <div className={`relative flex ${flexCol ? 'flex-col' : 'flex-row'} rounded-lg overflow-hidden shadow-inner h-full
+                              border border-gray-600 gradient-brighten`}>
+              {children}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
