@@ -153,7 +153,7 @@ const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFold
         </>
       )
       : (<>Loading...</>)}</div>
-      <div className="right flex items-center gap-x-4">
+      <div className="right flex flex-col md:flex-row items-center gap-x-4">
         <NewBar handleNewNote={handleNewNote} folderId={folderId} folder={folderId === null} />
         <ul className='relative flex gap-x-2 text-gray-300 w-fit rounded-md'>
           <button type='button'

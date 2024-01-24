@@ -351,7 +351,7 @@ const Notes = () => {
           <div className='rounded-lg overflow-hidden shadow-inner h-full
                             border border-gray-600 flex gradient-brighten'>
             <SideMenu folderId={folderId} handleNewNote={handleNewNote} announceOpen={(open: boolean) => {setMenuOpen(open)}}/>
-            <div className="fileArea w-full h-full py-4 pr-4">
+            <div className="fileArea w-[50%] flex-grow h-full py-4 pr-4">
               <TopMenu loaded={loaded}
                        folderId={folderId}
                        addNotesToFolder={addNotesToFolder}

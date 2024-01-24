@@ -142,7 +142,7 @@ const TestimonialsCarousel = () => {
       <div className="flex self-center items-center gap-x-4 mt-4">
         {clients.map((_c, index) => {
           return (
-          <div className={`w-[10px] h-[10px] rounded-full border ${index === step ? 'bg-waveLight-300' : ''}`}></div>
+          <div key={index} className={`w-[10px] h-[10px] rounded-full border ${index === step ? 'bg-waveLight-300' : ''}`}></div>
           );
         })}
       </div>
@@ -261,8 +261,8 @@ const Footer = () => {
         </div>
         <div className="mt-6 w-fit mx-auto text-center">
           <p className="text-sm">&copy; Copyright Wocean {new Date().getFullYear()}. All rights reserved.</p>
-          <p className="text-xs text-gray-400">Not actually copyrighted 😅. Produced and maintained by{' '}
-          <div className="inline-block">
+          <div className="flex items-center text-xs text-gray-400 gap-x-1">
+            <p>Not actually copyrighted 😅. Produced and maintained by{' '}</p>
             <a href="https://github.com/willneve/"
               target="_blank"
               className="flex w-fit items-center gap-x-1 text-transparent
@@ -270,7 +270,6 @@ const Footer = () => {
               William Neve
             </a>
           </div>
-          </p>
         </div>
       </div>
     </footer>
