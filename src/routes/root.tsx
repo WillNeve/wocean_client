@@ -7,10 +7,10 @@ import NavBar from "../components/NavBar/NavBar";
 
 const PromiseStatement = () => {
   return (
-    <div className='relative flex flex-col w-full max-w-4xl mx-auto text-gray-200 mt-[80px]'>
+    <div className='relative flex flex-col w-full max-w-4xl mx-auto text-gray-300 mt-[80px]'>
       <div className="why w-full flex flex-col min-[750px]:flex-row max-w-landing justify-between gap-4 mx-auto">
         <div className="text max-w-[400px]">
-          <h2 className="font-semibold text-gray-200/80"> - Why use us?</h2>
+          <h2 className="font-semibold text-gray-300/80"> - Why use us?</h2>
           <p className="text-3xl">With Wocean editor, we have <strong className="font-bold">revolutionalised</strong> the notetaking process.</p>
         </div>
         <div className="relative w-full max-w-[500px] min-[750px]:w-[30%] min-[750px]:max-w-[250px]
@@ -121,7 +121,7 @@ const TestimonialsCarousel = () => {
             </div>
             <div className="relative h-fit">
               <p className="font-normal text-sm">{clients[step].name}</p>
-              <p className="text-gray-200/60 text-xs">{clients[step].position}</p>
+              <p className="text-gray-300/60 text-xs">{clients[step].position}</p>
             </div>
           </div>
           <button type='button'
@@ -153,9 +153,9 @@ const TestimonialsCarousel = () => {
 
 const Testimonials = () => {
   return (
-    <div className="relative w-full justify-between items-center flex flex-col min-[750px]:flex-row max-w-landing gap-4 gap-x-8 mx-auto text-gray-200 mt-[80px] ">
+    <div className="relative w-full justify-between items-center flex flex-col min-[750px]:flex-row max-w-landing gap-4 gap-x-8 mx-auto text-gray-300 mt-[80px] ">
       <div className="w-full min-[750px]:w-[70%] flex flex-col items-end min-[750px]:order-2 max-w-[400px] max-[750px]:self-end">
-        <h2 className="font-semibold text-gray-200/80"> - Who uses us?</h2>
+        <h2 className="font-semibold text-gray-300/80"> - Who uses us?</h2>
         <p className="text-3xl text-right">Join <strong className="relative overflow-visible font-bold">millions<em className="font-thin">*</em></strong> of others who have chosen wocean to help them consolidate their thoughts.</p>
       </div>
       <TestimonialsCarousel/>
@@ -167,10 +167,10 @@ const Hero = () => {
   return (
     <div className="relative w-full mx-auto">
       <div className="heroGlow"></div>
-      <h2 className='font-bold text-5xl mt-[100px] mb-5 text-gray-200 text-center'>
+      <h2 className='font-bold text-5xl mt-[100px] mb-5 text-gray-300 text-center'>
         <em className="bg-gradient-to-r from-waveLight-300 to-waveLight-600 text-transparent bg-clip-text">Streamline</em> your notetaking.
       </h2>
-      <div className="flex flex-col buttons items-center text-gray-200">
+      <div className="flex flex-col buttons items-center text-gray-300">
         <a
           type="button"
           href='/signup'
@@ -180,7 +180,7 @@ const Hero = () => {
                   w-fit p-4 my-4
                   rounded-md
                   border
-                  text-gray-200
+                  text-gray-300
                   border-gray-200
                   font-medium
                   cursor-pointer

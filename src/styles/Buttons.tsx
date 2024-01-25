@@ -26,7 +26,7 @@ const ButtonFormRender: React.ForwardRefRenderFunction<HTMLButtonElement, Button
         hover:opacity-85
         border-gray-500
         font-medium
-        text-gray-200
+        text-gray-300
         cursor-pointer
         transition
         button-loading

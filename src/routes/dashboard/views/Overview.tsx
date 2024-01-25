@@ -41,12 +41,8 @@ const PieChart: React.FC<pieChartProps> = ({pieChartData}) => {
     );
   }
 
-  const innerWith = `${radius * 2}%`;
-  console.log(innerWith);
-
-
   return (
-      <div>
+      <div className="max-w-[210px]">
         <div className="flex items-center gap-x-4 flex-wrap">
           { pieChartData.map((data: pieChartSegment, index: number) => (
             <div key={index} className="flex items-center gap-x-2">
@@ -71,6 +67,48 @@ type statsDataType = {
     data: pieChartSegment[],
   }
 };
+
+const StatsLoading = () => {
+  return (
+    <>
+      <div className="w-full h-full flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-2">
+          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
+            <LoaderRect className='w-full h-full rounded-sm'/>
+          </LoaderGroup>
+
+          <div className="w-full h-[15px] flex items-center gap-x-4">
+            <LoaderGroup active={true} className={`w-[20%] h-full`}>
+              <LoaderRect className='w-full h-full rounded-sm'/>
+            </LoaderGroup>
+
+            <LoaderGroup active={true} className={`w-[20%] h-full`}>
+              <LoaderRect className='w-full h-full rounded-sm'/>
+            </LoaderGroup>
+          </div>
+        </div>
+        <LoaderGroup active={true} className={`relative w-[90%] h-auto  aspect-square`}>
+          <LoaderRect className='w-full h-full rounded-full'/>
+        </LoaderGroup>
+      </div>
+
+      <div className="w-full h-full flex flex-col gap-y-4">
+        <LoaderGroup active={true} className={`w-[60%] h-[40px]`}>
+          <LoaderRect className='w-full h-full rounded-sm'/>
+        </LoaderGroup>
+        <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
+          <LoaderRect className='w-full h-full rounded-sm'/>
+        </LoaderGroup>
+        <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
+          <LoaderRect className='w-full h-full rounded-sm'/>
+        </LoaderGroup>
+        <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
+          <LoaderRect className='w-full h-full rounded-sm'/>
+        </LoaderGroup>
+      </div>
+    </>
+  );
+}
 
 const Overview = () => {
   const [statsData, setStatsData] = useState< statsDataType | null>(null);
@@ -111,105 +149,31 @@ const Overview = () => {
   }, [])
 
   return (
-    <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-4">
+    <>
       {loaded ? (
         (timedOut ? (
-          <p>Sorry, your stats could not be loaded at this time.</p>
+          <h2>Sorry, your stats could not be loaded at this time.</h2>
         ) : (
-
-            <div className="w-full h-full flex flex-col">
-              <div className="top">
-                <h2 className="text-xl font-medium">Your Files</h2>
-                <p>Total: <strong className="font-semibold text-waveLight-500">{statsData?.files.total}</strong></p>
+          <>
+            <h2 className="text-xl">Overview</h2>
+            <p className="text-sm font-light max-w-[350px]">At wocean we love statistics, here is some information you may find useful:</p>
+            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 font-light mt-5">
+              <div className="w-full h-full flex flex-col">
+                <div className="top">
+                  <h2 className="text-xl">Your Files</h2>
+                  <p>Total: <strong className="text-waveLight-500">{statsData?.files.total}</strong></p>
+                </div>
+                <PieChart pieChartData={statsData?.files.data as unknown as pieChartSegment[]}/>
               </div>
-              <PieChart pieChartData={statsData?.files.data as unknown as pieChartSegment[]}/>
             </div>
+          </>
         ))
       ) : (
-        <>
-        <div className="w-full h-full flex flex-col gap-y-2">
-          <div className="flex flex-col gap-y-2">
-            <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-              <LoaderRect className='w-full h-full rounded-sm'/>
-            </LoaderGroup>
-
-            <div className="w-full h-[15px] flex items-center gap-x-4">
-              <LoaderGroup active={true} className={`w-[20%] h-full`}>
-                <LoaderRect className='w-full h-full rounded-sm'/>
-              </LoaderGroup>
-
-              <LoaderGroup active={true} className={`w-[20%] h-full`}>
-                <LoaderRect className='w-full h-full rounded-sm'/>
-              </LoaderGroup>
-            </div>
-          </div>
-          <LoaderGroup active={true} className={`relative w-[90%] h-auto  aspect-square`}>
-            <LoaderRect className='w-full h-full rounded-full'/>
-          </LoaderGroup>
+        <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 p-4 gap-4">
+          <StatsLoading/>
         </div>
-
-        <div className="w-full h-full flex flex-col gap-y-4">
-          <LoaderGroup active={true} className={`w-[60%] h-[40px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-        </div>
-
-        <div className="w-full h-full flex flex-col gap-y-4">
-          <LoaderGroup active={true} className={`w-[60%] h-[40px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-        </div>
-
-        <div className="w-full h-full flex flex-col gap-y-4">
-          <LoaderGroup active={true} className={`w-[60%] h-[40px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-        </div>
-
-        <div className="w-full h-full flex flex-col gap-y-4">
-          <LoaderGroup active={true} className={`w-[60%] h-[40px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-          <LoaderGroup active={true} className={`w-[60%] h-[20px]`}>
-            <LoaderRect className='w-full h-full rounded-sm'/>
-          </LoaderGroup>
-        </div>
-        </>
       )}
-    </div>
+    </>
   )
 }
 

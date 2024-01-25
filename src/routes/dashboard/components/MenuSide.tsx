@@ -46,15 +46,6 @@ const ViewList = () => {
   return (
     <div className="menu h-100 text-gray-300 font-light">
       <div className="submenu">
-        <h2 className='text-sm text-center min-[700px]:text-start'>Notes</h2>
-        <ul className='my-4 flex flex-col gap-y-1'>
-          <MenuButton onClick={handleViewChange} name={'notes'} viewName={viewName}>
-            <GoFileDirectory className='text-lg'/><p className='hidden min-[700px]:block'>Manage</p>
-          </MenuButton>
-        </ul>
-      </div>
-      <DividerBar />
-      <div className="submenu">
         <h2 className='text-sm text-center min-[700px]:text-start'>Tools</h2>
         <ul className='my-4 flex flex-col gap-y-1'>
           <MenuButton onClick={handleViewChange} name={'overview'} viewName={viewName}>

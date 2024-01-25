@@ -47,14 +47,14 @@ const Title: React.FC<titleProps> = ({content, handleChange}) => {
   return (
     <>
       <div className="relative w-fit h-fit  mt-4  mx-auto">
-      <h1 className={`text-gray-200 font-medium text-4xl
+      <h1 className={`text-gray-300 font-medium text-4xl
                       outline-none mx-auto w-fit m-w-5`}
               contentEditable={true}
               dangerouslySetInnerHTML={createMarkup(localContent)}
               onKeyDown={handleKeyDown}
               onKeyUp={handleKeyUp}>
               </h1>
-      <h1 className={`${!invalid ? 'hidden' : ''} text-gray-200/50
+      <h1 className={`${!invalid ? 'hidden' : ''} text-gray-300/50
                       font-medium text-4xl
                       outline-none
                       absolute top-0 left-0 pointer-events-none -translate-x-1/2`}

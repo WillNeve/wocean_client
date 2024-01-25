@@ -15,7 +15,7 @@ interface NavButtonProps {
 
 const NavButtonCTA: React.FC<NavButtonProps> = ({children, route}) => {
   return (
-    <a href={route} className='border border-gray-200 text-whitebright hover:opacity-75 cursor-pointer px-2 p-1 rounded-md'>{children}</a>
+    <a href={route} className='border border-gray-400 text-gray-300 hover:opacity-75 cursor-pointer px-2 p-1 rounded-md'>{children}</a>
   );
 }
 
@@ -43,7 +43,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
 
   return (
     <div className='relative z-20 top-0 left-0 w-full p-4
-                   text-whitebright'>
+                  text-gray-300'>
       <div className='flex mx-auto justify-between items-center w-full px-4 max-w-5xl'>
         <a href='/' className="masked text-2xl font-bold flex items-center gap-x-2">
           <p>🌊</p><h2>Wocean</h2>
@@ -79,7 +79,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
       </div>
       <div className="menuWrapper absolute flex justify-end bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-full max-w-5xl px-4 h-[40px] pointer-events-none">
         <div className={`NavMenu ${menuOpen ? 'active' : ''} relative z-40
-                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 popup-bg text-gray-200 rounded-lg border border-gray-500`}
+                        w-fit min-w-[200px] h-fit flex flex-col gap-y-2 items-end mr-1 p-4 popup-bg text-gray-300 rounded-lg border border-gray-500`}
                         >
           <a href="/notes" className={`w-full font-light flex items-center gap-x-2 justify-end p-2 border border-gray-500 rounded-md hover:opacity-85`}>
             <FaRegNoteSticky className='text-md'/>
@@ -92,7 +92,7 @@ const NavBar: React.FC<NavBarProps> = ({requestNavigate}) =>  {
           <button type='button'
                   aria-label='Log Out Button'
                   onClick={handleLogOut}
-                  className={`font-normal hover:bg-red-400/50 border border-gray-600/0 hover:border-gray-600 flex gap-x-4 items-center mt-4 p-1 px-2 rounded-md`}
+                  className={`font-normal hover:bg-red-400/20 border border-gray-600/0 hover:border-gray-600 flex gap-x-4 items-center mt-4 p-1 px-2 rounded-md`}
                   >
             <FiLogOut className='text-sm'/><p>Log Out</p>
           </button>

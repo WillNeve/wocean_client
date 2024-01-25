@@ -8,6 +8,9 @@ import { CiFolderOn } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa";
 import { VscNewFile } from "react-icons/vsc";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { LuFolderPlus } from "react-icons/lu";
+
+
 
 
 import { UserContext } from '../../../auth';
@@ -71,7 +74,7 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
 
 
   return (
-    <div className="relative text-gray-300 text-sm font-l">
+    <div className="relative text-gray-400 text-sm font-l">
       <div className='flex items-center rounded border border-gray-500'>
         <button type="button"
                 aria-label="create new note"
@@ -104,7 +107,7 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
                 className="p-1 rounded-md flex items-center gap-x-1 justify-end
                            border border-gray-500 cursor-pointer hover:opacity-85"
                 onClick={handleClick}>
-          <p>New Folder</p><VscNewFile className="text-lg"/>
+          <p>New Folder</p><LuFolderPlus className="text-lg"/>
         </button>
       </ul>
     </div>
@@ -122,11 +125,11 @@ const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFold
 
   return (
     (loaded ? (
-      <div className="top px-8 flex flex-col gap-y-2 min-[400px]:flex-row items-start justify-between w-full text-gray-300">
+      <div className="top px-8 gap-4 flex flex-wrap justify-start min-[600px]:justify-between w-full text-gray-400">
       {folderTitle ? (
         <button
-          className='flex items-center gap-x-1 p-1 border border-gray-500 rounded-md
-                    hover:opacity-75'
+          className='flex items-center gap-x-1 p-1 border border-gray-600 rounded h-fit
+          hover:bg-gray-200/20'
           onClick={() => setFolderId(null)}>
           <IoIosArrowBack/>
           <p className='pr-1'>Back</p>
@@ -153,18 +156,18 @@ const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFold
         </>
       )
       : (<>Loading...</>)}</div>
-      <div className="right flex flex-col items-start min-[400px]:items-end min-[500px]:flex-row min-[500px]:items-center gap-y-2 gap-x-4">
+      <div className="right flex flex-col min-[350px]:flex-row min-[350px]:items-center gap-y-2 gap-x-4">
         <NewBar handleNewNote={handleNewNote} folderId={folderId} folder={folderId === null} />
         <ul className='relative flex gap-x-2 text-gray-300 w-fit rounded-md'>
           <button type='button'
                   aria-label='Show add to folder options'
-                  className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200/20' : 'cursor-default opacity-30'}
+                  className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:bg-gray-200/20' : 'cursor-default opacity-25'}
                             p-2 border border-gray-500 rounded-sm`}
                   onClick={() => {if (checkedTileIds.length > 0) setFolderSelectionActive(!folderSelectionActive)}}>
             <MdDriveFileMoveRtl/>
           </button>
             <div className={`${folderSelectionActive ? '' : 'hidden'} absolute z-10 w-[200px] p-1 right-0 -bottom-1 translate-y-full
-                            rounded-md border border-gray-500 text-gray-200  popup-bg
+                            rounded-md border border-gray-500 text-gray-300  popup-bg
                             text-sm font-light`}>
               <p className='text-center'>Add selected notes to:</p>
               <ul>
@@ -186,7 +189,7 @@ const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFold
             </div>
           <button type='button'
                   aria-label='Delete checked notes'
-                  className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85 hover:bg-red-500/50' : 'cursor-default opacity-30'}
+                  className={`${checkedTileIds.length > 0 ? 'cursor-pointer hover:opacity-85 hover:bg-red-500/50' : 'cursor-default opacity-25'}
                   p-2 border border-gray-500 rounded-sm`}
                   onClick={deleteCheckedTiles}>
             <RiDeleteBin6Line/>

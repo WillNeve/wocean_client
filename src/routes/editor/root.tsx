@@ -226,13 +226,13 @@ const Editor: React.FC<editorProps> = ({newNote}) => {
         ) : (
           <>
             <Title handleChange={handleTitleChange} content={initialTitle}/>
-            <p className='text-center text-gray-300 text-sm'>Updated at: <em className='not-italic text-gray-200'>{updatedAt}</em></p>
+            <p className='text-center text-gray-500 text-sm'><em>Updated at: {updatedAt}</em></p>
           </>
         )}
       </div>
       <div className={`relative font-medium editor m-4 p-4 h-[50%] flex-grow overflow-hidden flex flex-col
                       outline-none rounded-lg
-                      ${dark ? 'gradient-brighten border border-gray-500 text-gray-200' : 'gradient-whitespace-light text-gray-600'}`} ref={editor}>
+                      ${dark ? 'gradient-brighten border border-gray-500 text-gray-300' : 'gradient-whitespace-light text-gray-600'}`} ref={editor}>
         <div className="maskedListVert py-[20px] customScrollBar blocks h-[100%] overflow-y-scroll">
           {blocks.map(({ id, type, content }, index) => (
             <NoteBlock
