@@ -67,10 +67,30 @@ const Notes = () => {
   }
 
   const deleteNote = async (noteId: string) => {
-    // sent delete request to API
-    // - make new route
-    // - in route controller make sure to reassign notes to root (SET folderId = null WHERE folderId = ${this folder id})
     console.log(noteId);
+    if (user) {
+      const resp = await Promise.race([
+        fetch(`${import.meta.env.VITE_SERVER_URL}/notes/${noteId}`, {
+          method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`, // Replace "user.token" with the actual token
+          }
+        }).catch(() => 'Server is unresponsive'),
+        new Promise<string>((resolve) => {
+          setTimeout(resolve, 10000)
+        })
+      ]);
+
+      if (resp instanceof Response) {
+        const data = await resp.json();
+        console.log(data);
+        const newNotes = notes.filter((note) => note.id !== parseInt(noteId, 10));
+        setNotes(newNotes);
+      } else {
+        // append message server unresp...
+      }
+    }
 
   }
 
@@ -340,6 +360,34 @@ const Notes = () => {
     setFolderStructureChanged(true);
   }
 
+  const createNote = async (folderId: string | null, folder: boolean) => {
+    if (user) {
+      const path = `/notes/new${folderId ? `?folder=${folderId}` : ''}${folder ? `?isFolder=${folder}` : ''}`;
+      const resp: Response | string = await Promise.race([
+        fetch(`${import.meta.env.VITE_SERVER_URL}${path}`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`, // Replace "user.token" with the actual token
+          },
+        }).catch(() => 'Server is unresponsive'),
+        new Promise<string>((resolve) => {
+          setTimeout(() => {
+            resolve('Server is unresponsive');
+          }, 5000);
+        })
+      ])
+      if (resp instanceof Response) {
+        if (resp.status === 200) {
+          const data = await resp.json();
+          handleNewNote(data.note)
+          // show a notice to user
+        } else {
+          // show a notice to user
+        }
+      }
+    }
+  }
 
 
   const handleNewNote = (note: note) => {
@@ -358,7 +406,8 @@ const Notes = () => {
                   folderTitle={folderTitle}
                   setFolderId={setFolderId}
                   handleNewNote={handleNewNote}
-                  deleteNote={deleteNote} />
+                  createNote={createNote}
+                  deleteNote={deleteNote}/>
         <div className={`customScrollBar  ${dragActive ? '' : 'maskedListVert'} mt-5 px-8 p-[20px] w-full h-[50%] flex-grow overflow-y-scroll
                                                 overflow-x-auto
                                                 grid gap-4
@@ -377,7 +426,7 @@ const Notes = () => {
             <>
               <NewNoteTile folder={false}
                           folderId={folderId}
-                          insertNewNote={handleNewNote}/>
+                          createNote={createNote}/>
               {notes.map((note, index) => (
                   <NoteTile
                     ref={(el: HTMLAnchorElement) => {

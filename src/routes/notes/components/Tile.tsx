@@ -1,13 +1,10 @@
-import React, { forwardRef, useContext, useState } from "react";
+import React, { forwardRef, useState } from "react";
 // types
 import { note, toggleBoolean } from "../../../types/types";
 // icons
 import { HiOutlinePlus } from "react-icons/hi";
 import { MdDragIndicator } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
-import { UserContext } from "../../../contexts/auth";
-
-
 
 interface noteTileProps {
   note: note,
@@ -146,52 +143,19 @@ export const NoteTileClone = forwardRef<HTMLDivElement,  noteTileCloneProps>(
 interface newNoteTileProps {
   folder: boolean,
   folderId: string | null,
-  insertNewNote: (note: note) => void;
+  createNote: (folderId: string | null, folder: boolean) => void,
 }
 
-export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, insertNewNote}) => {
-  const { user } = useContext(UserContext);
+export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, createNote}) => {
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const createNote = async () => {
-    if (user) {
-      const path = `/notes/new${folderId ? `?folder=${folderId}` : ''}${folder ? `?isFolder=${folder}` : ''}`;
-      const resp: Response | string = await Promise.race([
-        fetch(`${import.meta.env.VITE_SERVER_URL}${path}`, {
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`, // Replace "user.token" with the actual token
-          },
-        }).catch(() => 'Server is unresponsive'),
-        new Promise<string>((resolve) => {
-          setTimeout(() => {
-            resolve('Server is unresponsive');
-          }, 5000);
-        })
-      ])
-      if (resp instanceof Response) {
-        if (resp.status === 200) {
-          const data = await resp.json();
-          insertNewNote(data.note)
-          // show a notice to user
-        } else {
-          // show a notice to user
-        }
-      }
-    }
-  }
-
-  const handleClick = () => {
-    createNote();
-  }
 
   if (folder) {
     return (
       <div className={`flex w-full h-auto aspect-square
                       font-normal
                     hover:border-amber-500 cursor-pointer`}
-            onClick={handleClick}
+            onClick={() => {createNote(folderId, true)}}
             onMouseOver={() => setHovered(true)}
             onMouseOut={() => setHovered(false)}>
         <div className='relative w-full h-full'>
@@ -211,7 +175,7 @@ export const NewNoteTile: React.FC<newNoteTileProps> = ({folder, folderId, inser
               aria-label="New note button"
               className='w-full h-auto aspect-square flex items-center justify-center rounded-md transition-transform
                         gradient-brighten-cta border border-gray-500 cursor-pointer hover:scale-[1.025] hover:opacity-85'
-              onClick={handleClick}
+              onClick={() => {createNote(null, false);}}
               onMouseOver={() => setHovered(true)}
               onMouseOut={() => setHovered(false)}>
         <HiOutlinePlus className={`transition-transform text-4xl text-gray-300/50`}/>

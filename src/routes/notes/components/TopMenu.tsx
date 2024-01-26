@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Dispatch, SetStateAction, useContext } from 'react'
+import React, {useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { note, toggleBoolean } from '../../../types/types';
 //icons
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -9,11 +9,7 @@ import { FaFolder } from "react-icons/fa";
 import { VscNewFile } from "react-icons/vsc";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { LuFolderPlus } from "react-icons/lu";
-
-
-
-
-import { UserContext } from '../../../contexts/auth';
+// components
 import { LoaderGroup, LoaderRect } from '../../../styles/Utility';
 
 interface topMenuProps {
@@ -26,52 +22,17 @@ interface topMenuProps {
   deleteCheckedTiles: () => void,
   handleNewNote: (note: note) => void,
   folderId: string | null,
+  createNote: (folderId: string | null, folder: boolean) => void,
   deleteNote: (noteId: string) => void,
 }
 
 interface newBarProps {
   folderId: string | null,
-  folder: boolean,
-  handleNewNote: (note: note) => void,
+  createNote: (folderId: string | null, folder: boolean) => void,
 }
 
-const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
+const NewBar: React.FC<newBarProps> = ({ folderId, createNote}) => {
   const [menuOpen, setMenuOpen] = useState<toggleBoolean>(false);
-
-  const { user } = useContext(UserContext);
-
-  const createNote = async () => {
-    if (user) {
-      const path = `/notes/new${folderId ? `?folder=${folderId}` : ''}${folder ? `?isFolder=${folder}` : ''}`;
-      const resp: Response | string = await Promise.race([
-        fetch(`${import.meta.env.VITE_SERVER_URL}${path}`, {
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`, // Replace "user.token" with the actual token
-          },
-        }).catch(() => 'Server is unresponsive'),
-        new Promise<string>((resolve) => {
-          setTimeout(() => {
-            resolve('Server is unresponsive');
-          }, 5000);
-        })
-      ])
-      if (resp instanceof Response) {
-        if (resp.status === 200) {
-          const data = await resp.json();
-          handleNewNote(data.note)
-          // show a notice to user
-        } else {
-          // show a notice to user
-        }
-      }
-    }
-  }
-
-  const handleClick = () => {
-    createNote();
-  }
 
 
   return (
@@ -81,7 +42,10 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
                 aria-label="create new note"
                 className='p-[6px] flex items-center gap-x-1
                           hover:bg-gray-300/20'
-                onClick={handleClick}>
+                onClick={() => {
+                  setMenuOpen(false);
+                  createNote(folderId, false);
+                  }}>
           <p>New Note</p><VscNewFile className="text-lg"/>
         </button>
         <button type="button"
@@ -100,14 +64,20 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
                 aria-label="create new note"
                 className="p-1 rounded-md flex items-center gap-x-1 justify-end
                            border border-gray-500 cursor-pointer hover:opacity-85"
-                onClick={handleClick}>
+                onClick={() => {
+                  setMenuOpen(false);
+                  createNote(folderId, false);
+                  }}>
           <p>New Note</p><VscNewFile className="text-lg"/>
         </button>
         <button type="button"
                 aria-label="create new folder"
                 className="p-1 rounded-md flex items-center gap-x-1 justify-end
                            border border-gray-500 cursor-pointer hover:opacity-85"
-                onClick={handleClick}>
+                onClick={() => {
+                  setMenuOpen(false);
+                  createNote(folderId, true);
+                  }}>
           <p>New Folder</p><LuFolderPlus className="text-lg"/>
         </button>
       </ul>
@@ -123,10 +93,11 @@ const TopMenu: React.FC<topMenuProps> = ({folderId,
                                           checkedTileIds,
                                           addNotesToFolder,
                                           deleteCheckedTiles,
-                                          handleNewNote,
+                                          createNote,
                                           deleteNote}) => {
   const [folderSelectionActive, setFolderSelectionActive] = useState<toggleBoolean>(false);
   const [folderMenuOpen, setFolderMenuOpen] = useState<toggleBoolean>(false);
+  const [ folderDeletionModalVisible, setFolderDeletionModalVisible] = useState<toggleBoolean>(false);
 
   useEffect(() => {
     if (checkedTileIds.length === 0) {
@@ -164,19 +135,46 @@ const TopMenu: React.FC<topMenuProps> = ({folderId,
                   className='p-1 hover:bg-gray-200/20 rounded-md'>
             <IoMdArrowDropdown className='text-xl'/>
           </button>
-          <div className={`${folderMenuOpen ? '' : 'hidden'} absolute right-0 -bottom-1 translate-y-full
+          <div className={`${folderMenuOpen ? '' : 'hidden'} z-40 absolute right-0 -bottom-1 translate-y-full
                           border border-gray-500 rounded-lg popup-bg p-2`}>
             <ul className='flex flex-col items-end text-sm'>
               <button type='button'
                       onClick={() => {
-                        if (folderId) {
-                          deleteNote(folderId)
+                        if (!folderDeletionModalVisible) {
+                          setFolderMenuOpen(false);
+                          setFolderDeletionModalVisible(true);
                         }
                       }}
-                      className='p-1 rounded border border-gray-500 hover:opacity-85 cursor-pointer'>
-                Delete Folder
+                      className='p-1 h-fit w-fit rounded border border-gray-500 hover:opacity-85 cursor-pointer'>
+                <p>Delete Folder</p>
               </button>
             </ul>
+          </div>
+          <div className={`${folderDeletionModalVisible ? '' : 'hidden'} z-40 flex flex-col gap-y-1 w-[300px] absolute left-0 -bottom-1 translate-y-full
+                          border border-gray-500 rounded-lg popup-bg p-2 text-sm`}>
+            <p>Are you sure you want to delete this folder?</p>
+            <p className='text-xs text-red-400'>Your included notes will be moved back to root</p>
+            <div className='flex items-center gap-x-2'>
+            <button type='button'
+                    className='p-1 h-fit w-fit rounded border border-gray-500 hover:opacity-85 cursor-pointer'
+                    onClick={() => {
+                      setFolderDeletionModalVisible(false);
+                    }}>
+              <p>Cancel</p>
+            </button>
+            <button type='button'
+                    className='p-1 h-fit w-fit rounded border border-gray-500 hover:bg-red-500/20 cursor-pointer'
+                    onClick={() => {
+                      if (folderId) {
+                        setFolderMenuOpen(false);
+                          setFolderDeletionModalVisible(false);
+                        deleteNote(folderId);
+                        setFolderId(null);
+                      }
+                    }}>
+              <p>Yes, I'm sure</p>
+            </button>
+            </div>
           </div>
         </div>
         ) : (
@@ -190,7 +188,7 @@ const TopMenu: React.FC<topMenuProps> = ({folderId,
       )
       : (<>Loading...</>)}</div>
       <div className="right flex flex-col min-[350px]:flex-row min-[350px]:items-center gap-y-2 gap-x-4">
-        <NewBar handleNewNote={handleNewNote} folderId={folderId} folder={folderId === null} />
+        <NewBar createNote={createNote} folderId={folderId} />
         <ul className='relative flex gap-x-2 text-gray-300 w-fit rounded-md'>
           <button type='button'
                   aria-label='Show add to folder options'
