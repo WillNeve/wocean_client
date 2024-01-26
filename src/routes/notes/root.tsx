@@ -85,8 +85,6 @@ const Notes = () => {
       if (resp instanceof Response) {
         const data = await resp.json();
         console.log(data);
-        const newNotes = notes.filter((note) => note.id !== parseInt(noteId, 10));
-        setNotes(newNotes);
       } else {
         // append message server unresp...
       }
