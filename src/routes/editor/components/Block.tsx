@@ -161,8 +161,6 @@ const NoteBlock: React.FC<NoteBlockProps> = ({index, block, handleChange, newBlo
   };
 
   useEffect(() => {
-    console.log('effect triggered');
-    
     if (blockRef.current) {
       if (focused) {
         blockRef.current.focus();
