@@ -24,11 +24,11 @@ export const FormGroup: React.FC<FormGroupProps> = ({name, errors}) => {
 
   return (
     <div className="flex flex-col my-2">
-    <label htmlFor={name} className="">{name.charAt(0).toUpperCase() + name.replace('_', ' ').slice(1)}</label>
+    <label htmlFor={name} className="font-light">{name.charAt(0).toUpperCase() + name.replace('_', ' ').slice(1)}</label>
     <input type={/^password/.test(name) ? 'password' : 'text'}
            name={name}
            id={name}
-           className="p-1 bg-transparent border border-gray-500 shadow-sm shadow-gray-200/20 rounded-sm outline-none overflow-hidden text-gray-300 font-medium"
+           className="p-1 bg-transparent border border-gray-500 shadow shadow-waveLight-500/10 rounded-sm outline-none overflow-hidden text-gray-300 font-medium"
            autoComplete={autoComplete(name)}
            />
     <div className="flex flex-col text-red-300 gap">

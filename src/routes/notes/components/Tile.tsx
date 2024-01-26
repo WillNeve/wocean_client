@@ -1,11 +1,11 @@
 import React, { forwardRef, useContext, useState } from "react";
 // types
-import { note, toggle } from "../../../types/types";
+import { note, toggleBoolean } from "../../../types/types";
 // icons
 import { HiOutlinePlus } from "react-icons/hi";
 import { MdDragIndicator } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
-import { UserContext } from "../../../auth";
+import { UserContext } from "../../../contexts/auth";
 
 
 
@@ -29,9 +29,9 @@ interface noteTileCloneProps {
 
 export const NoteTile = forwardRef<HTMLAnchorElement, noteTileProps>(
   ({ note, onDragStart, moving, index, onTouchStart, onCheckedChange, requestFolderId }, ref) => {
-    const [checked, setChecked] = useState<toggle>(false);
+    const [checked, setChecked] = useState<toggleBoolean>(false);
 
-    const [hovered, setHovered] = useState<toggle>(false);
+    const [hovered, setHovered] = useState<toggleBoolean>(false);
 
     const handleCheckBoxClick = (e: React.MouseEvent) => {
       e.preventDefault();

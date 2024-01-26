@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
-import { UserContext } from '../../../auth';
+import { UserContext } from '../../../contexts/auth';
 import { ViewNameContext } from '../root';
 
 //views

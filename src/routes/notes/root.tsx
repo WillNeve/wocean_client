@@ -2,9 +2,9 @@ import React, { useEffect, useState, useContext, useRef, useCallback } from 'rea
 import { useNavigate } from 'react-router-dom';
 import Window from '../../components/Window/Window';
 //context
-import { UserContext } from '../../auth';
+import { UserContext } from '../../contexts/auth';
 //types
-import { note } from '../../types/types';
+import { note, toggleBoolean } from '../../types/types';
 //components
 import TopMenu from './components/TopMenu';
 import { NoteTile, NoteTileClone, NewNoteTile } from './components/Tile';
@@ -17,8 +17,6 @@ const preventPageScroll = (e: MouseEvent | TouchEvent) => {
   e.preventDefault();
 }
 
-type toggle = boolean;
-
 
 const Notes = () => {
   const navigate = useNavigate();
@@ -28,9 +26,9 @@ const Notes = () => {
   const [folderId, setFolderId] = useState<string | null>(null)
 
   const [notes, setNotes] = useState<note[]>([])
-  const [folderStructureChanged, setFolderStructureChanged] = useState<toggle>(false);
+  const [folderStructureChanged, setFolderStructureChanged] = useState<toggleBoolean>(false);
 
-  const [loaded, setLoaded] = useState<toggle>(false)
+  const [loaded, setLoaded] = useState<toggleBoolean>(false)
   const [checkedTileIds, setCheckedTileIds] = useState<number[]>([])
 
   const getNotes = async () => {
@@ -66,6 +64,14 @@ const Notes = () => {
         // append message
       }
     }
+  }
+
+  const deleteNote = async (noteId: string) => {
+    // sent delete request to API
+    // - make new route
+    // - in route controller make sure to reassign notes to root (SET folderId = null WHERE folderId = ${this folder id})
+    console.log(noteId);
+
   }
 
   const saveNotesOrder = async () => {
@@ -351,7 +357,8 @@ const Notes = () => {
                   checkedTileIds={checkedTileIds}
                   folderTitle={folderTitle}
                   setFolderId={setFolderId}
-                  handleNewNote={handleNewNote} />
+                  handleNewNote={handleNewNote}
+                  deleteNote={deleteNote} />
         <div className={`customScrollBar  ${dragActive ? '' : 'maskedListVert'} mt-5 px-8 p-[20px] w-full h-[50%] flex-grow overflow-y-scroll
                                                 overflow-x-auto
                                                 grid gap-4

@@ -1,14 +1,14 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // components
-import NavBar from "../../components/NavBar/NavBar";
-import { ModalFade } from "../../styles/Modals";
+import Window from "../../components/Window/Window";
 import { FormGroup } from "../../styles/Form";
 import { ButtonForm } from "../../styles/Buttons";
-import { FiAlertOctagon } from "react-icons/fi";
+import { ModalPopup } from "../../styles/Modals";
 // icons
+import { FiAlertOctagon } from "react-icons/fi";
 //auth
-import { UserContext } from "../../auth";
+import { UserContext } from "../../contexts/auth";
 
 
 
@@ -79,9 +79,8 @@ const SignUp = () => {
 
   return (
     <>
-      <NavBar requestNavigate={navigate}/>
-      <ModalFade>
-        <div className="p-6">
+      <Window requestNavigate={navigate} noFrame={true}>
+        <ModalPopup>
           <h1 className="text-xl font-medium">Create your account</h1>
           <form action="#" ref={formRef} onSubmit={createUser}>
             {errorMessage ?
@@ -93,8 +92,8 @@ const SignUp = () => {
             <FormGroup name={'password_confirmation'} errors={fieldErrors.password}/>
             <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Create Account</ButtonForm>
           </form>
-        </div>
-      </ModalFade>
+        </ModalPopup>
+      </Window>
     </>
   )
 }

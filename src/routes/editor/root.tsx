@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, useContext, useCallback} from 'reac
 import { useNavigate, useParams} from "react-router-dom";
 import Window from '../../components/Window/Window';
 // user context
-import { UserContext } from '../../auth';
+import { UserContext } from '../../contexts/auth';
 //icons
 import { FaSun, FaMoon } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -13,7 +13,7 @@ import { GiConfirmed } from "react-icons/gi";
 import NoteBlock, { noteBlockType } from './components/Block';
 import Title from './components/Title';
 import { LoaderRect, LoaderGroup } from '../../styles/Utility';
-import { toggle } from '../../types/types';
+import { toggleBoolean } from '../../types/types';
 
 interface editorProps {
   newNote: boolean,
@@ -21,7 +21,7 @@ interface editorProps {
 
 const Editor: React.FC<editorProps> = ({newNote}) => {
   const editor = useRef<HTMLDivElement>(document.createElement('div'));
-  const [dark, setDark] = useState<toggle>(true);
+  const [dark, setDark] = useState<toggleBoolean>(true);
   // user
   const { user, finishedLoadingUser } = useContext(UserContext);
   const navigate = useNavigate();

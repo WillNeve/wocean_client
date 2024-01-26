@@ -1,6 +1,6 @@
 import { useContext, ReactNode, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { UserContext } from "../../auth";
+import { UserContext } from "../../contexts/auth";
 
 //icons
 import { RiMenu3Line } from "react-icons/ri";

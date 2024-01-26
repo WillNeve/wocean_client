@@ -3,13 +3,10 @@ export type staticComponentProps = {
   className?: string,
 };
 
-
-export type toggle = boolean;
-
-
+// Generics
+export type toggleBoolean = boolean;
 
 // Note
-
 export type note = {
   id: number,
   title?: string,

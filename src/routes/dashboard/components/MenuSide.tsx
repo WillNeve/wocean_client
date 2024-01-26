@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext } from 'react'
 import { GoGraph, GoGear } from "react-icons/go";
 import { ViewNameContext } from '../root';
-import { UserContext } from '../../../auth';
+import { UserContext } from '../../../contexts/auth';
 
 
 interface MenuButtonProps {

@@ -1,35 +1,38 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // components
-import NavBar from '../../components/NavBar/NavBar';
-import { ModalFade } from "../../styles/Modals";
 import { FormGroup } from "../../styles/Form";
 import { ButtonForm } from "../../styles/Buttons";
+import Window from "../../components/Window/Window";
+import { ModalPopup } from "../../styles/Modals";
 //auth
-import { UserContext } from "../../auth";
+import { UserContext } from "../../contexts/auth";
 // icons
 import { FiAlertOctagon } from 'react-icons/fi';
 
+type fieldErrors = {
+  username: string[],
+  email: string[],
+  password: string[]
+};
+
 const SignIn = () => {
   const navigate = useNavigate();
+
   const { setUser } = useContext(UserContext)
 
   const formRef = useRef(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<validationErrors>({ username: [], email: [], password: [] })
+
+  const [fieldErrors, setFieldErrors] = useState<fieldErrors>({ username: [], email: [], password: [] })
   const [errorMessage, setErrorMessage] = useState<string | boolean>(false);
 
-  type validationErrors = {
-    username: string[],
-    email: string[],
-    password: string[]
-  };
 
   const appendGeneralMessage = (message: string) => {
     setErrorMessage(message);
   }
 
-  const appendValidationMessages = (errors: validationErrors) => {
+  const appendValidationMessages = (errors: fieldErrors) => {
     const {username, email, password} = errors;
     setFieldErrors({ username: username, email: email, password: password })
   }
@@ -55,10 +58,8 @@ const SignIn = () => {
 
       buttonRef.current?.classList.remove('loading')
 
-
-
       if (resp instanceof Response) {
-        if (resp.status === 200) { // what is authorized status ?
+        if (resp.status === 200) {
           const data = await resp.json();
           if (setUser) {
             setUser({id: data.user.id, username: data.user.username, email: data.user.email, token: data.user.token})
@@ -68,10 +69,10 @@ const SignIn = () => {
           const data = await resp.json();
           appendValidationMessages(data.errors);
         } else {
-          // something more fatal occured - tell user?
           appendGeneralMessage(`Something went wrong (${resp.status})`)
         }
       } else {
+        // no response (server offline)
         appendGeneralMessage(resp)
       }
     }
@@ -79,20 +80,19 @@ const SignIn = () => {
 
   return (
     <>
-      <NavBar requestNavigate={navigate}/>
-      <ModalFade>
-        <div className="p-6">
-          <h1 className="text-xl font-medium">Log in to your account</h1>
-          <form action="#" ref={formRef} onSubmit={authorizeUser}>
-            {errorMessage ?
-              (<div className="text-red-300 flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
-              : ''}
-            <FormGroup name={'email'} errors={fieldErrors.email}/>
-            <FormGroup name={'password'} errors={fieldErrors.password}/>
-            <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Log in</ButtonForm>
-          </form>
-        </div>
-      </ModalFade>
+      <Window requestNavigate={navigate} noFrame={true}>
+      <ModalPopup>
+        <h1 className="text-xl font-medium">Log in to your account</h1>
+        <form action="#" ref={formRef} onSubmit={authorizeUser}>
+          {errorMessage ?
+            (<div className="text-red-300 flex items-center gap-x-2"><FiAlertOctagon className='mb-[1px]'/>{errorMessage}</div>)
+            : ''}
+          <FormGroup name={'email'} errors={fieldErrors.email}/>
+          <FormGroup name={'password'} errors={fieldErrors.password}/>
+          <ButtonForm ref={buttonRef} aria-label='Create account button' className='mx-0 py-2'>Log in</ButtonForm>
+        </form>
+      </ModalPopup>
+      </Window>
     </>
   )
 }

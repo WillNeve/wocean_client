@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Dispatch, SetStateAction, useContext } from 'react'
-import { note, toggle } from '../../../types/types';
+import { note, toggleBoolean } from '../../../types/types';
 //icons
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdDriveFileMoveRtl } from "react-icons/md";
@@ -13,7 +13,7 @@ import { LuFolderPlus } from "react-icons/lu";
 
 
 
-import { UserContext } from '../../../auth';
+import { UserContext } from '../../../contexts/auth';
 import { LoaderGroup, LoaderRect } from '../../../styles/Utility';
 
 interface topMenuProps {
@@ -26,6 +26,7 @@ interface topMenuProps {
   deleteCheckedTiles: () => void,
   handleNewNote: (note: note) => void,
   folderId: string | null,
+  deleteNote: (noteId: string) => void,
 }
 
 interface newBarProps {
@@ -35,7 +36,7 @@ interface newBarProps {
 }
 
 const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
-  const [menuOpen, setMenuOpen] = useState<toggle>(false);
+  const [menuOpen, setMenuOpen] = useState<toggleBoolean>(false);
 
   const { user } = useContext(UserContext);
 
@@ -114,8 +115,18 @@ const NewBar: React.FC<newBarProps> = ({ folderId, folder, handleNewNote}) => {
   );
 }
 
-const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFolderId, notes, checkedTileIds, addNotesToFolder, deleteCheckedTiles, handleNewNote }) => {
-  const [folderSelectionActive, setFolderSelectionActive] = useState<toggle>(false);
+const TopMenu: React.FC<topMenuProps> = ({folderId,
+                                          loaded,
+                                          folderTitle,
+                                          setFolderId,
+                                          notes,
+                                          checkedTileIds,
+                                          addNotesToFolder,
+                                          deleteCheckedTiles,
+                                          handleNewNote,
+                                          deleteNote}) => {
+  const [folderSelectionActive, setFolderSelectionActive] = useState<toggleBoolean>(false);
+  const [folderMenuOpen, setFolderMenuOpen] = useState<toggleBoolean>(false);
 
   useEffect(() => {
     if (checkedTileIds.length === 0) {
@@ -138,13 +149,35 @@ const TopMenu: React.FC<topMenuProps> = ({folderId, loaded, folderTitle, setFold
       <div className='text-lg'>{loaded ? (
         <>
         {folderTitle ? (
+        <div className="relative flex items-center gap-x-1">
           <div className='flex items-center gap-x-1'>
-          <h2 className='not-italic font-bold text-xl
-                          flex items-center gap-x-2'>
-            <FaFolder/>
-            <p className='text-transparent text-gradient-light'>{folderTitle}</p>
-          </h2>
-          <em className='not-italic text-sm'>({notes.length})</em>
+            <h2 className='not-italic font-bold text-xl
+                            flex items-center gap-x-2'>
+              <FaFolder/>
+              <p className='text-transparent text-gradient-light'>{folderTitle}</p>
+            </h2>
+            <em className='not-italic text-sm'>({notes.length})</em>
+          </div>
+          <button type='button'
+                  aria-label='Open folder menu'
+                  onClick={() => setFolderMenuOpen(!folderMenuOpen)}
+                  className='p-1 hover:bg-gray-200/20 rounded-md'>
+            <IoMdArrowDropdown className='text-xl'/>
+          </button>
+          <div className={`${folderMenuOpen ? '' : 'hidden'} absolute right-0 -bottom-1 translate-y-full
+                          border border-gray-500 rounded-lg popup-bg p-2`}>
+            <ul className='flex flex-col items-end text-sm'>
+              <button type='button'
+                      onClick={() => {
+                        if (folderId) {
+                          deleteNote(folderId)
+                        }
+                      }}
+                      className='p-1 rounded border border-gray-500 hover:opacity-85 cursor-pointer'>
+                Delete Folder
+              </button>
+            </ul>
+          </div>
         </div>
         ) : (
           <div className='flex items-center gap-x-1'>

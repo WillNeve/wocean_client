@@ -16,7 +16,7 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
   import NotFound from './routes/404';
 
 //contexts
-import AuthLayer from './auth';
+import AuthLayer from './contexts/auth';
 
 // styles
 import './index.css';

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../auth';
+import { UserContext } from '../../contexts/auth';
 //components
 import Window from '../../components/Window/Window';
 //subcomponents

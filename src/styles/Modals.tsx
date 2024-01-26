@@ -1,18 +1,12 @@
 import { staticComponentProps } from '../types/types';
 
-export const ModalFade: React.FC<staticComponentProps> = ({children}) => {
+
+export const ModalPopup: React.FC<staticComponentProps> = ({children}) => {
   return (
-    <div className="min-w-80 md:min-w-96 mx-auto my-5 shadow-lg text-gray-300 gradient-brighten shadow-waveLight-500/10 w-fit border border-gray-500 rounded-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-6
+                    border border-gray-500 rounded-lg gradient-brighten text-gray-300
+                    min-w-[320px]">
       {children}
     </div>
-  )
-}
-
-
-export const ModalClear: React.FC<staticComponentProps> = ({children}) => {
-  return (
-    <div className="min-w-80 md:min-w-96 mx-auto my-5 shadow shadow-gray-200/20 w-fit border border-gray-600 rounded-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
-      {children}
-    </div>
-  )
+  );
 }

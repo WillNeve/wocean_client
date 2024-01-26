@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../auth";
+import { UserContext } from "../../../contexts/auth";
 import { LoaderGroup, LoaderRect } from "../../../styles/Utility";
 
 
