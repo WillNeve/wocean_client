@@ -73,7 +73,7 @@ const MenuSide: React.FC = () => {
 
   if (user) {
     return (
-      <div className='min-w-[85px] w-[20%] min-[700px]:w-[30%] border-r-[1px] px-4 py-2 border-gray-600'>
+      <div className='min-w-[65px] w-[10%] min-[400px]:w-[20%] min-[700px]:w-[30%] border-r-[1px] px-1 min-[400px]:px-4 py-2 border-gray-600'>
         <div className="hidden top mb-4 min-[700px]:block">
           <h1 className='text-2xl text-gray-300'>Dashboard</h1>
           <p className='font-light text-gray-300'>Welcome, <em className='not-italic'>{user.username}</em></p>
